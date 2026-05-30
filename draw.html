@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>随机抽签</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+    background: #fff;
+    color: #222;
+    min-height: 100vh;
+    padding: 20px;
+    background-image:
+      radial-gradient(circle, #ddd 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 8px 18px;
+    border: 2px dashed #222;
+    border-radius: 12px 8px 14px 10px;
+    text-decoration: none;
+    color: #222;
+    font-size: 16px;
+    transition: all 0.2s;
+    background: #fff;
+  }
+  .back-link:hover {
+    background: #222;
+    color: #fff;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: clamp(28px, 6vw, 48px);
+    margin-bottom: 24px;
+    letter-spacing: 4px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+  h1::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 3px;
+    background: #222;
+    margin: 8px auto 0;
+    border-radius: 2px;
+    transform: rotate(-0.5deg);
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* --- 手绘风格卡片 --- */
+  .card {
+    background: #fff;
+    border: 2.5px solid #222;
+    border-radius: 25px 20px 30px 22px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    box-shadow: 4px 4px 0 #222;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -6px; left: -6px; right: -6px; bottom: -6px;
+    border: 2px dashed #aaa;
+    border-radius: 30px 24px 35px 27px;
+    pointer-events: none;
+  }
+
+  .card-title {
+    font-size: 20px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed #ccc;
+  }
+
+  /* --- 名字列表 --- */
+  .name-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+    min-height: 40px;
+  }
+  .name-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 2px solid #222;
+    border-radius: 18px 12px 20px 14px;
+    font-size: 16px;
+    background: #f9f9f9;
+    animation: popIn 0.3s ease;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.6); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .name-tag .del-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    color: #666;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    transition: color 0.2s;
+    padding: 0;
+  }
+  .name-tag .del-btn:hover { color: #222; }
+
+  /* --- 输入区 --- */
+  .input-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .input-row input {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 16px;
+    border: 2px solid #222;
+    border-radius: 14px 10px 16px 12px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    transition: box-shadow 0.2s;
+  }
+  .input-row input:focus {
+    box-shadow: 3px 3px 0 #222;
+  }
+  .btn {
+    padding: 10px 20px;
+    border: 2.5px solid #222;
+    border-radius: 16px 12px 18px 14px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #fff;
+    color: #222;
+    white-space: nowrap;
+  }
+  .btn:hover {
+    background: #222;
+    color: #fff;
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 #222;
+  }
+  .btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+  }
+  .btn-primary {
+    background: #222;
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: #444;
+    color: #fff;
+  }
+
+  /* --- 抽取人数选择 --- */
+  .count-selector {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .count-selector label {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  .count-selector input[type="radio"] {
+    accent-color: #222;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  /* --- 滚动显示区 --- */
+  .slot-area {
+    text-align: center;
+    padding: 30px 20px;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .slot-display {
+    font-size: clamp(32px, 8vw, 56px);
+    letter-spacing: 6px;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: #222;
+  }
+  .slot-display.rolling {
+    animation: shake 0.08s infinite alternate;
+  }
+  @keyframes shake {
+    0% { transform: translateX(-2px) rotate(-0.5deg); }
+    100% { transform: translateX(2px) rotate(0.5deg); }
+  }
+  .slot-placeholder {
+    font-size: 20px;
+    color: #aaa;
+  }
+
+  /* --- 按钮区 --- */
+  .action-row {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .btn-big {
+    padding: 14px 36px;
+    font-size: 22px;
+    border-radius: 20px 16px 24px 18px;
+    border-width: 3px;
+  }
+
+  /* --- 弹窗遮罩 --- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal {
+    background: #fff;
+    border: 3px solid #222;
+    border-radius: 28px 22px 32px 26px;
+    padding: 32px 28px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 6px 6px 0 #222;
+    animation: modalPop 0.35s ease;
+    position: relative;
+  }
+  @keyframes modalPop {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .modal h2 {
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+  .modal-close {
+    position: absolute;
+    top: 12px; right: 16px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    color: #666;
+    line-height: 1;
+  }
+  .modal-close:hover { color: #222; }
+
+  .result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border: 2px solid #222;
+    border-radius: 16px 12px 18px 14px;
+    background: #f9f9f9;
+    font-size: 20px;
+  }
+  .result-item .result-name {
+    font-size: 22px;
+  }
+  .result-item .result-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .result-item .result-actions .btn {
+    padding: 6px 14px;
+    font-size: 14px;
+    border-radius: 10px 8px 12px 9px;
+  }
+  .btn-remove {
+    background: #222;
+    color: #fff;
+  }
+  .btn-remove:hover {
+    background: #555;
+    color: #fff;
+  }
+  .btn-keep {
+    background: #fff;
+    color: #222;
+  }
+
+  .modal-footer {
+    text-align: center;
+  }
+
+  /* --- 历史记录 --- */
+  .history-section {
+    margin-top: 8px;
+  }
+  .history-item {
+    padding: 8px 14px;
+    border-bottom: 1px dashed #ccc;
+    font-size: 15px;
+    color: #555;
+  }
+  .history-item:last-child { border-bottom: none; }
+  .history-empty {
+    color: #bbb;
+    font-size: 15px;
+    text-align: center;
+    padding: 10px;
+  }
+
+  /* --- 响应式 --- */
+  @media (max-width: 500px) {
+    body { padding: 12px; }
+    .card { padding: 16px; }
+    .btn-big { padding: 12px 24px; font-size: 18px; }
+    .modal { padding: 24px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-link">&larr; 返回首页</a>
+
+<div class="container">
+  <h1>随机抽签</h1>
+
+  <!-- 名字管理 -->
+  <div class="card">
+    <div class="card-title">参与人员</div>
+    <div class="name-list" id="nameList"></div>
+    <div class="input-row">
+      <input type="text" id="nameInput" placeholder="输入名字..." maxlength="20">
+      <button class="btn" onclick="addName()">添加</button>
+    </div>
+  </div>
+
+  <!-- 抽签设置 -->
+  <div class="card">
+    <div class="card-title">抽签设置</div>
+    <div class="count-selector">
+      <label><input type="radio" name="drawCount" value="1" checked> 抽 1 人</label>
+      <label><input type="radio" name="drawCount" value="2"> 抽 2 人</label>
+      <label><input type="radio" name="drawCount" value="3"> 抽 3 人</label>
+    </div>
+  </div>
+
+  <!-- 抽签区 -->
+  <div class="card">
+    <div class="slot-area">
+      <div class="slot-display" id="slotDisplay">
+        <span class="slot-placeholder">点击下方按钮开始抽签</span>
+      </div>
+    </div>
+    <div class="action-row">
+      <button class="btn btn-primary btn-big" id="startBtn" onclick="startDraw()">开始抽签</button>
+      <button class="btn btn-big" id="stopBtn" onclick="stopDraw()" style="display:none;">停 止</button>
+    </div>
+  </div>
+
+  <!-- 历史记录 -->
+  <div class="card history-section">
+    <div class="card-title">抽签记录</div>
+    <div id="historyList">
+      <div class="history-empty">暂无记录</div>
+    </div>
+  </div>
+</div>
+
+<!-- 结果弹窗 -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <h2>抽签结果</h2>
+    <div class="result-list" id="resultList"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal()">确 定</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- 数据 ---
+  let names = ['张三', '李四', '王五', '赵六', '孙七', '周八'];
+  let rolling = false;
+  let rollTimer = null;
+  let currentDisplay = [];
+  let history = [];
+
+  const nameListEl = document.getElementById('nameList');
+  const nameInputEl = document.getElementById('nameInput');
+  const slotDisplayEl = document.getElementById('slotDisplay');
+  const startBtnEl = document.getElementById('startBtn');
+  const stopBtnEl = document.getElementById('stopBtn');
+  const modalOverlayEl = document.getElementById('modalOverlay');
+  const resultListEl = document.getElementById('resultList');
+  const historyListEl = document.getElementById('historyList');
+
+  // --- 渲染名字列表 ---
+  function renderNames() {
+    nameListEl.innerHTML = '';
+    names.forEach(function(name, i) {
+      var tag = document.createElement('span');
+      tag.className = 'name-tag';
+      tag.innerHTML = name + ' <button class="del-btn" onclick="removeName(' + i + ')">&times;</button>';
+      nameListEl.appendChild(tag);
+    });
+  }
+
+  // --- 添加名字 ---
+  function addName() {
+    var val = nameInputEl.value.trim();
+    if (!val) return;
+    if (names.indexOf(val) !== -1) {
+      nameInputEl.value = '';
+      nameInputEl.focus();
+      return;
+    }
+    names.push(val);
+    nameInputEl.value = '';
+    nameInputEl.focus();
+    renderNames();
+  }
+
+  // --- 删除名字 ---
+  function removeName(index) {
+    names.splice(index, 1);
+    renderNames();
+  }
+
+  // --- 回车添加 ---
+  nameInputEl.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') addName();
+  });
+
+  // --- 获取抽取人数 ---
+  function getDrawCount() {
+    var checked = document.querySelector('input[name="drawCount"]:checked');
+    return checked ? parseInt(checked.value) : 1;
+  }
+
+  // --- 开始抽签 ---
+  function startDraw() {
+    var count = getDrawCount();
+    if (names.length < count) {
+      slotDisplayEl.innerHTML = '<span class="slot-placeholder">人数不足，请添加更多名字</span>';
+      return;
+    }
+    rolling = true;
+    startBtnEl.style.display = 'none';
+    stopBtnEl.style.display = '';
+    slotDisplayEl.classList.add('rolling');
+
+    // 快速滚动
+    rollTimer = setInterval(function() {
+      var pool = [];
+      for (var i = 0; i < count; i++) {
+        pool.push(names[Math.floor(Math.random() * names.length)]);
+      }
+      currentDisplay = pool;
+      slotDisplayEl.innerHTML = pool.map(function(n) {
+        return '<span>' + n + '</span>';
+      }).join('');
+    }, 60);
+  }
+
+  // --- 停止抽签 ---
+  function stopDraw() {
+    if (!rolling) return;
+    rolling = false;
+    clearInterval(rollTimer);
+    slotDisplayEl.classList.remove('rolling');
+    startBtnEl.style.display = '';
+    stopBtnEl.style.display = 'none';
+
+    var count = getDrawCount();
+    // 随机不重复抽取
+    var shuffled = names.slice().sort(function() { return Math.random() - 0.5; });
+    var drawn = shuffled.slice(0, count);
+
+    // 显示在滚动区
+    slotDisplayEl.innerHTML = drawn.map(function(n) {
+      return '<span>' + n + '</span>';
+    }).join('');
+
+    // 弹窗展示结果
+    showResult(drawn);
+  }
+
+  // --- 显示结果弹窗 ---
+  function showResult(drawn) {
+    resultListEl.innerHTML = '';
+    drawn.forEach(function(name) {
+      var item = document.createElement('div');
+      item.className = 'result-item';
+      item.innerHTML =
+        '<span class="result-name">' + name + '</span>' +
+        '<div class="result-actions">' +
+          '<button class="btn btn-keep" onclick="keepName(this, \'' + name.replace(/'/g, "\\'") + '\')">保留</button>' +
+          '<button class="btn btn-remove" onclick="removeDrawn(this, \'' + name.replace(/'/g, "\\'") + '\')">移除</button>' +
+        '</div>';
+      resultListEl.appendChild(item);
+    });
+    modalOverlayEl.classList.add('active');
+  }
+
+  // --- 保留 ---
+  function keepName(btn, name) {
+    btn.closest('.result-item').style.opacity = '0.5';
+    btn.disabled = true;
+    btn.nextElementSibling.disabled = true;
+  }
+
+  // --- 移除 ---
+  function removeDrawn(btn, name) {
+    var idx = names.indexOf(name);
+    if (idx !== -1) {
+      names.splice(idx, 1);
+      renderNames();
+    }
+    btn.closest('.result-item').style.opacity = '0.5';
+    btn.disabled = true;
+    btn.previousElementSibling.disabled = true;
+  }
+
+  // --- 关闭弹窗 ---
+  function closeModal() {
+    // 记录历史
+    var items = resultListEl.querySelectorAll('.result-item .result-name');
+    var drawnNames = [];
+    items.forEach(function(el) { drawnNames.push(el.textContent); });
+    if (drawnNames.length > 0) {
+      var now = new Date();
+      var timeStr = now.getHours().toString().padStart(2, '0') + ':' +
+                    now.getMinutes().toString().padStart(2, '0') + ':' +
+                    now.getSeconds().toString().padStart(2, '0');
+      history.unshift({ time: timeStr, names: drawnNames.slice() });
+      if (history.length > 20) history.pop();
+      renderHistory();
+    }
+    modalOverlayEl.classList.remove('active');
+  }
+
+  // --- 点击遮罩关闭 ---
+  modalOverlayEl.addEventListener('click', function(e) {
+    if (e.target === modalOverlayEl) closeModal();
+  });
+
+  // --- 渲染历史 ---
+  function renderHistory() {
+    if (history.length === 0) {
+      historyListEl.innerHTML = '<div class="history-empty">暂无记录</div>';
+      return;
+    }
+    historyListEl.innerHTML = '';
+    history.forEach(function(record) {
+      var div = document.createElement('div');
+      div.className = 'history-item';
+      div.textContent = '[' + record.time + '] ' + record.names.join('、');
+      historyListEl.appendChild(div);
+    });
+  }
+
+  // --- 初始化 ---
+  renderNames();
+</script>
+</body>
+</html>

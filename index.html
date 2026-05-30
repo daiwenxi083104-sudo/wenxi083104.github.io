@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>戴雯晞的手绘日记</title>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --gray: #666;
+            --light-gray: #999;
+            --bg: #fafafa;
+            --white: #fff;
+        }
+
+        body {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            background: var(--bg);
+            color: var(--black);
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="%231a1a1a" stroke-width="2"/></svg>') 12 12, auto;
+        }
+
+        /* 手绘线条动画 */
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(5px, -5px) rotate(1deg); }
+            50% { transform: translate(0, -10px) rotate(0deg); }
+            75% { transform: translate(-5px, -5px) rotate(-1deg); }
+        }
+
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        /* 页面容器 */
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            position: relative;
+        }
+
+        /* ========== 第1屏：开场 ========== */
+        .intro-page {
+            position: relative;
+        }
+
+        .intro-title {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 80px;
+            letter-spacing: 16px;
+            position: relative;
+            animation: wiggle 3s ease-in-out infinite;
+        }
+
+        .intro-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--black);
+            border-radius: 2px;
+            transform: rotate(-1deg);
+        }
+
+        .intro-subtitle {
+            margin-top: 30px;
+            font-size: 16px;
+            color: var(--gray);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .intro-subtitle span {
+            position: relative;
+        }
+
+        .intro-subtitle span::before,
+        .intro-subtitle span::after {
+            content: '◦';
+            margin: 0 8px;
+            color: var(--light-gray);
+        }
+
+        .intro-desc {
+            margin-top: 25px;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 15px;
+            color: var(--gray);
+            max-width: 500px;
+            text-align: center;
+            line-height: 1.8;
+            padding: 0 20px;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .scroll-hint-text {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* 漂浮装饰 */
+        .floating-deco {
+            position: absolute;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .deco-1 { top: 15%; left: 10%; animation-delay: 0s; }
+        .deco-2 { top: 25%; right: 15%; animation-delay: 1s; }
+        .deco-3 { bottom: 30%; left: 8%; animation-delay: 2s; }
+        .deco-4 { bottom: 20%; right: 10%; animation-delay: 3s; }
+
+        .sparkle {
+            font-size: 24px;
+            animation: blink 3s ease-in-out infinite;
+        }
+
+        /* ========== 第2屏：我是谁 ========== */
+        .who-container {
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .who-question {
+            font-size: 24px;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .who-answer {
+            font-size: 28px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .who-answer .highlight {
+            font-size: 32px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .who-answer .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -5px;
+            right: -5px;
+            height: 12px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+            z-index: -1;
+            transform: rotate(-2deg);
+        }
+
+        .keywords-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .keyword-bubble {
+            padding: 15px 30px;
+            border: 2px solid var(--black);
+            border-radius: 30px 35px 28px 32px;
+            background: var(--white);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 3px 3px 0 var(--black);
+        }
+
+        .keyword-bubble:hover {
+            transform: translate(-3px, -3px) scale(1.05);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .keyword-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 30%;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid var(--black);
+        }
+
+        .keyword-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 30%;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid var(--white);
+        }
+
+        /* 四个关键词模块 */
+        .four-keywords-section {
+            margin-top: 50px;
+            padding-top: 40px;
+            border-top: 2px dashed var(--border);
+        }
+
+        .four-keywords-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: var(--black);
+        }
+
+        .four-keywords-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .keyword-card {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 20px 18px 22px 16px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 3px 3px 0 var(--black);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .keyword-card:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .keyword-card-main {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--black);
+        }
+
+        .keyword-card-tag {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 12px;
+            color: var(--gray);
+            background: var(--bg);
+            padding: 4px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .keyword-card-btn {
+            margin-top: 8px;
+            padding: 8px 20px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 15px 13px 17px 11px;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .keyword-card-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 关键词弹窗 */
+        .keyword-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .keyword-modal.active {
+            display: flex;
+        }
+
+        .keyword-modal-content {
+            background: var(--white);
+            border: 3px solid var(--black);
+            border-radius: 24px 20px 28px 22px;
+            padding: 35px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 6px 6px 0 var(--black);
+            position: relative;
+        }
+
+        .keyword-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .keyword-modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .keyword-modal-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            padding-right: 40px;
+        }
+
+        .keyword-modal-text {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 15px;
+            line-height: 1.9;
+            color: var(--black);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .four-keywords-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .four-keywords-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========== 第3屏：我能做什么 ========== */
+        .skills-title {
+            font-size: 32px;
+            margin-bottom: 50px;
+        }
+
+        .skills-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1000px;
+        }
+
+        .skill-card {
+            width: 260px;
+            padding: 30px;
+            text-align: center;
+            border: 3px solid var(--black);
+            border-radius: 25px 20px 30px 22px;
+            background: var(--white);
+            box-shadow: 4px 4px 0 var(--black);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .skill-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .skill-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        .skill-name {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .skill-desc {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* 能力详情弹窗 */
+        .skill-detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .skill-detail-modal.active {
+            display: flex;
+        }
+
+        .skill-detail-content {
+            background: var(--white);
+            border: 3px solid var(--black);
+            border-radius: 28px 22px 32px 25px;
+            box-shadow: 6px 6px 0 var(--black);
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+            overflow: hidden;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) rotate(-1deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        .skill-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px 30px;
+            border-bottom: 2px dashed var(--black);
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 10;
+        }
+
+        .skill-detail-back {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--black);
+            border-radius: 12px 10px 14px 11px;
+            background: var(--white);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 2px 2px 0 var(--black);
+            flex-shrink: 0;
+        }
+
+        .skill-detail-back:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .skill-detail-title {
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skill-detail-title-icon {
+            font-size: 32px;
+        }
+
+        .skill-detail-body {
+            padding: 30px;
+        }
+
+        .skill-section {
+            margin-bottom: 28px;
+            padding: 20px;
+            border: 2px solid var(--black);
+            border-radius: 18px 15px 20px 17px;
+            background: var(--bg);
+            box-shadow: 3px 3px 0 var(--black);
+        }
+
+        .skill-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .skill-section-title {
+            font-size: 20px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-section-title::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--black);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .skill-item {
+            margin-bottom: 16px;
+            padding: 14px 16px;
+            border: 1.5px solid rgba(0, 0, 0, 0.15);
+            border-radius: 12px 10px 14px 11px;
+            background: var(--white);
+        }
+
+        .skill-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .skill-item-title {
+            font-size: 17px;
+            margin-bottom: 8px;
+            color: var(--black);
+        }
+
+        .skill-item-desc {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 14px 12px 15px 13px;
+            margin: 3px 4px 3px 0;
+            line-height: 1.5;
+        }
+
+        .skill-tag a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .skill-tag.tool a:hover {
+            text-decoration: underline;
+        }
+
+        .skill-tag.tool.link {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .skill-tag.tool.link:hover {
+            transform: translateY(-1px);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+
+        .skill-tag.tool {
+            background: #e8f5e9;
+            border: 1.5px solid #4caf50;
+            color: #2e7d32;
+        }
+
+        .skill-tag.need {
+            background: #fff3e0;
+            border: 1.5px solid #ff9800;
+            color: #e65100;
+        }
+
+        .skill-tag.extra {
+            background: #e3f2fd;
+            border: 1.5px solid #2196f3;
+            color: #1565c0;
+        }
+
+        .skill-sub-item {
+            margin-top: 10px;
+            padding: 10px 14px;
+            border-left: 3px solid var(--black);
+            border-radius: 0 10px 10px 0;
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .skill-sub-item-title {
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .skill-sub-item-desc {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* 弹窗响应式 */
+        @media (max-width: 768px) {
+            .skill-detail-modal {
+                padding: 20px 10px;
+            }
+
+            .skill-detail-content {
+                border-radius: 20px 18px 22px 19px;
+            }
+
+            .skill-detail-header {
+                padding: 18px 20px;
+            }
+
+            .skill-detail-title {
+                font-size: 20px;
+            }
+
+            .skill-detail-body {
+                padding: 20px 16px;
+            }
+
+            .skill-section {
+                padding: 16px;
+                margin-bottom: 20px;
+            }
+
+            .skill-item {
+                padding: 12px;
+            }
+        }
+
+        /* ========== 第4屏：我的作品 ========== */
+        .works-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .works-subtitle {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 50px;
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            max-width: 700px;
+        }
+
+        .work-item {
+            padding: 25px;
+            border: 2px solid var(--black);
+            border-radius: 15px 20px 18px 22px;
+            background: var(--white);
+            box-shadow: 3px 3px 0 var(--black);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .work-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--black);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .work-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .work-item:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .work-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .work-name {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .work-status {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 12px;
+            color: var(--light-gray);
+            padding: 4px 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        /* ========== 第5屏：我的生活 ========== */
+        .life-page {
+            text-align: center;
+        }
+
+        .life-intro {
+            max-width: 500px;
+            padding: 40px;
+            border: 2px solid var(--black);
+            border-radius: 24px 20px 28px 22px;
+            background: var(--white);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .life-desc {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .life-btn {
+            padding: 14px 32px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 22px 20px 24px 18px;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .life-btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.3);
+        }
+
+        /* ========== 第6屏：联系我 ========== */
+        .contact-page {
+            position: relative;
+            min-height: 80vh;
+        }
+
+        .contact-container {
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .contact-box {
+            display: inline-block;
+            padding: 40px 60px;
+            border: 3px solid var(--black);
+            border-radius: 25px 30px 28px 32px;
+            background: var(--white);
+            box-shadow: 5px 5px 0 var(--black);
+        }
+
+        .contact-item {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 18px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-label {
+            color: var(--gray);
+            font-size: 15px;
+        }
+
+        .contact-value {
+            font-weight: 500;
+        }
+
+        .ending-text {
+            margin-top: 50px;
+            font-size: 20px;
+            color: var(--gray);
+        }
+
+        .ending-deco {
+            margin-top: 20px;
+            font-size: 32px;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        /* 留言板样式 */
+        .guestbook-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 20px 18px 22px 16px;
+            box-shadow: 4px 4px 0 var(--black);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .guestbook-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .guestbook-desc {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .guestbook-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .guestbook-input,
+        .guestbook-textarea {
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 12px 10px 14px 8px;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .guestbook-input:focus,
+        .guestbook-textarea:focus {
+            border-color: var(--black);
+        }
+
+        .guestbook-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .guestbook-btn {
+            padding: 12px 30px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 15px 13px 17px 11px;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .guestbook-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+        }
+
+        .guestbook-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .guestbook-item {
+            padding: 15px;
+            background: var(--bg);
+            border-radius: 12px 10px 14px 8px;
+            text-align: left;
+        }
+
+        .guestbook-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .guestbook-item-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .guestbook-item-time {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 11px;
+            color: var(--light-gray);
+        }
+
+        .guestbook-item-content {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--black);
+        }
+
+        .guestbook-empty {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
+            color: var(--light-gray);
+            padding: 20px;
+        }
+
+        /* 页面导航点 */
+        .page-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: transparent;
+        }
+
+        .dot.active {
+            background: var(--black);
+            transform: scale(1.3);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .intro-title {
+                font-size: 48px;
+            }
+
+            .who-answer {
+                font-size: 20px;
+            }
+
+            .who-answer .highlight {
+                font-size: 24px;
+            }
+
+            .skills-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .works-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-dots {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 页面导航点 -->
+    <div class="page-dots">
+        <div class="dot active" onclick="scrollToPage(0)"></div>
+        <div class="dot" onclick="scrollToPage(1)"></div>
+        <div class="dot" onclick="scrollToPage(2)"></div>
+        <div class="dot" onclick="scrollToPage(3)"></div>
+        <div class="dot" onclick="scrollToPage(4)"></div>
+    </div>
+
+    <!-- 第1屏：开场 -->
+    <section class="page intro-page" id="page-0">
+        <div class="floating-deco deco-1 sparkle">✦</div>
+        <div class="floating-deco deco-2 sparkle">✧</div>
+        <div class="floating-deco deco-3 sparkle">✦</div>
+        <div class="floating-deco deco-4 sparkle">✧</div>
+
+        <h1 class="intro-title">戴雯晞</h1>
+        <div class="intro-subtitle">
+            <span>音乐学</span>
+            <span>企业文化</span>
+            <span>2026届</span>
+        </div>
+
+        <p class="intro-desc">音乐艺术背景的我，在找寻热爱与价值的路上步履不停，始终相信步步向青山的力量。</p>
+
+        <div class="scroll-hint">
+            <span class="scroll-hint-text">向下滚动</span>
+            <div class="scroll-arrow">↓</div>
+        </div>
+    </section>
+
+    <!-- 第2屏：我是谁 -->
+    <section class="page who-page" id="page-1">
+        <div class="who-container">
+            <p class="who-question">(｡･ω･｡) 我是谁？</p>
+            <p class="who-answer">
+                一个相信<span class="highlight">音乐</span>能治愈人心<br>
+                也相信<span class="highlight">好文化</span>能温暖团队的人
+            </p>
+
+            <div class="keywords-container">
+                <div class="keyword-bubble">🎵 音乐学背景</div>
+                <div class="keyword-bubble">💡 创意策划</div>
+                <div class="keyword-bubble">🤝 团队协调</div>
+            </div>
+
+            <!-- 四个关键词模块 -->
+            <div class="four-keywords-section">
+                <h3 class="four-keywords-title">我的四个关键词</h3>
+                <div class="four-keywords-grid">
+                    <!-- 关键词1：跨界破局 -->
+                    <div class="keyword-card" onclick="openKeywordModal(0)">
+                        <div class="keyword-card-main">跨界破局</div>
+                        <div class="keyword-card-tag">突破边界</div>
+                        <button class="keyword-card-btn">了解更多</button>
+                    </div>
+                    <!-- 关键词2：生活策展 -->
+                    <div class="keyword-card" onclick="openKeywordModal(1)">
+                        <div class="keyword-card-main">生活策展</div>
+                        <div class="keyword-card-tag">感知美好</div>
+                        <button class="keyword-card-btn">了解更多</button>
+                    </div>
+                    <!-- 关键词3：主动进化 -->
+                    <div class="keyword-card" onclick="openKeywordModal(2)">
+                        <div class="keyword-card-main">主动进化</div>
+                        <div class="keyword-card-tag">自我迭代</div>
+                        <button class="keyword-card-btn">了解更多</button>
+                    </div>
+                    <!-- 关键词4：长期践行 -->
+                    <div class="keyword-card" onclick="openKeywordModal(3)">
+                        <div class="keyword-card-main">长期践行</div>
+                        <div class="keyword-card-tag">知行合一</div>
+                        <button class="keyword-card-btn">了解更多</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第3屏：我能做什么 -->
+    <section class="page skills-page" id="page-2">
+        <h2 class="skills-title">我能做什么 (◕‿◕)</h2>
+        <div class="skills-container">
+            <div class="skill-card" onclick="openSkillDetail(0)">
+                <span class="skill-icon">🎨</span>
+                <h3 class="skill-name">视觉设计</h3>
+                <p class="skill-desc">平面设计与图文处理<br>让美触手可及</p>
+            </div>
+            <div class="skill-card" onclick="openSkillDetail(1)">
+                <span class="skill-icon">🎬</span>
+                <h3 class="skill-name">视频制作</h3>
+                <p class="skill-desc">视频拍摄与剪辑<br>用镜头讲故事</p>
+            </div>
+            <div class="skill-card" onclick="openSkillDetail(2)">
+                <span class="skill-icon">✍️</span>
+                <h3 class="skill-name">文案撰写</h3>
+                <p class="skill-desc">内刊/季刊/电子刊物<br>文案与内容写作</p>
+            </div>
+            <div class="skill-card" onclick="openSkillDetail(3)">
+                <span class="skill-icon">📱</span>
+                <h3 class="skill-name">新媒体运营</h3>
+                <p class="skill-desc">新媒体与内部传播<br>渠道运营</p>
+            </div>
+            <div class="skill-card" onclick="openSkillDetail(4)">
+                <span class="skill-icon">🎯</span>
+                <h3 class="skill-name">活动策划</h3>
+                <p class="skill-desc">活动落地"手活儿"<br>拍照/物料/控台</p>
+            </div>
+            <div class="skill-card" onclick="openSkillDetail(5)">
+                <span class="skill-icon">📊</span>
+                <h3 class="skill-name">数据分析</h3>
+                <p class="skill-desc">基础数据分析<br>含AI工具应用</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第4屏：我的作品 -->
+    <section class="page works-page" id="page-3">
+        <h2 class="works-title">我的小作品 (ﾉ◕ヮ◕)ﾉ</h2>
+        <p class="works-subtitle">企业文化小工具 · 持续更新中</p>
+        <div class="works-grid">
+            <div class="work-item" onclick="location.href='wheel.html'">
+                <span class="work-icon">🎡</span>
+                <h3 class="work-name">幸运转盘</h3>
+                <span class="work-status">点击使用</span>
+            </div>
+            <div class="work-item" onclick="location.href='draw.html'">
+                <span class="work-icon">🎲</span>
+                <h3 class="work-name">随机抽签</h3>
+                <span class="work-status">点击使用</span>
+            </div>
+            <div class="work-item" onclick="location.href='vote.html'">
+                <span class="work-icon">📊</span>
+                <h3 class="work-name">投票小助手</h3>
+                <span class="work-status">点击使用</span>
+            </div>
+            <div class="work-item" onclick="location.href='notice.html'">
+                <span class="work-icon">📝</span>
+                <h3 class="work-name">通知生成器</h3>
+                <span class="work-status">点击使用</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第5屏：我的生活 -->
+    <section class="page life-page" id="page-4">
+        <h2 class="works-title">我 的 生 活 (◍•ᴗ•◍)</h2>
+        <p class="works-subtitle">记录每一个瞬间 · 分享每一份心情</p>
+        <div class="life-intro">
+            <p class="life-desc">这里是我的生活日记本，可以随时记录图片、视频和心情</p>
+            <button class="life-btn" onclick="location.href='life.html'">进入我的生活 →</button>
+        </div>
+    </section>
+
+    <!-- 第6屏：联系我 -->
+    <section class="page contact-page" id="page-5">
+        <div class="contact-container">
+            <h2 class="contact-title">找我玩呀 (｡♥‿♥｡)</h2>
+            <div class="contact-box">
+                <div class="contact-item">
+                    <span class="contact-label">邮箱：</span>
+                    <span class="contact-value">3284497028@qq.com</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">微信：</span>
+                    <span class="contact-value">dwx07160831</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">电话：</span>
+                    <span class="contact-value">18817142327</span>
+                </div>
+            </div>
+            <!-- 留言互动区域 -->
+            <div class="guestbook-section">
+                <h3 class="guestbook-title">💬 给我留言</h3>
+                <p class="guestbook-desc">有什么想对我说的？欢迎留下你的想法、建议或祝福~</p>
+                <div class="guestbook-form">
+                    <input type="text" class="guestbook-input" id="guestName" placeholder="你的名字（可选）" maxlength="20">
+                    <textarea class="guestbook-textarea" id="guestMessage" placeholder="写下你的留言..." maxlength="300"></textarea>
+                    <button class="guestbook-btn" onclick="submitGuestbook()">发送留言</button>
+                </div>
+                <div class="guestbook-list" id="guestbookList">
+                    <!-- 留言会显示在这里 -->
+                </div>
+            </div>
+
+            <p class="ending-text">感谢你的浏览，期待相遇 ✨</p>
+            <div class="ending-deco">🌸</div>
+        </div>
+    </section>
+
+    <!-- 能力详情弹窗 -->
+    <div class="skill-detail-modal" id="skillDetailModal" onclick="closeSkillDetailOnOverlay(event)">
+        <div class="skill-detail-content">
+            <div class="skill-detail-header">
+                <button class="skill-detail-back" onclick="closeSkillDetail()">←</button>
+                <h3 class="skill-detail-title">
+                    <span class="skill-detail-title-icon" id="modalIcon"></span>
+                    <span id="modalTitle"></span>
+                </h3>
+            </div>
+            <div class="skill-detail-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // 全屏滚动
+        let currentPage = 0;
+        const totalPages = 6;
+        let isScrolling = false;
+
+        function scrollToPage(index) {
+            if (index < 0 || index >= totalPages) return;
+            currentPage = index;
+            document.getElementById(`page-${index}`).scrollIntoView({ behavior: 'smooth' });
+            updateDots();
+        }
+
+        function updateDots() {
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentPage);
+            });
+        }
+
+        // 鼠标滚轮
+        window.addEventListener('wheel', (e) => {
+            if (isScrolling) return;
+            isScrolling = true;
+            
+            setTimeout(() => {
+                isScrolling = false;
+            }, 800);
+
+            if (e.deltaY > 0 && currentPage < totalPages - 1) {
+                scrollToPage(currentPage + 1);
+            } else if (e.deltaY < 0 && currentPage > 0) {
+                scrollToPage(currentPage - 1);
+            }
+        });
+
+        // 键盘导航
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' && currentPage < totalPages - 1) {
+                scrollToPage(currentPage + 1);
+            } else if (e.key === 'ArrowUp' && currentPage > 0) {
+                scrollToPage(currentPage - 1);
+            }
+        });
+
+        // 触摸滑动
+        let touchStartY = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        });
+
+        window.addEventListener('touchend', (e) => {
+            const touchEndY = e.changedTouches[0].clientY;
+            const diff = touchStartY - touchEndY;
+            
+            if (Math.abs(diff) > 50) {
+                if (diff > 0 && currentPage < totalPages - 1) {
+                    scrollToPage(currentPage + 1);
+                } else if (diff < 0 && currentPage > 0) {
+                    scrollToPage(currentPage - 1);
+                }
+            }
+        });
+
+        // 监听滚动更新当前页
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    currentPage = parseInt(id.split('-')[1]);
+                    updateDots();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.page').forEach(page => observer.observe(page));
+
+        // ========== 能力详情弹窗 ==========
+        const skillDetails = [
+            {
+                icon: '🎨',
+                title: '视觉设计（平面设计与图文处理）',
+                sections: [
+                    {
+                        title: '海报与长图设计',
+                        desc: '企业文化最直观的视觉输出，从一张海报开始传递品牌温度。无论是节日祝福、价值观宣传、活动招募、榜单公布还是制度图解，都需要用视觉语言让信息一目了然。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: '设计能力',
+                                desc: '能独立完成从文案构思到视觉成图的全流程，掌握多种设计风格——活泼可爱的团建海报、正式大气的制度图解、国潮风的节日祝福、极简风的价值观宣传，根据不同场景灵活切换。',
+                                tags: [
+                                    { text: '活泼风格', type: 'need' },
+                                    { text: '正式风格', type: 'need' },
+                                    { text: '国潮风格', type: 'need' },
+                                    { text: '极简风格', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '设计工具',
+                                desc: '根据项目需求和时间紧迫程度，灵活选择最合适的工具快速出图。传统工具精细可控，AI 工具效率翻倍。',
+                                tags: [
+                                    { text: 'Photoshop', type: 'tool', link: 'https://www.adobe.com/cn/products/photoshop.html' },
+                                    { text: 'Illustrator', type: 'tool', link: 'https://www.adobe.com/cn/products/illustrator.html' },
+                                    { text: 'Canva', type: 'tool', link: 'https://www.canva.cn/' },
+                                    { text: 'PPT / Keynote', type: 'tool' }
+                                ]
+                            },
+                            {
+                                title: 'AI 设计工具',
+                                desc: '善用 AI 工具可以大幅提升出图效率，从文案配图到活动海报，AI 生成 + 人工微调 = 又快又好。',
+                                tags: [
+                                    { text: '即梦 AI', type: 'tool', link: 'https://jimeng.jianying.com/' },
+                                    { text: 'Canva AI', type: 'tool', link: 'https://www.canva.cn/ai-image-generator/' },
+                                    { text: '通义万相', type: 'tool', link: 'https://tongyi.aliyun.com/wanxiang/' },
+                                    { text: '稿定 AI', type: 'tool', link: 'https://www.gaoding.com/ai' }
+                                ]
+                            },
+                            {
+                                title: '素材与模板平台',
+                                desc: '好设计离不开好素材。从模板、插画、图标到字体，这些平台是日常设计的"弹药库"，能快速找到灵感并高效出图。',
+                                tags: [
+                                    { text: '稿定设计', type: 'tool', link: 'https://www.gaoding.com/' },
+                                    { text: '秒出设计', type: 'tool', link: 'https://www.miaochu.com/' },
+                                    { text: '包图网', type: 'tool', link: 'https://ibaotu.com/' },
+                                    { text: '千图网', type: 'tool', link: 'https://www.58pic.com/' },
+                                    { text: 'Iconfont', type: 'tool', link: 'https://www.iconfont.cn/' },
+                                    { text: '花瓣网', type: 'tool', link: 'https://huaban.com/' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: '办公文档的高阶美化',
+                        desc: '把枯燥的文档变成有质感的视觉作品。员工手册不再是密密麻麻的文字，文化白皮书也能让人眼前一亮，培训课件从此告别“Word搬家”。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: '排版与美化',
+                                desc: '掌握核心排版原则——对齐让信息有序、对比让重点突出、留白让阅读轻松。能快速将Word文档转化为可印刷的高质量PDF，让每一页都经得起细看。',
+                                tags: [
+                                    { text: '对齐原则', type: 'need' },
+                                    { text: '对比原则', type: 'need' },
+                                    { text: '留白原则', type: 'need' },
+                                    { text: 'PDF输出', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '应用场景',
+                                desc: '员工手册设计、文化白皮书排版、内刊文章配图、培训课件美化、入职指南视觉化。',
+                                tags: []
+                            }
+                        ]
+                    },
+                    {
+                        title: '文化墙与物料延展',
+                        desc: '企业文化不只是屏幕上的内容，更需要落地到物理空间。从一面文化墙到一个小小的台卡，都是品牌形象的延伸。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: '物料类型',
+                                desc: '墙面贴画、展板设计、台卡制作、贴纸/不干胶、手举牌、打卡装置、易拉宝等。每一件物料都要与整体视觉调性保持一致。',
+                                tags: [
+                                    { text: '文化墙设计', type: 'need' },
+                                    { text: '展板制作', type: 'need' },
+                                    { text: '打卡装置', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '延展能力',
+                                desc: '能将主视觉快速延展到不同尺寸和材质的物料上，确保线上线下视觉统一。',
+                                tags: []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                icon: '🎬',
+                title: '视频制作（视频拍摄与剪辑）',
+                sections: [
+                    {
+                        title: '团建、生日会、文化日短视频',
+                        desc: '企业文化活动的高光时刻，用15-60秒短视频快速传播。从拍摄到出片，当天完成，让精彩不降温。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: '拍摄与剪辑',
+                                desc: '能独立完成素材拍摄，掌握运镜技巧（推、拉、摇、移），会加字幕、配BGM、做转场，让视频有节奏感。',
+                                tags: [
+                                    { text: '运镜技巧', type: 'need' },
+                                    { text: '字幕制作', type: 'need' },
+                                    { text: 'BGM配乐', type: 'need' },
+                                    { text: '转场效果', type: 'need' },
+                                    { text: '当天出片', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '剪辑工具',
+                                desc: '熟练使用主流剪辑软件，根据项目需求选择最合适的工具。',
+                                tags: [
+                                    { text: '剪映', type: 'tool', link: 'https://www.capcut.cn/' },
+                                    { text: 'Premiere', type: 'tool', link: 'https://www.adobe.com/cn/products/premiere.html' },
+                                    { text: 'Final Cut Pro', type: 'tool' },
+                                    { text: '必剪', type: 'tool', link: 'https://bcut.bilibili.cn/' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: '人物采访/价值观故事',
+                        desc: '用镜头记录真实故事，让企业文化有温度、有共鸣。优秀员工、项目团队、文化践行者，都是最好的故事主角。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: '采访全流程',
+                                desc: '从前期策划到后期成片，把控每个环节。拟采访提纲、选拍摄场景、引导被访者放松、捕捉真实表情，让采访不尴尬、有看点。',
+                                tags: [
+                                    { text: '采访提纲', type: 'need' },
+                                    { text: '场景布置', type: 'need' },
+                                    { text: '引导技巧', type: 'need' },
+                                    { text: '情绪捕捉', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '拍摄技术',
+                                desc: '掌握基础收音（领夹麦使用）、多机位切换（主机位+侧机位）、自然光/补光灯运用、背景虚化控制，让画面有质感。',
+                                tags: [
+                                    { text: '领夹麦收音', type: 'need' },
+                                    { text: '多机位切换', type: 'need' },
+                                    { text: '灯光布置', type: 'need' },
+                                    { text: '景深控制', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '后期制作',
+                                desc: '同期声字幕精准对齐，氛围感调色（暖色调温情、冷色调专业），BGM情绪铺垫，让故事更动人。',
+                                tags: [
+                                    { text: '同期声字幕', type: 'need' },
+                                    { text: '氛围调色', type: 'need' },
+                                    { text: '情绪剪辑', type: 'need' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: 'AI 视频工具',
+                        desc: '善用 AI 工具让视频制作效率翻倍，从素材生成到智能剪辑，AI 辅助 + 人工把控 = 又快又好。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: 'AI 视频生成',
+                                desc: '用 AI 生成创意素材、动态背景、虚拟场景，弥补实拍素材不足，让视频更有视觉冲击力。',
+                                tags: [
+                                    { text: '可灵 AI', type: 'tool', link: 'https://klingai.com/' },
+                                    { text: '即梦 AI', type: 'tool', link: 'https://jimeng.jianying.com/' },
+                                    { text: 'Runway', type: 'tool', link: 'https://runwayml.com/' },
+                                    { text: 'Pika', type: 'tool', link: 'https://pika.art/' }
+                                ]
+                            },
+                            {
+                                title: 'AI 辅助剪辑',
+                                desc: '智能字幕生成、自动剪辑高光片段、AI 配音、智能抠图，把重复性工作交给 AI，专注创意本身。',
+                                tags: [
+                                    { text: '剪映 AI 字幕', type: 'tool', link: 'https://www.capcut.cn/' },
+                                    { text: '讯飞听见', type: 'tool', link: 'https://www.iflyrec.com/' },
+                                    { text: '腾讯智影', type: 'tool', link: 'https://zenvideo.qq.com/' },
+                                    { text: '度加剪辑', type: 'tool', link: 'https://ducut.baidu.com/' }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                icon: '✍️',
+                title: '文案撰写（内刊/季刊/电子刊物制作 + 文案与内容写作）',
+                sections: [
+                    {
+                        title: '内刊/季刊/电子刊物的制作',
+                        desc: '企业文化沉淀的重要载体，从纸质内刊到电子刊物，记录成长、传递价值、凝聚人心。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: '内容策划与编排',
+                                desc: '从主题策划到栏目设置，把控整本刊物的调性和节奏。懂目录层级、页眉页脚设计、跨页图片处理，让阅读体验流畅舒适。',
+                                tags: [
+                                    { text: '主题策划', type: 'need' },
+                                    { text: '栏目设置', type: 'need' },
+                                    { text: '目录层级', type: 'need' },
+                                    { text: '跨页设计', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '稿件采写与编辑',
+                                desc: '深入各部门挖掘故事，把枯燥的业务数据、专业术语翻译成员工爱读、愿意分享的内容。快速记录、录音整理、提炼金句，让每篇文章都有看点。',
+                                tags: [
+                                    { text: '采访技巧', type: 'need' },
+                                    { text: '故事挖掘', type: 'need' },
+                                    { text: '标题提炼', type: 'need' },
+                                    { text: '文字润色', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '排版与制作工具',
+                                desc: '熟练使用多页排版工具，印刷版导出高清PDF，电子版生成可翻页的H5或小程序，让内刊既有质感又便于传播。',
+                                tags: [
+                                    { text: 'Canva', type: 'tool', link: 'https://www.canva.cn/' },
+                                    { text: 'InDesign', type: 'tool', link: 'https://www.adobe.com/cn/products/indesign.html' },
+                                    { text: 'FLBOOK', type: 'tool', link: 'https://flbook.com.cn/' },
+                                    { text: '云展网', type: 'tool', link: 'https://www.yunzhan365.com/' }
+                                ]
+                            },
+                            {
+                                title: '分发与数据追踪',
+                                desc: '选择合适的渠道推送内刊（公众号、企业微信、邮件），埋点统计阅读完成率、分享率，用数据指导下期优化方向。',
+                                tags: [
+                                    { text: '渠道选择', type: 'need' },
+                                    { text: '阅读统计', type: 'need' },
+                                    { text: '反馈收集', type: 'need' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: '文案与内容写作',
+                        desc: '文字是企业文化最基础的表达方式，从一句话到一篇长文，都需要精准传递信息、引发共鸣。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: '短文案——点睛之笔',
+                                desc: '用最少的字传递最强的信息。海报金句让人一眼记住，朋友圈宣传语引发转发，公众号摘要勾起点击欲望，弹窗通知清晰不打扰。',
+                                tags: [
+                                    { text: '海报金句', type: 'need' },
+                                    { text: '朋友圈文案', type: 'need' },
+                                    { text: '摘要提炼', type: 'need' },
+                                    { text: '通知文案', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '长文案——深度叙事',
+                                desc: '人物故事要有血有肉，文化案例要有细节有共鸣，制度解读要通俗易懂，年会串词要串联情绪。让长文读起来不累，看完有收获。',
+                                tags: [
+                                    { text: '人物故事', type: 'need' },
+                                    { text: '案例撰写', type: 'need' },
+                                    { text: '制度解读', type: 'need' },
+                                    { text: '主持串词', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '公告与通知——温度与尺度',
+                                desc: '行政通知也可以有温度。全员信正式但不生硬，部门群公告亲切但不随意，奖惩通报严肃但不冰冷。掌握不同场景的口吻切换，让通知被愿意阅读。',
+                                tags: [
+                                    { text: '全员信', type: 'need' },
+                                    { text: '群公告', type: 'need' },
+                                    { text: '奖惩通报', type: 'need' },
+                                    { text: '口径把握', type: 'need' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: 'AI 写作辅助工具',
+                        desc: '善用 AI 工具提升写作效率，从灵感激发到内容润色，AI 辅助 + 人工把控 = 又快又好。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: 'AI 文案生成',
+                                desc: '用 AI 快速生成文案框架、标题选项、段落扩写，解决"写不出来"的困境，把精力集中在创意和打磨上。',
+                                tags: [
+                                    { text: 'ChatGPT', type: 'tool', link: 'https://chat.openai.com/' },
+                                    { text: '文心一言', type: 'tool', link: 'https://yiyan.baidu.com/' },
+                                    { text: '通义千问', type: 'tool', link: 'https://tongyi.aliyun.com/qianwen/' },
+                                    { text: 'Kimi', type: 'tool', link: 'https://kimi.moonshot.cn/' }
+                                ]
+                            },
+                            {
+                                title: 'AI 润色与校对',
+                                desc: '智能检查错别字、语法错误，优化句式表达，让文字更流畅、更专业。',
+                                tags: [
+                                    { text: '秘塔写作猫', type: 'tool', link: 'https://xiezuocat.com/' },
+                                    { text: '讯飞听见', type: 'tool', link: 'https://www.iflyrec.com/' },
+                                    { text: 'Grammarly', type: 'tool', link: 'https://www.grammarly.com/' }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                icon: '📱',
+                title: '新媒体运营（新媒体与内部传播渠道运营）',
+                sections: [
+                    {
+                        title: '企业公众号/内网/飞书订阅号',
+                        desc: '日常推文编辑、发布、数据统计',
+                        tags: [
+                            { text: '需掌握：做头图、回复留言、分析打开率', type: 'need' }
+                        ],
+                        subItems: []
+                    },
+                    {
+                        title: '短视频平台（如有抖音/快手企业号）',
+                        desc: '策划选题、拍摄、运营',
+                        tags: [
+                            { text: '需掌握：了解平台调性，会蹭热点但不失分寸', type: 'need' }
+                        ],
+                        subItems: []
+                    },
+                    {
+                        title: '邮件/海报/倒计时',
+                        desc: '用邮件系统做HTML简讯（基础懂代码更好，不会用模板也行）',
+                        tags: [],
+                        subItems: []
+                    }
+                ]
+            },
+            {
+                icon: '🎯',
+                title: '活动策划（活动落地相关的"手活儿"）',
+                sections: [
+                    {
+                        title: '拍照',
+                        desc: '会议、团建、颁奖现场，能拍出可直接用于宣传的图片',
+                        tags: [
+                            { text: '需掌握：构图、抓拍表情、简单修图（调亮度、裁切）', type: 'need' },
+                            { text: '工具：手机旗舰机+后期（Lightroom或醒图）', type: 'tool' }
+                        ],
+                        subItems: []
+                    },
+                    {
+                        title: '物料制作对接',
+                        desc: '找印刷厂、广告公司，校对色差、材质、尺寸',
+                        tags: [
+                            { text: '需掌握：看懂印刷工艺单（覆膜、UV、骑马钉等）', type: 'need' },
+                            { text: '需掌握：会砍价和盯工期', type: 'need' }
+                        ],
+                        subItems: []
+                    },
+                    {
+                        title: '现场投屏/控台',
+                        desc: '活动背景大屏画面、抽奖系统、颁奖KV切换',
+                        tags: [
+                            { text: '需掌握：基本PPT放映设置、音频线连接、应急处理（黑屏怎么办）', type: 'need' }
+                        ],
+                        subItems: []
+                    }
+                ]
+            },
+            {
+                icon: '📊',
+                title: '数据分析（数据驱动决策）',
+                sections: [
+                    {
+                        title: '为什么行政/文化岗需要数据分析',
+                        desc: '从"凭感觉"到"看数据"，用数据证明工作价值、发现问题、优化决策。文化活动不是做了就行，要知道做得怎么样、哪里可以更好。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: '数据的价值',
+                                desc: '量化工作成果：用参与率、满意度、传播量证明活动效果；发现问题：通过数据波动找到薄弱环节；指导决策：基于数据而非直觉做下阶段规划。',
+                                tags: [
+                                    { text: '量化成果', type: 'need' },
+                                    { text: '发现问题', type: 'need' },
+                                    { text: '指导决策', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '常见分析场景',
+                                desc: '活动效果评估（参与率、满意度、传播量）、文化触达分析（阅读量、打开率、完读率）、员工调研分析（问卷数据、NPS评分）、成本效益分析（人均成本、ROI）。',
+                                tags: [
+                                    { text: '活动评估', type: 'need' },
+                                    { text: '文化触达', type: 'need' },
+                                    { text: '员工调研', type: 'need' },
+                                    { text: '成本分析', type: 'need' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: '基础数据处理与可视化',
+                        desc: '从零散数据到清晰图表，让数据自己说话。掌握基础的数据清洗、整理、可视化技能，快速产出直观的分析报告。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: '数据收集与清洗',
+                                desc: '从各平台导出原始数据（公众号后台、问卷星、活动报名系统），统一格式、去重补全、标准化处理，为后续分析打好基础。',
+                                tags: [
+                                    { text: '数据导出', type: 'need' },
+                                    { text: '格式统一', type: 'need' },
+                                    { text: '数据清洗', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: 'Excel 核心技能',
+                                desc: '透视表快速汇总多维度数据，VLOOKUP关联匹配，条件格式高亮关键数据，图表功能生成柱状图、折线图、饼图。Excel 足以应对 80% 的日常分析需求。',
+                                tags: [
+                                    { text: '透视表', type: 'need' },
+                                    { text: 'VLOOKUP', type: 'need' },
+                                    { text: '条件格式', type: 'need' },
+                                    { text: '图表制作', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '进阶可视化工具',
+                                desc: '当 Excel 不够用时的升级选择。飞书多维表格适合团队协作，简道云适合搭建数据收集+分析一体化系统，Tableau 适合复杂数据探索。',
+                                tags: [
+                                    { text: '飞书多维表格', type: 'tool', link: 'https://www.feishu.cn/product/base' },
+                                    { text: '简道云', type: 'tool', link: 'https://www.jiandaoyun.com/' },
+                                    { text: 'Tableau', type: 'tool', link: 'https://www.tableau.com/' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: 'AI 让数据分析更高效',
+                        desc: 'AI 不是替代分析思维，而是把重复性工作自动化，让你专注于解读和决策。从数据整理到可视化，AI 都能大幅提效。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: 'AI 数据看板搭建',
+                                desc: '用 Coze/扣子搭建智能数据助手，自动抓取各平台数据，生成实时看板。无需写代码，通过自然语言描述需求，AI 自动生成图表和洞察。',
+                                tags: [
+                                    { text: 'Coze/扣子', type: 'tool', link: 'https://www.coze.cn/' },
+                                    { text: '飞书智能伙伴', type: 'tool', link: 'https://www.feishu.cn/product/ai' }
+                                ]
+                            },
+                            {
+                                title: 'AI 辅助数据分析的优势',
+                                desc: '自然语言提问：直接问"上季度参与活动人数趋势如何"，AI 自动生成图表；智能洞察：自动发现数据异常和关联；一键报告：根据数据自动生成分析结论和建议。',
+                                tags: [
+                                    { text: '自然语言交互', type: 'need' },
+                                    { text: '自动洞察', type: 'need' },
+                                    { text: '智能报告', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: 'AI 数据分析实战步骤',
+                                desc: '① 明确分析目标 → ② 准备/导入数据 → ③ 用 AI 工具生成初步分析 → ④ 人工验证和调整 → ⑤ 输出可视化报告 → ⑥ 基于结论行动。AI 负责 ②③⑤，人负责 ①④⑥。',
+                                tags: [
+                                    { text: '明确目标', type: 'need' },
+                                    { text: 'AI生成', type: 'need' },
+                                    { text: '人工验证', type: 'need' },
+                                    { text: '行动落地', type: 'need' }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: '典型工作场景实战',
+                        desc: '把数据分析真正用到日常工作中，让每一次活动、每一篇推文、每一个决策都有数据支撑。',
+                        tags: [],
+                        subItems: [
+                            {
+                                title: '活动效果复盘',
+                                desc: '活动前设定目标（参与率>60%、满意度>4.5分），活动中实时监控报名人数，活动后分析参与率、满意度、传播量、成本效益，输出复盘报告指导下次优化。',
+                                tags: [
+                                    { text: '目标设定', type: 'need' },
+                                    { text: '实时监控', type: 'need' },
+                                    { text: '复盘报告', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '内容运营优化',
+                                desc: '追踪每篇推文的打开率、完读率、分享率，找出高传播内容的共同特征（标题套路、发布时间、内容类型），用数据指导内容策略调整。',
+                                tags: [
+                                    { text: '打开率分析', type: 'need' },
+                                    { text: '内容归因', type: 'need' },
+                                    { text: '策略优化', type: 'need' }
+                                ]
+                            },
+                            {
+                                title: '员工满意度追踪',
+                                desc: '定期调研（季度/年度）+ 实时反馈（活动后即时问卷），用 NPS 评分衡量员工推荐意愿，追踪趋势变化，定位问题部门/环节。',
+                                tags: [
+                                    { text: '定期调研', type: 'need' },
+                                    { text: 'NPS评分', type: 'need' },
+                                    { text: '趋势追踪', type: 'need' }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        function openSkillDetail(index) {
+            const data = skillDetails[index];
+            const modal = document.getElementById('skillDetailModal');
+            document.getElementById('modalIcon').textContent = data.icon;
+            document.getElementById('modalTitle').textContent = data.title;
+
+            let bodyHTML = '';
+            data.sections.forEach(section => {
+                bodyHTML += '<div class="skill-section">';
+                bodyHTML += '<h4 class="skill-section-title">' + section.title + '</h4>';
+                if (section.desc) {
+                    bodyHTML += '<p class="skill-item-desc" style="margin-top:-8px;margin-bottom:14px;">' + section.desc + '</p>';
+                }
+                if (section.subItems && section.subItems.length > 0) {
+                    section.subItems.forEach(sub => {
+                        bodyHTML += '<div class="skill-item">';
+                        bodyHTML += '<h5 class="skill-item-title">' + sub.title + '</h5>';
+                        if (sub.desc) {
+                            bodyHTML += '<p class="skill-item-desc">' + sub.desc + '</p>';
+                        }
+                        if (sub.tags && sub.tags.length > 0) {
+                            sub.tags.forEach(tag => {
+                                if (tag.link) {
+                                    bodyHTML += '<a href="' + tag.link + '" target="_blank" rel="noopener"><span class="skill-tag ' + tag.type + ' link">' + tag.text + ' ↗</span></a>';
+                                } else {
+                                    bodyHTML += '<span class="skill-tag ' + tag.type + '">' + tag.text + '</span>';
+                                }
+                            });
+                        }
+                        bodyHTML += '</div>';
+                    });
+                } else {
+                    if (section.tags && section.tags.length > 0) {
+                        section.tags.forEach(tag => {
+                            bodyHTML += '<span class="skill-tag ' + tag.type + '">' + tag.text + '</span>';
+                        });
+                    }
+                }
+                bodyHTML += '</div>';
+            });
+
+            document.getElementById('modalBody').innerHTML = bodyHTML;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSkillDetail() {
+            const modal = document.getElementById('skillDetailModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeSkillDetailOnOverlay(event) {
+            if (event.target === event.currentTarget) {
+                closeSkillDetail();
+            }
+        }
+
+        // ESC键关闭弹窗
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSkillDetail();
+                closeKeywordModal();
+            }
+        });
+    </script>
+
+    <!-- 四个关键词弹窗 -->
+    <div class="keyword-modal" id="keywordModal" onclick="closeKeywordModalOnOverlay(event)">
+        <div class="keyword-modal-content">
+            <button class="keyword-modal-close" onclick="closeKeywordModal()">×</button>
+            <h3 class="keyword-modal-title" id="keywordModalTitle"></h3>
+            <p class="keyword-modal-text" id="keywordModalText"></p>
+        </div>
+    </div>
+
+    <script>
+        // 四个关键词数据
+        const keywordData = [
+            {
+                title: '跨界破局',
+                content: '我是音乐学出身，但专业没有定义我的路径。我选择独自北上南下，在北京字节跳动和深圳矽递科技Seeed Studio的实习中跨界探索。相信"想不如做"，跨界是我破局的第一步。'
+            },
+            {
+                title: '生活策展',
+                content: '我是一个生活策展人。收藏句子、手写信、纸袋、小纸条……不是为了囤积，而是为了留住微光。我能从细碎里感知幸福，也愿意把这份温暖保存下来。'
+            },
+            {
+                title: '主动进化',
+                content: '我从不等待机会。我主动学AI、学代码、学设计，关注金融和政策。挫败让我沉淀，而不是后退。我的进化方式很简单：一边行动，一边迭代。'
+            },
+            {
+                title: '长期践行',
+                content: '我不做空想家。我的未来靠一步步践行：在做中沉淀，在试错中调整。五年后，我希望自己已经是那个推动项目的人。而现在，我正在路上。'
+            }
+        ];
+
+        // 打开关键词弹窗
+        function openKeywordModal(index) {
+            const data = keywordData[index];
+            document.getElementById('keywordModalTitle').textContent = data.title;
+            document.getElementById('keywordModalText').textContent = data.content;
+            document.getElementById('keywordModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭关键词弹窗
+        function closeKeywordModal() {
+            document.getElementById('keywordModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // 点击遮罩层关闭
+        function closeKeywordModalOnOverlay(event) {
+            if (event.target.id === 'keywordModal') {
+                closeKeywordModal();
+            }
+        }
+
+        // ========== 留言板功能 ==========
+        // 从 localStorage 加载留言
+        function loadGuestbook() {
+            const messages = JSON.parse(localStorage.getItem('guestbookMessages') || '[]');
+            const listEl = document.getElementById('guestbookList');
+            
+            if (messages.length === 0) {
+                listEl.innerHTML = '';
+                return;
+            }
+            
+            listEl.innerHTML = messages.map(msg => `
+                <div class="guestbook-item">
+                    <div class="guestbook-item-header">
+                        <span class="guestbook-item-name">${msg.name || '匿名访客'}</span>
+                        <span class="guestbook-item-time">${msg.time}</span>
+                    </div>
+                    <div class="guestbook-item-content">${msg.content}</div>
+                </div>
+            `).join('');
+        }
+
+        // 提交留言
+        function submitGuestbook() {
+            const nameInput = document.getElementById('guestName');
+            const messageInput = document.getElementById('guestMessage');
+            const name = nameInput.value.trim();
+            const content = messageInput.value.trim();
+            
+            if (!content) {
+                alert('请写下你的留言内容~');
+                return;
+            }
+            
+            const messages = JSON.parse(localStorage.getItem('guestbookMessages') || '[]');
+            const now = new Date();
+            const timeStr = `${now.getMonth() + 1}月${now.getDate()}日 ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+            
+            messages.unshift({
+                name: name,
+                content: content,
+                time: timeStr
+            });
+            
+            // 最多保留20条留言
+            if (messages.length > 20) {
+                messages.pop();
+            }
+            
+            localStorage.setItem('guestbookMessages', JSON.stringify(messages));
+            
+            // 清空输入框
+            nameInput.value = '';
+            messageInput.value = '';
+            
+            // 重新加载留言列表
+            loadGuestbook();
+            
+            alert('留言发送成功！感谢你的留言~');
+        }
+
+        // 页面加载时初始化留言板
+        document.addEventListener('DOMContentLoaded', function() {
+            loadGuestbook();
+        });
+    </script>
+
+</body>
+</html>

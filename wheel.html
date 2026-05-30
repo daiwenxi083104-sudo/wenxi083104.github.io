@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>转盘大全</title>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+    background: #fafafa;
+    color: #1a1a1a;
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+  .back-link {
+    display: inline-block;
+    margin: 20px 0 0 20px;
+    padding: 8px 20px;
+    background: #fff;
+    color: #1a1a1a;
+    text-decoration: none;
+    border: 2px solid #1a1a1a;
+    border-radius: 18px 12px 22px 14px;
+    box-shadow: 3px 3px 0 #1a1a1a;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .back-link:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 #1a1a1a;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .title-section {
+    text-align: center;
+    margin: 30px 0 40px;
+  }
+  .title-section h1 {
+    font-size: 48px;
+    letter-spacing: 12px;
+    margin-bottom: 10px;
+    text-shadow: 3px 3px 0 #1a1a1a;
+  }
+  .title-section p {
+    font-size: 20px;
+    color: #555;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    padding: 10px;
+  }
+  .card {
+    background: #fff;
+    border: 2.5px solid #1a1a1a;
+    border-radius: 25px 20px 30px 22px;
+    box-shadow: 4px 4px 0 #1a1a1a;
+    padding: 28px 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #1a1a1a;
+    transition: all 0.25s ease;
+    cursor: pointer;
+  }
+  .card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 7px 7px 0 #1a1a1a;
+  }
+  .card:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #1a1a1a;
+  }
+  .card .icon {
+    font-size: 52px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .card h3 {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .card p {
+    font-size: 15px;
+    color: #666;
+  }
+  .footer-link {
+    text-align: center;
+    margin-top: 40px;
+  }
+  .footer-link a {
+    display: inline-block;
+    padding: 10px 28px;
+    background: #1a1a1a;
+    color: #fafafa;
+    text-decoration: none;
+    border-radius: 20px 16px 24px 18px;
+    box-shadow: 4px 4px 0 #555;
+    font-size: 17px;
+    transition: all 0.2s;
+  }
+  .footer-link a:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #555;
+  }
+  /* Decorative doodles */
+  .doodle {
+    text-align: center;
+    font-size: 28px;
+    margin: 10px 0;
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-link">&#8592; 返回</a>
+
+<div class="container">
+  <div class="title-section">
+    <div class="doodle">~ ~ ~ ~ ~ ~ ~</div>
+    <h1>转 盘 大 全</h1>
+    <p>选择你需要的转盘类型</p>
+    <div class="doodle">~ ~ ~ ~ ~ ~ ~</div>
+  </div>
+
+  <div class="card-grid">
+    <a href="wheel-prize.html" class="card">
+      <span class="icon">&#127873;</span>
+      <h3>奖项转盘</h3>
+      <p>年会抽奖、活动抽奖</p>
+    </a>
+    <a href="wheel-punish.html" class="card">
+      <span class="icon">&#128520;</span>
+      <h3>惩罚转盘</h3>
+      <p>真心话大冒险、团建惩罚</p>
+    </a>
+    <a href="wheel-food.html" class="card">
+      <span class="icon">&#127869;</span>
+      <h3>今天吃什么</h3>
+      <p>选择困难症的福音</p>
+    </a>
+    <a href="wheel-yesno.html" class="card">
+      <span class="icon">&#127919;</span>
+      <h3>随机决定</h3>
+      <p>做不做？去不去？</p>
+    </a>
+    <a href="wheel-task.html" class="card">
+      <span class="icon">&#9989;</span>
+      <h3>任务分配</h3>
+      <p>随机分配任务</p>
+    </a>
+  </div>
+
+  <div class="footer-link">
+    <a href="index.html">返回首页</a>
+  </div>
+</div>
+
+</body>
+</html>
