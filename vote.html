@@ -387,154 +387,20 @@
   </div>
 </div>
 
-<script>
-  // 默认示例数据
-  let topic = '团建去哪里？';
-  let options = [
-    { name: '爬山', votes: 0 },
-    { name: '烧烤', votes: 0 },
-    { name: 'KTV', votes: 0 },
-    { name: '看电影', votes: 0 }
-  ];
-  let votedIndex = -1;
-  let votingStarted = false;
-
-  // 初始化：自动填入默认示例
-  document.getElementById('topicInput').value = topic;
-
-  function showToast(msg) {
-    var toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(function() {
-      toast.classList.remove('show');
-    }, 2000);
-  }
-
-  function addOption() {
-    var input = document.getElementById('optionInput');
-    var name = input.value.trim();
-    if (!name) {
-      showToast('请输入选项名称~');
-      return;
-    }
-    if (options.some(function(o) { return o.name === name; })) {
-      showToast('该选项已存在哦~');
-      return;
-    }
-    options.push({ name: name, votes: 0 });
-    input.value = '';
-    showToast('已添加选项：' + name);
-  }
-
-  function startVote() {
-    topic = document.getElementById('topicInput').value.trim();
-    if (!topic) {
-      showToast('请输入投票主题~');
-      return;
-    }
-    if (options.length < 2) {
-      showToast('至少需要两个选项哦~');
-      return;
-    }
-    votingStarted = true;
-    votedIndex = -1;
-    options.forEach(function(o) { o.votes = 0; });
-
-    document.getElementById('createCard').style.display = 'none';
-    document.getElementById('voteCard').style.display = 'block';
-    document.getElementById('voteTopic').textContent = topic;
-    renderOptions();
-  }
-
-  function renderOptions() {
-    var list = document.getElementById('optionList');
-    list.innerHTML = '';
-    var total = options.reduce(function(s, o) { return s + o.votes; }, 0);
-
-    options.forEach(function(opt, i) {
-      var percent = total > 0 ? Math.round(opt.votes / total * 100) : 0;
-      var li = document.createElement('li');
-      li.className = 'option-item' + (votedIndex === i ? ' voted' : '');
-      li.onclick = function() { vote(i); };
-      li.innerHTML =
-        '<div class="option-header">' +
-          '<div class="option-name"><span class="option-radio"></span>' + escapeHtml(opt.name) + '</div>' +
-          '<div class="option-votes">' + opt.votes + ' 票</div>' +
-        '</div>' +
-        '<div class="option-bar-wrap">' +
-          '<span class="option-percent">' + percent + '%</span>' +
-          '<div class="option-bar" style="width:' + percent + '%"></div>' +
-        '</div>';
-      list.appendChild(li);
-    });
-
-    document.getElementById('totalVotes').textContent = total;
-  }
-
-  function vote(index) {
-    votedIndex = index;
-    options[index].votes++;
-    renderOptions();
-    showToast('已投票给：' + options[index].name);
-  }
-
-  function showAddOption() {
-    var wrap = document.getElementById('addOptionWrap');
-    wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
-    if (wrap.style.display === 'block') {
-      document.getElementById('newOptionInput').focus();
-    }
-  }
-
-  function addNewOption() {
-    var input = document.getElementById('newOptionInput');
-    var name = input.value.trim();
-    if (!name) {
-      showToast('请输入选项名称~');
-      return;
-    }
-    if (options.some(function(o) { return o.name === name; })) {
-      showToast('该选项已存在哦~');
-      return;
-    }
-    options.push({ name: name, votes: 0 });
-    input.value = '';
-    renderOptions();
-    showToast('已添加新选项：' + name);
-  }
-
-  function resetVote() {
-    options.forEach(function(o) { o.votes = 0; });
-    votedIndex = -1;
-    renderOptions();
-    showToast('投票已重置~');
-  }
-
-  function newVote() {
-    votingStarted = false;
-    options = [];
-    votedIndex = -1;
-    document.getElementById('topicInput').value = '';
-    document.getElementById('createCard').style.display = 'block';
-    document.getElementById('voteCard').style.display = 'none';
-    document.getElementById('addOptionWrap').style.display = 'none';
-    showToast('已清空，请创建新投票~');
-  }
-
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
-  }
-
-  // 回车快捷键
-  document.getElementById('optionInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') addOption();
-  });
-  document.getElementById('newOptionInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') addNewOption();
-  });
+<script type="module">
+  import { VoteHelper } from './js/VoteHelper.js';
+  
+  // 初始化投票助手
+  const voteApp = new VoteHelper();
+  
+  // 暴露方法到全局，供 HTML 内联事件调用
+  window.addOption = () => voteApp.addOption();
+  window.startVote = () => voteApp.startVote();
+  window.vote = (index) => voteApp.vote(index);
+  window.showAddOption = () => voteApp.showAddOption();
+  window.addNewOption = () => voteApp.addNewOption();
+  window.resetVote = () => voteApp.resetVote();
+  window.newVote = () => voteApp.newVote();
 </script>
 
 </body>
