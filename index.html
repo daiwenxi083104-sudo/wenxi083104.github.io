@@ -28,6 +28,48 @@
             cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="%231a1a1a" stroke-width="2"/></svg>') 12 12, auto;
         }
 
+        /* 可访问性：Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--black);
+            color: var(--white);
+            padding: 8px 16px;
+            z-index: 10000;
+            text-decoration: none;
+            border-radius: 0 0 8px 0;
+            font-size: 14px;
+            transition: top 0.3s;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* 可访问性：Focus 样式 */
+        *:focus-visible {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* 减少动画（用户偏好） */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
         /* 手绘线条动画 */
         @keyframes wiggle {
             0%, 100% { transform: rotate(-2deg); }
@@ -1239,24 +1281,27 @@
     </style>
 </head>
 <body>
+    <!-- 可访问性：Skip Link -->
+    <a href="#main-content" class="skip-link">跳转到主要内容</a>
 
     <!-- 页面导航点 -->
-    <div class="page-dots">
-        <div class="dot active" onclick="scrollToPage(0)"></div>
-        <div class="dot" onclick="scrollToPage(1)"></div>
-        <div class="dot" onclick="scrollToPage(2)"></div>
-        <div class="dot" onclick="scrollToPage(3)"></div>
-        <div class="dot" onclick="scrollToPage(4)"></div>
-    </div>
+    <nav class="page-dots" aria-label="页面导航">
+        <button class="dot active" onclick="scrollToPage(0)" aria-label="第1页：开场" aria-current="page"></button>
+        <button class="dot" onclick="scrollToPage(1)" aria-label="第2页：我是谁"></button>
+        <button class="dot" onclick="scrollToPage(2)" aria-label="第3页：我能做什么"></button>
+        <button class="dot" onclick="scrollToPage(3)" aria-label="第4页：我的作品"></button>
+        <button class="dot" onclick="scrollToPage(4)" aria-label="第5页：我的生活"></button>
+    </nav>
 
+    <main id="main-content">
     <!-- 第1屏：开场 -->
-    <section class="page intro-page" id="page-0">
+    <section class="page intro-page" id="page-0" aria-labelledby="intro-title">
         <div class="floating-deco deco-1 sparkle">✦</div>
         <div class="floating-deco deco-2 sparkle">✧</div>
         <div class="floating-deco deco-3 sparkle">✦</div>
         <div class="floating-deco deco-4 sparkle">✧</div>
 
-        <h1 class="intro-title">戴雯晞</h1>
+        <h1 class="intro-title" id="intro-title">戴雯晞</h1>
         <div class="intro-subtitle">
             <span>音乐学</span>
             <span>企业文化</span>
@@ -1272,7 +1317,7 @@
     </section>
 
     <!-- 第2屏：我是谁 -->
-    <section class="page who-page" id="page-1">
+    <section class="page who-page" id="page-1" aria-labelledby="who-title">
         <div class="who-container">
             <p class="who-question">(｡･ω･｡) 我是谁？</p>
             <p class="who-answer">
@@ -1280,128 +1325,128 @@
                 也相信<span class="highlight">好文化</span>能温暖团队的人
             </p>
 
-            <div class="keywords-container">
-                <div class="keyword-bubble">🎵 音乐学背景</div>
-                <div class="keyword-bubble">💡 创意策划</div>
-                <div class="keyword-bubble">🤝 团队协调</div>
+            <div class="keywords-container" role="list" aria-label="个人关键词">
+                <div class="keyword-bubble" role="listitem">🎵 音乐学背景</div>
+                <div class="keyword-bubble" role="listitem">💡 创意策划</div>
+                <div class="keyword-bubble" role="listitem">🤝 团队协调</div>
             </div>
 
             <!-- 四个关键词模块 -->
-            <div class="four-keywords-section">
-                <h3 class="four-keywords-title">我的四个关键词</h3>
-                <div class="four-keywords-grid">
+            <div class="four-keywords-section" role="region" aria-labelledby="keywords-title">
+                <h3 class="four-keywords-title" id="keywords-title">我的四个关键词</h3>
+                <div class="four-keywords-grid" role="list">
                     <!-- 关键词1：跨界破局 -->
-                    <div class="keyword-card" onclick="openKeywordModal(0)">
+                    <button class="keyword-card" onclick="openKeywordModal(0)" role="listitem" aria-label="跨界破局：突破边界，了解更多">
                         <div class="keyword-card-main">跨界破局</div>
                         <div class="keyword-card-tag">突破边界</div>
-                        <button class="keyword-card-btn">了解更多</button>
-                    </div>
+                        <span class="keyword-card-btn">了解更多</span>
+                    </button>
                     <!-- 关键词2：生活策展 -->
-                    <div class="keyword-card" onclick="openKeywordModal(1)">
+                    <button class="keyword-card" onclick="openKeywordModal(1)" role="listitem" aria-label="生活策展：感知美好，了解更多">
                         <div class="keyword-card-main">生活策展</div>
                         <div class="keyword-card-tag">感知美好</div>
-                        <button class="keyword-card-btn">了解更多</button>
-                    </div>
+                        <span class="keyword-card-btn">了解更多</span>
+                    </button>
                     <!-- 关键词3：主动进化 -->
-                    <div class="keyword-card" onclick="openKeywordModal(2)">
+                    <button class="keyword-card" onclick="openKeywordModal(2)" role="listitem" aria-label="主动进化：自我迭代，了解更多">
                         <div class="keyword-card-main">主动进化</div>
                         <div class="keyword-card-tag">自我迭代</div>
-                        <button class="keyword-card-btn">了解更多</button>
-                    </div>
+                        <span class="keyword-card-btn">了解更多</span>
+                    </button>
                     <!-- 关键词4：长期践行 -->
-                    <div class="keyword-card" onclick="openKeywordModal(3)">
+                    <button class="keyword-card" onclick="openKeywordModal(3)" role="listitem" aria-label="长期践行：知行合一，了解更多">
                         <div class="keyword-card-main">长期践行</div>
                         <div class="keyword-card-tag">知行合一</div>
-                        <button class="keyword-card-btn">了解更多</button>
-                    </div>
+                        <span class="keyword-card-btn">了解更多</span>
+                    </button>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- 第3屏：我能做什么 -->
-    <section class="page skills-page" id="page-2">
-        <h2 class="skills-title">我能做什么 (◕‿◕)</h2>
-        <div class="skills-container">
-            <div class="skill-card" onclick="openSkillDetail(0)">
-                <span class="skill-icon">🎨</span>
+    <section class="page skills-page" id="page-2" aria-labelledby="skills-title">
+        <h2 class="skills-title" id="skills-title">我能做什么 (◕‿◕)</h2>
+        <div class="skills-container" role="list" aria-label="技能列表">
+            <button class="skill-card" onclick="openSkillDetail(0)" role="listitem" aria-label="视觉设计：平面设计与图文处理，点击查看详情">
+                <span class="skill-icon" aria-hidden="true">🎨</span>
                 <h3 class="skill-name">视觉设计</h3>
                 <p class="skill-desc">平面设计与图文处理<br>让美触手可及</p>
-            </div>
-            <div class="skill-card" onclick="openSkillDetail(1)">
-                <span class="skill-icon">🎬</span>
+            </button>
+            <button class="skill-card" onclick="openSkillDetail(1)" role="listitem" aria-label="视频制作：视频拍摄与剪辑，点击查看详情">
+                <span class="skill-icon" aria-hidden="true">🎬</span>
                 <h3 class="skill-name">视频制作</h3>
                 <p class="skill-desc">视频拍摄与剪辑<br>用镜头讲故事</p>
-            </div>
-            <div class="skill-card" onclick="openSkillDetail(2)">
-                <span class="skill-icon">✍️</span>
+            </button>
+            <button class="skill-card" onclick="openSkillDetail(2)" role="listitem" aria-label="文案撰写：内刊季刊电子刊物，点击查看详情">
+                <span class="skill-icon" aria-hidden="true">✍️</span>
                 <h3 class="skill-name">文案撰写</h3>
                 <p class="skill-desc">内刊/季刊/电子刊物<br>文案与内容写作</p>
-            </div>
-            <div class="skill-card" onclick="openSkillDetail(3)">
-                <span class="skill-icon">📱</span>
+            </button>
+            <button class="skill-card" onclick="openSkillDetail(3)" role="listitem" aria-label="新媒体运营：新媒体与内部传播，点击查看详情">
+                <span class="skill-icon" aria-hidden="true">📱</span>
                 <h3 class="skill-name">新媒体运营</h3>
                 <p class="skill-desc">新媒体与内部传播<br>渠道运营</p>
-            </div>
-            <div class="skill-card" onclick="openSkillDetail(4)">
-                <span class="skill-icon">🎯</span>
+            </button>
+            <button class="skill-card" onclick="openSkillDetail(4)" role="listitem" aria-label="活动策划：活动落地手活儿，点击查看详情">
+                <span class="skill-icon" aria-hidden="true">🎯</span>
                 <h3 class="skill-name">活动策划</h3>
                 <p class="skill-desc">活动落地"手活儿"<br>拍照/物料/控台</p>
-            </div>
-            <div class="skill-card" onclick="openSkillDetail(5)">
-                <span class="skill-icon">📊</span>
+            </button>
+            <button class="skill-card" onclick="openSkillDetail(5)" role="listitem" aria-label="数据分析：基础数据分析含AI工具，点击查看详情">
+                <span class="skill-icon" aria-hidden="true">📊</span>
                 <h3 class="skill-name">数据分析</h3>
                 <p class="skill-desc">基础数据分析<br>含AI工具应用</p>
-            </div>
+            </button>
         </div>
     </section>
 
     <!-- 第4屏：我的作品 -->
-    <section class="page works-page" id="page-3">
-        <h2 class="works-title">我的小作品 (ﾉ◕ヮ◕)ﾉ</h2>
+    <section class="page works-page" id="page-3" aria-labelledby="works-title">
+        <h2 class="works-title" id="works-title">我的小作品 (ﾉ◕ヮ◕)ﾉ</h2>
         <p class="works-subtitle">企业文化小工具 · 持续更新中</p>
-        <div class="works-grid">
-            <div class="work-item" onclick="location.href='wheel.html'">
-                <span class="work-icon">🎡</span>
+        <div class="works-grid" role="list" aria-label="作品列表">
+            <a href="wheel.html" class="work-item" role="listitem" aria-label="幸运转盘：企业文化抽奖工具">
+                <span class="work-icon" aria-hidden="true">🎡</span>
                 <h3 class="work-name">幸运转盘</h3>
                 <span class="work-status">点击使用</span>
-            </div>
-            <div class="work-item" onclick="location.href='draw.html'">
-                <span class="work-icon">🎲</span>
+            </a>
+            <a href="draw.html" class="work-item" role="listitem" aria-label="随机抽签：公平抽签工具">
+                <span class="work-icon" aria-hidden="true">🎲</span>
                 <h3 class="work-name">随机抽签</h3>
                 <span class="work-status">点击使用</span>
-            </div>
-            <div class="work-item" onclick="location.href='vote.html'">
-                <span class="work-icon">📊</span>
+            </a>
+            <a href="vote.html" class="work-item" role="listitem" aria-label="投票小助手：团队投票统计工具">
+                <span class="work-icon" aria-hidden="true">📊</span>
                 <h3 class="work-name">投票小助手</h3>
                 <span class="work-status">点击使用</span>
-            </div>
-            <div class="work-item" onclick="location.href='notice.html'">
-                <span class="work-icon">📝</span>
+            </a>
+            <a href="notice.html" class="work-item" role="listitem" aria-label="通知生成器：企业通知模板工具">
+                <span class="work-icon" aria-hidden="true">📝</span>
                 <h3 class="work-name">通知生成器</h3>
                 <span class="work-status">点击使用</span>
-            </div>
+            </a>
         </div>
     </section>
 
     <!-- 第5屏：我的生活 -->
-    <section class="page life-page" id="page-4">
-        <h2 class="works-title">我 的 生 活 (◍•ᴗ•◍)</h2>
+    <section class="page life-page" id="page-4" aria-labelledby="life-title">
+        <h2 class="works-title" id="life-title">我 的 生 活 (◍•ᴗ•◍)</h2>
         <p class="works-subtitle">记录每一个瞬间 · 分享每一份心情</p>
         <div class="life-intro">
             <p class="life-desc">这里是我的生活日记本，可以随时记录图片、视频和心情</p>
-            <button class="life-btn" onclick="location.href='life.html'">进入我的生活 →</button>
+            <a href="life.html" class="life-btn" role="button" aria-label="进入我的生活记录页面">进入我的生活 →</a>
         </div>
     </section>
 
     <!-- 第6屏：联系我 -->
-    <section class="page contact-page" id="page-5">
+    <section class="page contact-page" id="page-5" aria-labelledby="contact-title">
         <div class="contact-container">
-            <h2 class="contact-title">找我玩呀 (｡♥‿♥｡)</h2>
-            <div class="contact-box">
+            <h2 class="contact-title" id="contact-title">找我玩呀 (｡♥‿♥｡)</h2>
+            <address class="contact-box" aria-label="联系方式">
                 <div class="contact-item">
                     <span class="contact-label">邮箱：</span>
-                    <span class="contact-value">3284497028@qq.com</span>
+                    <a href="mailto:3284497028@qq.com" class="contact-value">3284497028@qq.com</a>
                 </div>
                 <div class="contact-item">
                     <span class="contact-label">微信：</span>
@@ -1409,37 +1454,35 @@
                 </div>
                 <div class="contact-item">
                     <span class="contact-label">电话：</span>
-                    <span class="contact-value">18817142327</span>
+                    <a href="tel:18817142327" class="contact-value">18817142327</a>
                 </div>
-            </div>
+            </address>
             <!-- 留言互动区域 -->
-            <div class="guestbook-section">
-                <h3 class="guestbook-title">💬 给我留言</h3>
+            <section class="guestbook-section" aria-labelledby="guestbook-title">
+                <h3 class="guestbook-title" id="guestbook-title">💬 给我留言</h3>
                 <p class="guestbook-desc">有什么想对我说的？欢迎留下你的想法、建议或祝福~</p>
-                <div class="guestbook-form">
-                    <input type="text" class="guestbook-input" id="guestName" placeholder="你的名字（可选）" maxlength="20">
-                    <textarea class="guestbook-textarea" id="guestMessage" placeholder="写下你的留言..." maxlength="300"></textarea>
-                    <button class="guestbook-btn" onclick="submitGuestbook()">发送留言</button>
-                </div>
-                <div class="guestbook-list" id="guestbookList">
+                <form class="guestbook-form" onsubmit="event.preventDefault(); submitGuestbook();" aria-label="留言表单">
+                    <input type="text" class="guestbook-input" id="guestName" placeholder="你的名字（可选）" maxlength="20" aria-label="你的名字">
+                    <textarea class="guestbook-textarea" id="guestMessage" placeholder="写下你的留言..." maxlength="300" aria-label="留言内容" required></textarea>
+                    <button type="submit" class="guestbook-btn" aria-label="发送留言">发送留言</button>
+                </form>
+                <div class="guestbook-list" id="guestbookList" role="region" aria-label="留言列表">
                     <!-- 留言会显示在这里 -->
                 </div>
-            </div>
+            </section>
 
             <p class="ending-text">感谢你的浏览，期待相遇 ✨</p>
-            <div class="ending-deco">🌸</div>
+            <div class="ending-deco" aria-hidden="true">🌸</div>
         </div>
     </section>
+    </main>
 
     <!-- 能力详情弹窗 -->
-    <div class="skill-detail-modal" id="skillDetailModal" onclick="closeSkillDetailOnOverlay(event)">
-        <div class="skill-detail-content">
+    <div class="skill-detail-modal" id="skillDetailModal" onclick="closeSkillDetailOnOverlay(event)" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="skill-detail-content" role="document">
             <div class="skill-detail-header">
-                <button class="skill-detail-back" onclick="closeSkillDetail()">←</button>
-                <h3 class="skill-detail-title">
-                    <span class="skill-detail-title-icon" id="modalIcon"></span>
-                    <span id="modalTitle"></span>
-                </h3>
+                <button class="skill-detail-back" onclick="closeSkillDetail()" aria-label="关闭弹窗">←</button>
+                <h3 class="skill-detail-title" id="modalTitle"></h3>
             </div>
             <div class="skill-detail-body" id="modalBody"></div>
         </div>

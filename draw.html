@@ -365,61 +365,62 @@
 </head>
 <body>
 
-<a href="index.html" class="back-link">&larr; 返回首页</a>
+<a href="index.html" class="back-link" aria-label="返回首页">&larr; 返回首页</a>
 
-<div class="container">
-  <h1>随机抽签</h1>
+<main class="container" role="main" aria-labelledby="page-title">
+  <h1 id="page-title">随机抽签</h1>
 
   <!-- 名字管理 -->
-  <div class="card">
-    <div class="card-title">参与人员</div>
-    <div class="name-list" id="nameList"></div>
+  <section class="card" aria-labelledby="names-title">
+    <h2 class="card-title" id="names-title">参与人员</h2>
+    <div class="name-list" id="nameList" role="list" aria-label="已添加的参与者"></div>
     <div class="input-row">
-      <input type="text" id="nameInput" placeholder="输入名字..." maxlength="20">
-      <button class="btn" onclick="addName()">添加</button>
+      <input type="text" id="nameInput" placeholder="输入名字..." maxlength="20" aria-label="输入参与者姓名">
+      <button class="btn" onclick="addName()" aria-label="添加参与者">添加</button>
     </div>
-  </div>
+  </section>
 
   <!-- 抽签设置 -->
-  <div class="card">
-    <div class="card-title">抽签设置</div>
-    <div class="count-selector">
-      <label><input type="radio" name="drawCount" value="1" checked> 抽 1 人</label>
-      <label><input type="radio" name="drawCount" value="2"> 抽 2 人</label>
-      <label><input type="radio" name="drawCount" value="3"> 抽 3 人</label>
+  <section class="card" aria-labelledby="settings-title">
+    <h2 class="card-title" id="settings-title">抽签设置</h2>
+    <div class="count-selector" role="radiogroup" aria-label="抽取人数">
+      <label><input type="radio" name="drawCount" value="1" checked aria-label="抽取1人"> 抽 1 人</label>
+      <label><input type="radio" name="drawCount" value="2" aria-label="抽取2人"> 抽 2 人</label>
+      <label><input type="radio" name="drawCount" value="3" aria-label="抽取3人"> 抽 3 人</label>
     </div>
-  </div>
+  </section>
 
   <!-- 抽签区 -->
-  <div class="card">
+  <section class="card" aria-labelledby="draw-area-title">
+    <h2 class="card-title" id="draw-area-title" class="visually-hidden">抽签区域</h2>
     <div class="slot-area">
-      <div class="slot-display" id="slotDisplay">
+      <div class="slot-display" id="slotDisplay" role="status" aria-live="polite" aria-atomic="true">
         <span class="slot-placeholder">点击下方按钮开始抽签</span>
       </div>
     </div>
     <div class="action-row">
-      <button class="btn btn-primary btn-big" id="startBtn" onclick="startDraw()">开始抽签</button>
-      <button class="btn btn-big" id="stopBtn" onclick="stopDraw()" style="display:none;">停 止</button>
+      <button class="btn btn-primary btn-big" id="startBtn" onclick="startDraw()" aria-label="开始抽签">开始抽签</button>
+      <button class="btn btn-big" id="stopBtn" onclick="stopDraw()" style="display:none;" aria-label="停止抽签">停 止</button>
     </div>
-  </div>
+  </section>
 
   <!-- 历史记录 -->
-  <div class="card history-section">
-    <div class="card-title">抽签记录</div>
-    <div id="historyList">
+  <section class="card history-section" aria-labelledby="history-title">
+    <h2 class="card-title" id="history-title">抽签记录</h2>
+    <div id="historyList" role="log" aria-live="polite" aria-atomic="false">
       <div class="history-empty">暂无记录</div>
     </div>
-  </div>
-</div>
+  </section>
+</main>
 
 <!-- 结果弹窗 -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">&times;</button>
-    <h2>抽签结果</h2>
-    <div class="result-list" id="resultList"></div>
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="result-title" aria-hidden="true">
+  <div class="modal" role="document">
+    <button class="modal-close" onclick="closeModal()" aria-label="关闭弹窗">&times;</button>
+    <h2 id="result-title">抽签结果</h2>
+    <div class="result-list" id="resultList" role="list" aria-label="中签名单"></div>
     <div class="modal-footer">
-      <button class="btn btn-primary" onclick="closeModal()">确 定</button>
+      <button class="btn btn-primary" onclick="closeModal()" aria-label="确定并关闭">确 定</button>
     </div>
   </div>
 </div>
