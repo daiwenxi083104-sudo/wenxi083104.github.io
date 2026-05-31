@@ -1061,6 +1061,14 @@
                 <p class="empty-text">还没有记录，点击右上角开始记录你的生活吧~</p>
             </div>
         </div>
+
+        <!-- 数据备份/恢复 -->
+        <div class="data-backup-section" style="text-align:center;padding:20px;margin-top:10px;">
+            <button class="btn" onclick="exportPosts()" style="margin:5px;padding:8px 16px;font-size:13px;background:#f0f0f0;border:1px solid #ddd;border-radius:6px;cursor:pointer;">📥 备份帖子</button>
+            <button class="btn" onclick="document.getElementById('importFile').click()" style="margin:5px;padding:8px 16px;font-size:13px;background:#f0f0f0;border:1px solid #ddd;border-radius:6px;cursor:pointer;">📤 恢复帖子</button>
+            <input type="file" id="importFile" accept=".json" onchange="importPosts(event)" style="display:none;">
+            <p style="font-size:12px;color:#999;margin-top:8px;">帖子数据自动保存在浏览器中，建议定期备份以防丢失</p>
+        </div>
     </div>
 
     <!-- 编辑弹窗 -->
@@ -1131,9 +1139,10 @@
         </div>
     </div>
 
+    <script src="./js/LifeStorage.js"></script>
     <script>
-        // 数据存储
-        let posts = JSON.parse(localStorage.getItem('lifePosts')) || [];
+        // 数据存储（使用 LifeStorage 持久化模块）
+        let posts = [];
         let currentMedia = null;
         let currentMediaType = null;
         let selectedMood = '';
@@ -1149,8 +1158,14 @@
         let cropImageObj = null;        // 用于裁剪的Image对象
 
         // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             console.log('DOM loaded, initializing...');
+            
+            // 初始化持久化存储
+            await LifeStorage.init();
+            
+            // 从持久化存储加载帖子
+            posts = await LifeStorage.getAll();
             
             // 按时间排序（最新的在前）
             sortPostsByTime();
@@ -1343,9 +1358,9 @@
             // 添加到数组开头
             posts.unshift(post);
             
-            // 保存到本地存储
-            localStorage.setItem('lifePosts', JSON.stringify(posts));
-            console.log('Saved to localStorage');
+            // 保存到持久化存储（IndexedDB + localStorage 双重保障）
+            LifeStorage.saveAll(posts);
+            console.log('帖子已持久化保存');
 
             // 重新渲染
             renderPosts();
@@ -1473,16 +1488,13 @@
             console.log('deletePost called, id:', id);
             if (!confirm('确定要删除这条动态吗？')) return;
             
-            // 重新从 localStorage 读取最新数据
-            posts = JSON.parse(localStorage.getItem('lifePosts')) || [];
-            
             // 过滤掉要删除的帖子
             posts = posts.filter(function(p) {
                 return p.id !== id;
             });
             
-            // 保存回 localStorage
-            localStorage.setItem('lifePosts', JSON.stringify(posts));
+            // 保存到持久化存储
+            LifeStorage.saveAll(posts);
             console.log('Post deleted, remaining:', posts.length);
             
             // 重新渲染
@@ -1830,17 +1842,9 @@
                     }
                 }
                 
-                // 安全保存到 localStorage
-                try {
-                    const data = JSON.stringify(posts);
-                    console.log('Data size:', (data.length / 1024 / 1024).toFixed(2), 'MB');
-                    localStorage.setItem('lifePosts', data);
-                    console.log('Saved to localStorage');
-                } catch (e) {
-                    console.error('Save failed:', e);
-                    alert('保存失败：数据可能太大，请尝试更换更小的图片~');
-                    return;
-                }
+                // 保存到持久化存储
+                LifeStorage.saveAll(posts);
+                console.log('帖子编辑已保存');
                 
                 renderPosts();
                 console.log('Re-rendered posts');
@@ -1903,9 +1907,7 @@
                     time: new Date().toISOString()
                 });
                 
-                localStorage.setItem('lifePosts', JSON.stringify(posts));
-                
-                // 重新渲染该帖子的评论
+                LifeStorage.saveAll(posts);
                 const commentsList = document.getElementById('comments-list-' + postId);
                 commentsList.innerHTML = post.comments.map(function(comment) {
                     const commentDate = new Date(comment.time);
@@ -1925,6 +1927,51 @@
                 closeEditModal();
             }
         });
+
+        // ========== 数据备份与恢复 ==========
+
+        // 导出帖子为 JSON 文件
+        async function exportPosts() {
+            const success = await LifeStorage.exportToFile();
+            if (success) {
+                showToast('备份成功！文件已下载~');
+            } else {
+                showToast('没有帖子可以备份~');
+            }
+        }
+
+        // 从 JSON 文件导入帖子
+        async function importPosts(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            try {
+                const result = await LifeStorage.importFromFile(file);
+                posts = await LifeStorage.getAll();
+                sortPostsByTime();
+                renderPosts();
+                showToast(result.message);
+            } catch (err) {
+                showToast('导入失败：' + err.message);
+            }
+            
+            // 重置 input，允许再次选择同一文件
+            event.target.value = '';
+        }
+
+        // Toast 提示
+        function showToast(msg) {
+            let toast = document.getElementById('lifeToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'lifeToast';
+                toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:12px 24px;border-radius:8px;z-index:9999;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none;';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+        }
     </script>
 </body>
 </html>
