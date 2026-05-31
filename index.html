@@ -415,6 +415,7 @@
 
         .skill-card {
             width: 260px;
+            max-width: 100%;
             padding: 30px;
             text-align: center;
             border: 3px solid var(--black);
@@ -1007,10 +1008,27 @@
             transform: scale(1.3);
         }
 
-        /* 响应式 */
+        /* 响应式 - 平板/手机（≤768px） */
         @media (max-width: 768px) {
             .intro-title {
                 font-size: 48px;
+                letter-spacing: 8px;
+            }
+
+            .intro-subtitle {
+                flex-direction: column;
+                gap: 8px;
+                font-size: 14px;
+            }
+
+            .intro-desc {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+
+            .who-container {
+                max-width: 100%;
+                padding: 0 15px;
             }
 
             .who-answer {
@@ -1021,17 +1039,201 @@
                 font-size: 24px;
             }
 
+            .keywords-container {
+                gap: 12px;
+            }
+
+            .keyword-bubble {
+                padding: 12px 22px;
+                font-size: 16px;
+            }
+
+            .four-keywords-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .keyword-card {
+                padding: 18px 12px;
+            }
+
+            .keyword-card-main {
+                font-size: 17px;
+            }
+
+            .keyword-card-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .skills-title {
+                font-size: 26px;
+                margin-bottom: 30px;
+            }
+
             .skills-container {
                 flex-direction: column;
                 align-items: center;
+                gap: 20px;
+            }
+
+            .skill-card {
+                width: 100%;
+                max-width: 340px;
+                padding: 24px 20px;
+            }
+
+            .skill-icon {
+                font-size: 40px;
+            }
+
+            .skill-name {
+                font-size: 20px;
+            }
+
+            .works-title {
+                font-size: 26px;
+                margin-bottom: 15px;
+            }
+
+            .works-subtitle {
+                font-size: 13px;
+                margin-bottom: 30px;
             }
 
             .works-grid {
                 grid-template-columns: 1fr;
+                max-width: 340px;
+                gap: 18px;
+            }
+
+            .work-item {
+                padding: 20px;
+            }
+
+            .life-intro {
+                max-width: 100%;
+                padding: 30px 20px;
+            }
+
+            .life-btn {
+                padding: 14px 28px;
+                font-size: 16px;
+            }
+
+            .contact-title {
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+
+            .contact-box {
+                padding: 30px 25px;
+            }
+
+            .contact-item {
+                font-size: 16px;
+                flex-direction: column;
+                gap: 4px;
+                align-items: flex-start;
+            }
+
+            .guestbook-section {
+                max-width: 100%;
+                padding: 20px 16px;
+                margin-top: 30px;
+            }
+
+            .guestbook-input,
+            .guestbook-textarea {
+                font-size: 16px;
+                padding: 14px 16px;
+            }
+
+            .guestbook-btn {
+                padding: 14px 24px;
+                font-size: 16px;
+            }
+
+            .page {
+                padding: 40px 20px;
             }
 
             .page-dots {
                 display: none;
+            }
+
+            .scroll-hint {
+                bottom: 30px;
+            }
+
+            .ending-text {
+                font-size: 17px;
+                margin-top: 30px;
+            }
+        }
+
+        /* 响应式 - 小屏手机（≤480px） */
+        @media (max-width: 480px) {
+            .intro-title {
+                font-size: 36px;
+                letter-spacing: 6px;
+            }
+
+            .who-question {
+                font-size: 20px;
+            }
+
+            .who-answer {
+                font-size: 18px;
+            }
+
+            .who-answer .highlight {
+                font-size: 20px;
+            }
+
+            .four-keywords-grid {
+                grid-template-columns: 1fr;
+                max-width: 280px;
+            }
+
+            .keyword-bubble {
+                font-size: 15px;
+                padding: 10px 18px;
+            }
+
+            .skills-title {
+                font-size: 22px;
+            }
+
+            .skill-card {
+                max-width: 100%;
+                padding: 20px 16px;
+            }
+
+            .works-grid {
+                max-width: 100%;
+            }
+
+            .contact-box {
+                padding: 24px 18px;
+                display: block;
+            }
+
+            .contact-item {
+                font-size: 15px;
+                margin: 12px 0;
+            }
+
+            .guestbook-section {
+                padding: 16px 12px;
+            }
+
+            .guestbook-btn {
+                width: 100%;
+            }
+
+            .page {
+                padding: 30px 16px;
             }
         }
     </style>
