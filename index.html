@@ -20,17 +20,25 @@
         }
 
         :root {
-            --black: #1a1a1a;
-            --gray: #666;
-            --light-gray: #999;
+            /* 颜色层级系统 - 宋体风格 */
+            --black: #1a1a1a;         /* 一级：标题/重点 */
+            --primary: #2d2d2d;       /* 一级：主要信息 */
+            --secondary: #4a4a4a;     /* 二级：正文内容 */
+            --gray: #666;             /* 二级：常规文字 */
+            --tertiary: #888;         /* 三级：辅助说明 */
+            --light-gray: #aaa;       /* 三级：次要信息 */
+            --hint: #ccc;             /* 四级：提示文字 */
             --bg: #fafafa;
             --white: #fff;
+            
+            /* 宋体字体栈 */
+            --font-song: "SimSun", "STSong", "Songti SC", "Noto Serif SC", serif;
         }
 
         body {
-            font-family: 'ZCOOL KuaiLe', cursive;
+            font-family: var(--font-song);
             background: var(--bg);
-            color: var(--black);
+            color: var(--secondary);
             overflow-x: hidden;
             cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="%231a1a1a" stroke-width="2"/></svg>') 12 12, auto;
         }
@@ -1139,50 +1147,247 @@
 
         /* ========== 第4屏：我的作品 ========== */
         .works-title {
-            font-size: 32px;
-            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--black);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
         }
 
         .works-subtitle {
-            font-family: 'Noto Sans SC', sans-serif;
             font-size: 14px;
-            color: var(--gray);
-            margin-bottom: 50px;
+            color: var(--tertiary);
+            margin-bottom: 30px;
         }
 
+        /* PDF作品集入口 */
+        .portfolio-banner {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 24px;
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f8f8f8 0%, #fff 100%);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+
+        .portfolio-banner:hover {
+            box-shadow: 3px 3px 0 var(--black);
+            transform: translate(-2px, -2px);
+        }
+
+        .portfolio-icon {
+            font-size: 32px;
+        }
+
+        .portfolio-content {
+            flex: 1;
+        }
+
+        .portfolio-title {
+            font-size: 16px;
+            color: var(--black);
+            margin-bottom: 4px;
+        }
+
+        .portfolio-desc {
+            font-size: 13px;
+            color: var(--tertiary);
+        }
+
+        .portfolio-arrow {
+            font-size: 20px;
+            color: var(--gray);
+        }
+
+        /* 作品卡片网格 */
         .works-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            max-width: 700px;
+            gap: 20px;
+            max-width: 800px;
         }
 
-        .work-item {
-            padding: 25px;
-            border: 2px solid var(--black);
-            border-radius: 15px 20px 18px 22px;
+        .work-card {
+            padding: 20px;
+            border: 1.5px solid rgba(0,0,0,0.15);
+            border-radius: 10px;
             background: var(--white);
-            box-shadow: 3px 3px 0 var(--black);
-            transition: all 0.3s ease;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s;
         }
 
-        .work-item::before {
-            content: '';
-            position: absolute;
+        .work-card:hover {
+            border-color: var(--black);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+
+        .work-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .work-icon {
+            font-size: 24px;
+        }
+
+        .work-name {
+            font-size: 18px;
+            color: var(--black);
+        }
+
+        .work-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* 颜色层级系统 */
+        .tag-need {
+            font-size: 12px;
+            color: var(--primary);
+            padding: 3px 8px;
+            background: rgba(45,45,45,0.08);
+            border-radius: 4px;
+        }
+
+        .tag-tech {
+            font-size: 12px;
+            color: var(--secondary);
+            padding: 3px 8px;
+            background: rgba(74,74,74,0.08);
+            border-radius: 4px;
+        }
+
+        .work-brief {
+            font-size: 13px;
+            color: var(--tertiary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .work-link {
+            font-size: 13px;
+            color: var(--gray);
+            text-decoration: none;
+        }
+
+        .work-link:hover {
+            color: var(--black);
+        }
+
+        /* 作品详情弹窗 */
+        .work-detail-modal {
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--black);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
         }
 
-        .work-item:hover::before {
-            transform: scaleX(1);
+        .work-detail-modal.active {
+            display: flex;
+        }
+
+        .work-detail-content {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .work-detail-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid var(--black);
+            border-radius: 50%;
+            background: var(--white);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .work-detail-body {
+            padding: 24px;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-section-title {
+            font-size: 14px;
+            color: var(--black);
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .detail-section-content {
+            font-size: 13px;
+            color: var(--secondary);
+            line-height: 1.8;
+        }
+
+        .detail-highlight {
+            color: var(--primary);
+        }
+
+        /* PDF弹窗 */
+        .pdf-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1001;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pdf-modal.active {
+            display: flex;
+        }
+
+        .pdf-content {
+            background: var(--white);
+            border-radius: 12px;
+            width: 90%;
+            height: 90%;
+            position: relative;
+        }
+
+        .pdf-close {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            background: var(--white);
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
         }
 
         .work-item:hover {
@@ -1876,29 +2081,91 @@
 
     <!-- 第4屏：我的作品 -->
     <section class="page works-page" id="page-3" aria-labelledby="works-title">
-        <h2 class="works-title" id="works-title">我的小作品 (ﾉ◕ヮ◕)ﾉ</h2>
-        <p class="works-subtitle">企业文化小工具 · 持续更新中</p>
+        <h2 class="works-title" id="works-title">我的小作品</h2>
+        <p class="works-subtitle">企业文化小工具 · 从需求到实现的全流程思考</p>
+        
+        <!-- PDF作品集入口 -->
+        <div class="portfolio-banner" onclick="openPortfolio()">
+            <div class="portfolio-icon">📄</div>
+            <div class="portfolio-content">
+                <h3 class="portfolio-title">查看完整作品集</h3>
+                <p class="portfolio-desc">包含项目详情、能力图谱与设计思路</p>
+            </div>
+            <div class="portfolio-arrow">→</div>
+        </div>
+        
         <div class="works-grid" role="list" aria-label="作品列表">
-            <a href="wheel.html" class="work-item" role="listitem" aria-label="幸运转盘：企业文化抽奖工具">
-                <span class="work-icon" aria-hidden="true">🎡</span>
-                <h3 class="work-name">幸运转盘</h3>
-                <span class="work-status">点击使用</span>
-            </a>
-            <a href="draw.html" class="work-item" role="listitem" aria-label="随机抽签：公平抽签工具">
-                <span class="work-icon" aria-hidden="true">🎲</span>
-                <h3 class="work-name">随机抽签</h3>
-                <span class="work-status">点击使用</span>
-            </a>
-            <a href="vote.html" class="work-item" role="listitem" aria-label="投票小助手：团队投票统计工具">
-                <span class="work-icon" aria-hidden="true">📊</span>
-                <h3 class="work-name">投票小助手</h3>
-                <span class="work-status">点击使用</span>
-            </a>
-            <a href="notice.html" class="work-item" role="listitem" aria-label="通知生成器：企业通知模板工具">
-                <span class="work-icon" aria-hidden="true">📝</span>
-                <h3 class="work-name">通知生成器</h3>
-                <span class="work-status">点击使用</span>
-            </a>
+            <!-- 幸运转盘 -->
+            <div class="work-card" onclick="openWorkDetail(0)">
+                <div class="work-header">
+                    <span class="work-icon">🎡</span>
+                    <h3 class="work-name">幸运转盘</h3>
+                </div>
+                <div class="work-tags">
+                    <span class="tag-need">需求：年会抽奖公平性</span>
+                    <span class="tag-tech">技术：Canvas + 随机算法</span>
+                </div>
+                <p class="work-brief">可视化转盘抽奖，支持权重配置与结果记录</p>
+                <a href="wheel.html" class="work-link">点击使用 →</a>
+            </div>
+            
+            <!-- 随机抽签 -->
+            <div class="work-card" onclick="openWorkDetail(1)">
+                <div class="work-header">
+                    <span class="work-icon">🎲</span>
+                    <h3 class="work-name">随机抽签</h3>
+                </div>
+                <div class="work-tags">
+                    <span class="tag-need">需求：公平随机分配</span>
+                    <span class="tag-tech">技术：Fisher-Yates洗牌</span>
+                </div>
+                <p class="work-brief">支持分组抽签、顺序抽签与结果导出</p>
+                <a href="draw.html" class="work-link">点击使用 →</a>
+            </div>
+            
+            <!-- 投票小助手 -->
+            <div class="work-card" onclick="openWorkDetail(2)">
+                <div class="work-header">
+                    <span class="work-icon">📊</span>
+                    <h3 class="work-name">投票小助手</h3>
+                </div>
+                <div class="work-tags">
+                    <span class="tag-need">需求：团队决策效率</span>
+                    <span class="tag-tech">技术：实时统计 + 可视化</span>
+                </div>
+                <p class="work-brief">多选项投票、实时票数显示与结果分析</p>
+                <a href="vote.html" class="work-link">点击使用 →</a>
+            </div>
+            
+            <!-- 通知生成器 -->
+            <div class="work-card" onclick="openWorkDetail(3)">
+                <div class="work-header">
+                    <span class="work-icon">📝</span>
+                    <h3 class="work-name">通知生成器</h3>
+                </div>
+                <div class="work-tags">
+                    <span class="tag-need">需求：通知撰写效率</span>
+                    <span class="tag-tech">技术：模板引擎 + 预览</span>
+                </div>
+                <p class="work-brief">多场景模板、一键生成与格式复制</p>
+                <a href="notice.html" class="work-link">点击使用 →</a>
+            </div>
+        </div>
+        
+        <!-- 作品详情弹窗 -->
+        <div class="work-detail-modal" id="workDetailModal" onclick="closeWorkDetailOnOverlay(event)">
+            <div class="work-detail-content">
+                <button class="work-detail-close" onclick="closeWorkDetail()">×</button>
+                <div class="work-detail-body" id="workDetailBody"></div>
+            </div>
+        </div>
+        
+        <!-- PDF弹窗 -->
+        <div class="pdf-modal" id="pdfModal" onclick="closePdfModalOnOverlay(event)">
+            <div class="pdf-content">
+                <button class="pdf-close" onclick="closePdfModal()">×</button>
+                <iframe id="pdfFrame" src="" style="width:100%;height:90%;border:none;"></iframe>
+            </div>
         </div>
     </section>
 
@@ -2057,6 +2324,149 @@
                 requestAnimationFrame(draw);
             }
             draw();
+        }
+
+        // ========== 作品详情数据 ==========
+        const workDetails = [
+            {
+                name: '幸运转盘',
+                icon: '🎡',
+                sections: [
+                    {
+                        title: '需求分析',
+                        content: '年会抽奖活动需要公平、透明的随机机制。传统纸质抽奖存在视觉冲击弱、过程不透明的问题。需要一个可视化强、参与感高的抽奖工具。'
+                    },
+                    {
+                        title: '技术实现',
+                        content: '采用 <span class="detail-highlight">Canvas</span> 绘制转盘，使用 <span class="detail-highlight">requestAnimationFrame</span> 实现流畅旋转动画。核心算法采用加权随机，支持不同奖品设置不同中奖概率。'
+                    },
+                    {
+                        title: '功能亮点',
+                        content: '• 可自定义奖品列表与权重\n• 旋转动画带缓动效果（先快后慢）\n• 结果自动记录，支持导出\n• 移动端适配，触摸友好'
+                    },
+                    {
+                        title: '应用场景',
+                        content: '年会抽奖、团建活动、福利发放、随机选择等场景。'
+                    }
+                ]
+            },
+            {
+                name: '随机抽签',
+                icon: '🎲',
+                sections: [
+                    {
+                        title: '需求分析',
+                        content: '团队活动中常需要公平分配任务、随机分组。Excel随机函数操作繁琐，缺乏仪式感。需要一个简单直观的抽签工具。'
+                    },
+                    {
+                        title: '技术实现',
+                        content: '采用 <span class="detail-highlight">Fisher-Yates 洗牌算法</span> 保证真随机性。支持顺序抽签和同时抽签两种模式，结果可导出为文本。'
+                    },
+                    {
+                        title: '功能亮点',
+                        content: '• 支持分组抽签（如A/B两组）\n• 支持顺序抽签（逐个揭晓）\n• 结果一键复制\n• 无需登录，即开即用'
+                    },
+                    {
+                        title: '应用场景',
+                        content: '任务分配、分组活动、演讲顺序、值班安排等场景。'
+                    }
+                ]
+            },
+            {
+                name: '投票小助手',
+                icon: '📊',
+                sections: [
+                    {
+                        title: '需求分析',
+                        content: '团队决策时需要收集意见，传统举手投票难以统计且缺乏隐私。需要一个实时统计、可视化结果的投票工具。'
+                    },
+                    {
+                        title: '技术实现',
+                        content: '使用 <span class="detail-highlight">LocalStorage</span> 存储投票数据，<span class="detail-highlight">Canvas</span> 绘制实时统计图表。支持多选项投票和单选项投票。'
+                    },
+                    {
+                        title: '功能亮点',
+                        content: '• 实时票数可视化\n• 支持匿名投票\n• 投票结果一键导出\n• 支持自定义选项数量'
+                    },
+                    {
+                        title: '应用场景',
+                        content: '团建地点选择、午餐投票、方案决策、意见收集等场景。'
+                    }
+                ]
+            },
+            {
+                name: '通知生成器',
+                icon: '📝',
+                sections: [
+                    {
+                        title: '需求分析',
+                        content: '企业文化工作中需要频繁撰写各类通知（放假通知、活动通知、制度通知等）。每次从头撰写效率低，格式不统一。需要一个模板化工具提升效率。'
+                    },
+                    {
+                        title: '技术实现',
+                        content: '构建 <span class="detail-highlight">模板引擎</span>，支持变量替换（如日期、地点、内容）。提供多场景预设模板，支持实时预览和一键复制。'
+                    },
+                    {
+                        title: '功能亮点',
+                        content: '• 预设10+常用通知模板\n• 支持自定义模板\n• 实时预览生成结果\n• 一键复制到剪贴板'
+                    },
+                    {
+                        title: '应用场景',
+                        content: '放假通知、活动招募、制度发布、会议通知、节日祝福等场景。'
+                    }
+                ]
+            }
+        ];
+
+        // 打开作品详情弹窗
+        function openWorkDetail(index) {
+            const data = workDetails[index];
+            const modal = document.getElementById('workDetailModal');
+            const body = document.getElementById('workDetailBody');
+            
+            let html = '<div class="work-detail-header" style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">';
+            html += '<span style="font-size:32px;">' + data.icon + '</span>';
+            html += '<h3 style="font-size:20px;color:var(--black);">' + data.name + '</h3>';
+            html += '</div>';
+            
+            data.sections.forEach(section => {
+                html += '<div class="detail-section">';
+                html += '<h4 class="detail-section-title">' + section.title + '</h4>';
+                html += '<div class="detail-section-content">' + section.content.replace(/\n/g, '<br>') + '</div>';
+                html += '</div>';
+            });
+            
+            body.innerHTML = html;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWorkDetail() {
+            document.getElementById('workDetailModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeWorkDetailOnOverlay(event) {
+            if (event.target === event.currentTarget) closeWorkDetail();
+        }
+
+        // PDF作品集
+        function openPortfolio() {
+            const modal = document.getElementById('pdfModal');
+            const frame = document.getElementById('pdfFrame');
+            frame.src = './assets/戴雯晞作品集.pdf';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePdfModal() {
+            document.getElementById('pdfModal').classList.remove('active');
+            document.getElementById('pdfFrame').src = '';
+            document.body.style.overflow = '';
+        }
+
+        function closePdfModalOnOverlay(event) {
+            if (event.target === event.currentTarget) closePdfModal();
         }
 
         // 初始化播放器
