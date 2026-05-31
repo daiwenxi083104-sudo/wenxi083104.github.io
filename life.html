@@ -512,6 +512,202 @@
             box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
         }
 
+        /* 日历视图 */
+        .calendar-view {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 24px 20px 28px 22px;
+            padding: 20px;
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px dashed rgba(0,0,0,0.2);
+        }
+
+        .calendar-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .calendar-nav-btn {
+            width: 36px;
+            height: 36px;
+            border: 2px solid var(--black);
+            border-radius: 10px;
+            background: var(--white);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .calendar-nav-btn:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0 var(--black);
+        }
+
+        .calendar-nav-btn:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0 var(--black);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 1.5px solid rgba(0,0,0,0.15);
+            border-radius: 12px 10px 14px 11px;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            min-height: 60px;
+        }
+
+        .calendar-day:hover {
+            border-color: var(--black);
+            transform: translate(-1px, -1px);
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.4;
+            background: #f8f8f8;
+        }
+
+        .calendar-day-number {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .calendar-day-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--black);
+            margin-top: 2px;
+        }
+
+        .calendar-day-indicator.multi {
+            width: 12px;
+            border-radius: 3px;
+        }
+
+        .calendar-day.today {
+            background: var(--bg);
+            border-color: var(--black);
+            border-width: 2px;
+        }
+
+        .calendar-day.today .calendar-day-number {
+            color: var(--black);
+            font-weight: 700;
+        }
+
+        /* 日期帖子弹窗 */
+        .day-posts-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .day-posts-modal.active {
+            display: flex;
+        }
+
+        .day-posts-content {
+            background: var(--white);
+            border: 3px solid var(--black);
+            border-radius: 28px 28px 0 0;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .day-posts-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 24px;
+            border-bottom: 2px dashed var(--black);
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 10;
+            border-radius: 25px 25px 0 0;
+        }
+
+        .day-posts-close {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            background: var(--white);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .day-posts-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .day-posts-list {
+            padding: 20px 24px;
+            overflow-y: auto;
+            flex: 1;
+            -webkit-overflow-scrolling: touch;
+        }
+
         /* 动态列表 */
         .timeline {
             display: flex;
@@ -1054,11 +1250,31 @@
             </div>
         </div>
 
-        <!-- 时间线 -->
-        <div class="timeline" id="timeline">
-            <div class="empty-state" id="emptyState">
-                <div class="empty-icon">📝</div>
-                <p class="empty-text">还没有记录，点击右上角开始记录你的生活吧~</p>
+        <!-- 日历视图 -->
+        <div class="calendar-view" id="calendarView">
+            <div class="calendar-header">
+                <button class="calendar-nav-btn" onclick="changeMonth(-1)">‹</button>
+                <h3 class="calendar-title" id="calendarTitle">2024年1月</h3>
+                <button class="calendar-nav-btn" onclick="changeMonth(1)">›</button>
+            </div>
+            <div class="calendar-weekdays">
+                <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- 日历格子由JS生成 -->
+            </div>
+        </div>
+
+        <!-- 日期帖子弹窗 -->
+        <div class="day-posts-modal" id="dayPostsModal" onclick="closeDayPostsOnOverlay(event)">
+            <div class="day-posts-content">
+                <div class="day-posts-header">
+                    <button class="day-posts-close" onclick="closeDayPosts()">←</button>
+                    <h3 class="day-posts-title" id="dayPostsTitle">1月1日</h3>
+                </div>
+                <div class="day-posts-list" id="dayPostsList">
+                    <!-- 该日期的帖子列表 -->
+                </div>
             </div>
         </div>
 
@@ -1170,6 +1386,7 @@
             // 按时间排序（最新的在前）
             sortPostsByTime();
             renderPosts();
+            renderCalendar(); // 渲染日历
             
             // 设置默认时间为当前时间
             const now = new Date();
@@ -1364,6 +1581,7 @@
 
             // 重新渲染
             renderPosts();
+            renderCalendar(); // 刷新日历
             
             // 关闭表单并重置
             toggleForm();
@@ -1499,6 +1717,7 @@
             
             // 重新渲染
             renderPosts();
+            renderCalendar(); // 刷新日历
         }
 
         // 打开编辑弹窗
@@ -1847,6 +2066,7 @@
                 console.log('帖子编辑已保存');
                 
                 renderPosts();
+                renderCalendar(); // 刷新日历
                 console.log('Re-rendered posts');
             }
 
@@ -1957,6 +2177,167 @@
             
             // 重置 input，允许再次选择同一文件
             event.target.value = '';
+        }
+
+        // ========== 日历功能 ==========
+        let currentCalendarDate = new Date();
+
+        // 渲染日历
+        function renderCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            
+            // 更新标题
+            document.getElementById('calendarTitle').textContent = year + '年' + (month + 1) + '月';
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            const today = new Date();
+            
+            // 生成42个格子（6周）
+            for (let i = 0; i < 42; i++) {
+                const cellDate = new Date(startDate);
+                cellDate.setDate(startDate.getDate() + i);
+                
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                
+                // 判断是否为本月
+                if (cellDate.getMonth() !== month) {
+                    dayEl.classList.add('other-month');
+                }
+                
+                // 判断是否为今天
+                if (cellDate.toDateString() === today.toDateString()) {
+                    dayEl.classList.add('today');
+                }
+                
+                // 日期数字
+                const dayNum = document.createElement('span');
+                dayNum.className = 'calendar-day-number';
+                dayNum.textContent = cellDate.getDate();
+                dayEl.appendChild(dayNum);
+                
+                // 检查该日期是否有帖子
+                const dateStr = cellDate.toISOString().split('T')[0];
+                const dayPosts = posts.filter(p => {
+                    const postDate = new Date(p.time || p.createdAt);
+                    return postDate.toISOString().split('T')[0] === dateStr;
+                });
+                
+                if (dayPosts.length > 0) {
+                    const indicator = document.createElement('span');
+                    indicator.className = 'calendar-day-indicator' + (dayPosts.length > 1 ? ' multi' : '');
+                    dayEl.appendChild(indicator);
+                    dayEl.onclick = function() { openDayPosts(cellDate, dayPosts); };
+                }
+                
+                grid.appendChild(dayEl);
+            }
+        }
+
+        // 切换月份
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        // 打开某一天的帖子弹窗
+        function openDayPosts(date, dayPosts) {
+            const modal = document.getElementById('dayPostsModal');
+            document.getElementById('dayPostsTitle').textContent = (date.getMonth() + 1) + '月' + date.getDate() + '日';
+            
+            const list = document.getElementById('dayPostsList');
+            list.innerHTML = '';
+            
+            if (dayPosts.length === 0) {
+                list.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">这一天还没有记录~</p>';
+            } else {
+                dayPosts.forEach(post => {
+                    const card = createPostCard(post);
+                    list.appendChild(card);
+                });
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭日期帖子弹窗
+        function closeDayPosts() {
+            const modal = document.getElementById('dayPostsModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeDayPostsOnOverlay(event) {
+            if (event.target === event.currentTarget) {
+                closeDayPosts();
+            }
+        }
+
+        // 创建帖子卡片（复用原有逻辑）
+        function createPostCard(post) {
+            const card = document.createElement('div');
+            card.className = 'post-card';
+            card.id = 'post-' + post.id;
+            
+            let mediaHTML = '';
+            if (post.media) {
+                if (post.mediaType === 'video') {
+                    mediaHTML = '<video class="post-media" controls preload="metadata"><source src="' + post.media + '" type="video/mp4"></video>';
+                } else {
+                    mediaHTML = '<img class="post-media" src="' + post.media + '" alt="图片" loading="lazy">';
+                }
+            }
+            
+            const postDate = new Date(post.time || post.createdAt);
+            const timeStr = postDate.toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            
+            let commentsHTML = '';
+            if (post.comments && post.comments.length > 0) {
+                commentsHTML = '<div class="comments-section">' +
+                    post.comments.map(function(c) {
+                        const cDate = new Date(c.time);
+                        return '<div class="comment-item">' +
+                            '<div>' + escapeHtml(c.text) + '</div>' +
+                            '<div class="comment-time">' + cDate.toLocaleString('zh-CN') + '</div>' +
+                        '</div>';
+                    }).join('') +
+                '</div>';
+            }
+            
+            card.innerHTML = 
+                mediaHTML +
+                '<div class="post-content">' +
+                    '<div class="post-header">' +
+                        '<div class="post-meta">' +
+                            (post.mood ? '<span class="mood-badge">' + post.mood + '</span>' : '') +
+                            (post.location ? '<span class="location-tag">📍 ' + escapeHtml(post.location) + '</span>' : '') +
+                            '<span class="post-time">' + timeStr + '</span>' +
+                        '</div>' +
+                        '<div class="post-actions">' +
+                            '<button class="action-btn" onclick="openEditModal(' + post.id + ')">✏️</button>' +
+                            '<button class="action-btn" onclick="deletePost(' + post.id + ')">🗑️</button>' +
+                        '</div>' +
+                    '</div>' +
+                    (post.text ? '<p class="post-text">' + escapeHtml(post.text) + '</p>' : '') +
+                    '<div class="post-footer">' +
+                        '<div class="comment-section">' +
+                            '<input type="text" class="comment-input" id="comment-input-' + post.id + '" placeholder="写下评论...">' +
+                            '<button class="comment-btn" onclick="addComment(' + post.id + ')">发送</button>' +
+                        '</div>' +
+                        commentsHTML +
+                    '</div>' +
+                '</div>';
+            
+            return card;
         }
 
         // Toast 提示
