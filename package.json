@@ -1,7 +1,7 @@
 {
   "name": "wenxi-portfolio",
-  "version": "1.0.0",
-  "description": "戴雯晞的个人作品集网站",
+  "version": "1.1.0",
+  "description": "戴雯晞的个人作品集网站 - 音乐学背景的企业文化/行政方向求职者",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,21 @@
     "vite": "^5.4.0",
     "terser": "^5.31.0"
   },
-  "keywords": ["portfolio", "personal-website", "enterprise-culture"],
-  "author": "戴雯晞",
-  "license": "MIT"
+  "keywords": [
+    "portfolio",
+    "personal-website",
+    "enterprise-culture",
+    "admin-tools",
+    "hr-tools"
+  ],
+  "author": "戴雯晞 <3284497028@qq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wenxi083104/wenxi083104.github.io.git"
+  },
+  "homepage": "https://wenxi083104.github.io",
+  "bugs": {
+    "url": "https://github.com/wenxi083104/wenxi083104.github.io/issues"
+  }
 }

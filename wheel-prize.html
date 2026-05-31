@@ -275,6 +275,20 @@
 </div>
 
 <script>
+  // Toast 提示函数
+  function showToast(msg) {
+    let toast = document.getElementById('toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'toast';
+      toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:12px 24px;border-radius:8px;z-index:9999;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none;';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.opacity = '1';
+    setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+  }
+
   // Default options
   let options = ['一等奖', '二等奖', '三等奖', '幸运奖', '谢谢参与', '再来一次'];
   let currentAngle = 0;
@@ -358,9 +372,18 @@
   }
 
   function spinWheel() {
-    if (isSpinning || options.length < 2) return;
+    // 空列表检查
+    if (options.length < 2) {
+      showToast('请至少添加2个选项~');
+      return;
+    }
+    // 防止重复点击
+    if (isSpinning) return;
+    
     isSpinning = true;
-    document.getElementById('spinBtn').disabled = true;
+    const btn = document.getElementById('spinBtn');
+    btn.disabled = true;
+    btn.textContent = '抽奖中...';
 
     const spins = 5 + Math.random() * 3; // 5-8 spins
     const extraAngle = Math.random() * 2 * Math.PI;
@@ -381,7 +404,9 @@
         requestAnimationFrame(animate);
       } else {
         isSpinning = false;
-        document.getElementById('spinBtn').disabled = false;
+        const btn = document.getElementById('spinBtn');
+        btn.disabled = false;
+        btn.textContent = '开 始';
         showResult();
       }
     }

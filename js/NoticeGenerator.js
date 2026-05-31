@@ -90,13 +90,32 @@ export class NoticeGenerator {
   }
   
   /**
-   * 获取输入值
+   * 获取输入值（带XSS过滤）
    * @param {string} id
    * @returns {string}
    */
   getVal(id) {
     const el = document.getElementById(id);
-    return el ? el.value.trim() : '';
+    if (!el) return '';
+    const value = el.value.trim();
+    return this.sanitizeInput(value);
+  }
+  
+  /**
+   * XSS过滤：转义HTML特殊字符
+   * @param {string} input
+   * @returns {string}
+   */
+  sanitizeInput(input) {
+    if (!input) return '';
+    const div = document.createElement('div');
+    div.textContent = input;
+    return div.innerHTML
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;');
   }
   
   /**

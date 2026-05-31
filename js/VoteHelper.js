@@ -17,6 +17,11 @@ export class VoteHelper {
     this.votedIndex = -1;
     this.votingStarted = false;
     
+    // 防抖和状态管理
+    this.voteDebounceTimer = null;
+    this.isVoting = false; // 防止重复点击
+    this.hasVoted = false; // 标记是否已投票
+    
     // DOM 元素引用
     this.elements = {};
     
@@ -141,14 +146,35 @@ export class VoteHelper {
   }
   
   /**
-   * 投票
+   * 投票（带防抖和重复投票防护）
    * @param {number} index
    */
   vote(index) {
-    this.votedIndex = index;
-    this.options[index].votes++;
-    this.renderOptions();
-    showToast(`已投票给：${this.options[index].name}`);
+    // 防止重复点击
+    if (this.isVoting) return;
+    
+    // 防止重复投票（同一轮投票只能投一次）
+    if (this.hasVoted) {
+      showToast('您已经投过票了~');
+      return;
+    }
+    
+    this.isVoting = true;
+    
+    // 清除之前的防抖定时器
+    if (this.voteDebounceTimer) {
+      clearTimeout(this.voteDebounceTimer);
+    }
+    
+    // 防抖：300ms 内只执行一次
+    this.voteDebounceTimer = setTimeout(() => {
+      this.votedIndex = index;
+      this.options[index].votes++;
+      this.hasVoted = true;
+      this.renderOptions();
+      showToast(`已投票给：${this.options[index].name}`);
+      this.isVoting = false;
+    }, 300);
   }
   
   /**
@@ -193,6 +219,8 @@ export class VoteHelper {
   resetVote() {
     this.options.forEach(o => o.votes = 0);
     this.votedIndex = -1;
+    this.hasVoted = false; // 重置投票状态
+    this.isVoting = false;
     this.renderOptions();
     showToast('投票已重置~');
   }
