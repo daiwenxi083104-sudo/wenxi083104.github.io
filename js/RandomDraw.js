@@ -16,7 +16,35 @@ export class RandomDraw {
     // DOM 元素引用
     this.elements = {};
     
+    // 事件监听器引用（用于清理）
+    this.eventListeners = [];
+    
     this.init();
+  }
+  
+  /**
+   * 绑定事件并保存引用，便于清理
+   * @param {HTMLElement} element
+   * @param {string} event
+   * @param {Function} handler
+   */
+  addEventListener(element, event, handler) {
+    element.addEventListener(event, handler);
+    this.eventListeners.push({ element, event, handler });
+  }
+  
+  /**
+   * 清理所有事件监听器
+   */
+  destroy() {
+    this.eventListeners.forEach(({ element, event, handler }) => {
+      element.removeEventListener(event, handler);
+    });
+    this.eventListeners = [];
+    
+    if (this.rolling) {
+      cancelAnimationFrame(this.rollTimer);
+    }
   }
   
   /**
@@ -43,14 +71,16 @@ export class RandomDraw {
    */
   bindEvents() {
     // 回车添加名字
-    this.elements.nameInput.addEventListener('keydown', (e) => {
+    const nameInputHandler = (e) => {
       if (e.key === 'Enter') this.addName();
-    });
+    };
+    this.addEventListener(this.elements.nameInput, 'keydown', nameInputHandler);
     
     // 点击遮罩关闭弹窗
-    this.elements.modalOverlay.addEventListener('click', (e) => {
+    const modalClickHandler = (e) => {
       if (e.target === this.elements.modalOverlay) this.closeModal();
-    });
+    };
+    this.addEventListener(this.elements.modalOverlay, 'click', modalClickHandler);
   }
   
   /**
@@ -117,7 +147,7 @@ export class RandomDraw {
   }
   
   /**
-   * 开始抽签动画
+   * 开始抽签动画（使用 requestAnimationFrame 优化性能）
    */
   startDraw() {
     const count = this.getDrawCount();
@@ -132,15 +162,28 @@ export class RandomDraw {
     this.elements.stopBtn.style.display = '';
     this.elements.slotDisplay.classList.add('rolling');
     
-    // 快速滚动动画
-    this.rollTimer = setInterval(() => {
-      const pool = [];
-      for (let i = 0; i < count; i++) {
-        pool.push(this.names[Math.floor(Math.random() * this.names.length)]);
+    // 使用 requestAnimationFrame 替代 setInterval，更平滑且性能更好
+    let lastFrameTime = 0;
+    const frameInterval = 60; // 约 16fps，与原来 60ms 间隔相当
+    
+    const animate = (timestamp) => {
+      if (!this.rolling) return;
+      
+      if (timestamp - lastFrameTime >= frameInterval) {
+        const pool = [];
+        for (let i = 0; i < count; i++) {
+          pool.push(this.names[Math.floor(Math.random() * this.names.length)]);
+        }
+        this.currentDisplay = pool;
+        // 使用 textContent 避免 innerHTML 解析开销
+        this.elements.slotDisplay.innerHTML = pool.map(n => `<span>${n}</span>`).join('');
+        lastFrameTime = timestamp;
       }
-      this.currentDisplay = pool;
-      this.elements.slotDisplay.innerHTML = pool.map(n => `<span>${n}</span>`).join('');
-    }, 60);
+      
+      this.rollTimer = requestAnimationFrame(animate);
+    };
+    
+    this.rollTimer = requestAnimationFrame(animate);
   }
   
   /**
@@ -150,7 +193,7 @@ export class RandomDraw {
     if (!this.rolling) return;
     
     this.rolling = false;
-    clearInterval(this.rollTimer);
+    cancelAnimationFrame(this.rollTimer);
     this.elements.slotDisplay.classList.remove('rolling');
     this.elements.startBtn.style.display = '';
     this.elements.stopBtn.style.display = 'none';

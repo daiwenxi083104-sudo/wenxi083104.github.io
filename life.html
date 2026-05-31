@@ -1016,7 +1016,7 @@
             <div class="media-upload" id="mediaUpload" onclick="document.getElementById('fileInput').click()">
                 <div class="upload-icon">📷</div>
                 <div class="upload-text">点击上传图片或视频</div>
-                <img class="media-preview" id="mediaPreview" alt="预览">
+                <img class="media-preview" id="mediaPreview" alt="预览" loading="lazy">
                 <video class="media-preview" id="videoPreview" controls></video>
             </div>
             <input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFileSelect(event)">
@@ -1068,7 +1068,7 @@
             <!-- 图片编辑区 -->
             <div class="edit-image-section" id="editImageSection" style="display: none;">
                 <div class="edit-image-preview-wrap" id="editImagePreviewWrap">
-                    <img id="editImagePreview" src="" alt="编辑图片">
+                    <img id="editImagePreview" src="" alt="编辑图片" loading="lazy">
                 </div>
                 <input type="file" id="editFileInput" accept="image/*" onchange="handleEditImageReplace(event)">
                 
@@ -1408,7 +1408,7 @@
                 if (post.mediaType === 'video') {
                     mediaHtml = '<video class="post-media" src="' + post.media + '" controls></video>';
                 } else {
-                    mediaHtml = '<img class="post-media" src="' + post.media + '" alt="动态图片">';
+                    mediaHtml = '<img class="post-media" src="' + post.media + '" alt="动态图片" loading="lazy">';
                 }
             }
 
