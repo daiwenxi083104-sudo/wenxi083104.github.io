@@ -111,6 +111,19 @@
             position: relative;
         }
 
+        /* 手机端：自由滚动，取消全屏翻页 */
+        @media (max-width: 768px) {
+            .page {
+                min-height: auto;
+                padding: 40px 20px;
+                justify-content: flex-start;
+            }
+            .page-dots {
+                position: fixed;
+                z-index: 100;
+            }
+        }
+
         /* ========== 第1屏：开场 ========== */
         .intro-page {
             position: relative;
@@ -511,7 +524,7 @@
             display: none;
             justify-content: center;
             align-items: flex-start;
-            overflow-y: auto;
+            overflow: hidden; /* 防止滚动穿透 */
             padding: 40px 20px;
         }
 
@@ -524,11 +537,14 @@
             border: 3px solid var(--black);
             border-radius: 28px 22px 32px 25px;
             box-shadow: 6px 6px 0 var(--black);
-            max-width: 700px;
+            max-width: 900px;
             width: 100%;
+            max-height: 85vh; /* 限制弹窗最大高度 */
             position: relative;
             animation: modalSlideIn 0.3s ease;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         @keyframes modalSlideIn {
@@ -588,6 +604,22 @@
 
         .skill-detail-body {
             padding: 30px;
+            overflow-y: auto; /* 弹窗内容可滚动 */
+            flex: 1;
+            -webkit-overflow-scrolling: touch; /* iOS 平滑滚动 */
+        }
+
+        /* 多列并排布局（桌面端） */
+        .skill-sections-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .skill-sections-grid {
+                grid-template-columns: 1fr; /* 手机端单列 */
+            }
         }
 
         .skill-section {
@@ -1469,7 +1501,7 @@
                 <h3 class="guestbook-title" id="guestbook-title">💬 给我留言</h3>
                 <p class="guestbook-desc">有什么想对我说的？欢迎留下你的想法、建议或祝福~</p>
                 <form class="guestbook-form" onsubmit="event.preventDefault(); submitGuestbook();" aria-label="留言表单">
-                    <input type="text" class="guestbook-input" id="guestName" placeholder="你的名字（可选）" maxlength="20" aria-label="你的名字">
+                    <input type="text" class="guestbook-input" id="guestName" placeholder="名字/昵称" maxlength="20" aria-label="你的名字或昵称">
                     <textarea class="guestbook-textarea" id="guestMessage" placeholder="写下你的留言..." maxlength="300" aria-label="留言内容" required></textarea>
                     <button type="submit" class="guestbook-btn" aria-label="发送留言">发送留言</button>
                 </form>
@@ -1496,10 +1528,11 @@
     </div>
 
     <script>
-        // 全屏滚动
+        // 全屏滚动（仅桌面端）
         let currentPage = 0;
         const totalPages = 6;
         let isScrolling = false;
+        const isMobile = window.innerWidth <= 768;
 
         function scrollToPage(index) {
             if (index < 0 || index >= totalPages) return;
@@ -1511,52 +1544,62 @@
         function updateDots() {
             document.querySelectorAll('.dot').forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentPage);
+                if (index === currentPage) {
+                    dot.setAttribute('aria-current', 'page');
+                } else {
+                    dot.removeAttribute('aria-current');
+                }
             });
         }
 
-        // 鼠标滚轮
-        window.addEventListener('wheel', (e) => {
-            if (isScrolling) return;
-            isScrolling = true;
-            
-            setTimeout(() => {
-                isScrolling = false;
-            }, 800);
+        if (!isMobile) {
+            // 鼠标滚轮（仅桌面端）
+            window.addEventListener('wheel', (e) => {
+                if (isScrolling) return;
+                isScrolling = true;
+                
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 800);
 
-            if (e.deltaY > 0 && currentPage < totalPages - 1) {
-                scrollToPage(currentPage + 1);
-            } else if (e.deltaY < 0 && currentPage > 0) {
-                scrollToPage(currentPage - 1);
-            }
-        });
-
-        // 键盘导航
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowDown' && currentPage < totalPages - 1) {
-                scrollToPage(currentPage + 1);
-            } else if (e.key === 'ArrowUp' && currentPage > 0) {
-                scrollToPage(currentPage - 1);
-            }
-        });
-
-        // 触摸滑动
-        let touchStartY = 0;
-        window.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-        });
-
-        window.addEventListener('touchend', (e) => {
-            const touchEndY = e.changedTouches[0].clientY;
-            const diff = touchStartY - touchEndY;
-            
-            if (Math.abs(diff) > 50) {
-                if (diff > 0 && currentPage < totalPages - 1) {
+                if (e.deltaY > 0 && currentPage < totalPages - 1) {
                     scrollToPage(currentPage + 1);
-                } else if (diff < 0 && currentPage > 0) {
+                } else if (e.deltaY < 0 && currentPage > 0) {
                     scrollToPage(currentPage - 1);
                 }
-            }
-        });
+            });
+
+            // 键盘导航（仅桌面端）
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown' && currentPage < totalPages - 1) {
+                    scrollToPage(currentPage + 1);
+                } else if (e.key === 'ArrowUp' && currentPage > 0) {
+                    scrollToPage(currentPage - 1);
+                }
+            });
+        }
+
+        // 手机端：自由滚动，不拦截触摸事件
+        // 触摸滑动仅在桌面端模拟翻页
+        if (!isMobile) {
+            let touchStartY = 0;
+            window.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+            });
+
+            window.addEventListener('touchend', (e) => {
+                const touchEndY = e.changedTouches[0].clientY;
+                const diff = touchStartY - touchEndY;
+                
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0 && currentPage < totalPages - 1) {
+                        scrollToPage(currentPage + 1);
+                    } else if (diff < 0 && currentPage > 0) {
+                        scrollToPage(currentPage - 1);
+                    }
+                }
+            });
+        }
 
         // 监听滚动更新当前页
         const observer = new IntersectionObserver((entries) => {
@@ -2086,44 +2129,51 @@
             // 将图标和标题合并显示
             document.getElementById('modalTitle').textContent = data.icon + ' ' + data.title;
 
-            let bodyHTML = '';
+            let sectionsHTML = '';
             data.sections.forEach(section => {
-                bodyHTML += '<div class="skill-section">';
-                bodyHTML += '<h4 class="skill-section-title">' + section.title + '</h4>';
+                sectionsHTML += '<div class="skill-section">';
+                sectionsHTML += '<h4 class="skill-section-title">' + section.title + '</h4>';
                 if (section.desc) {
-                    bodyHTML += '<p class="skill-item-desc" style="margin-top:-8px;margin-bottom:14px;">' + section.desc + '</p>';
+                    sectionsHTML += '<p class="skill-item-desc" style="margin-top:-8px;margin-bottom:14px;">' + section.desc + '</p>';
                 }
                 if (section.subItems && section.subItems.length > 0) {
                     section.subItems.forEach(sub => {
-                        bodyHTML += '<div class="skill-item">';
-                        bodyHTML += '<h5 class="skill-item-title">' + sub.title + '</h5>';
+                        sectionsHTML += '<div class="skill-item">';
+                        sectionsHTML += '<h5 class="skill-item-title">' + sub.title + '</h5>';
                         if (sub.desc) {
-                            bodyHTML += '<p class="skill-item-desc">' + sub.desc + '</p>';
+                            sectionsHTML += '<p class="skill-item-desc">' + sub.desc + '</p>';
                         }
                         if (sub.tags && sub.tags.length > 0) {
                             sub.tags.forEach(tag => {
                                 if (tag.link) {
-                                    bodyHTML += '<a href="' + tag.link + '" target="_blank" rel="noopener"><span class="skill-tag ' + tag.type + ' link">' + tag.text + ' ↗</span></a>';
+                                    sectionsHTML += '<a href="' + tag.link + '" target="_blank" rel="noopener"><span class="skill-tag ' + tag.type + ' link">' + tag.text + ' ↗</span></a>';
                                 } else {
-                                    bodyHTML += '<span class="skill-tag ' + tag.type + '">' + tag.text + '</span>';
+                                    sectionsHTML += '<span class="skill-tag ' + tag.type + '">' + tag.text + '</span>';
                                 }
                             });
                         }
-                        bodyHTML += '</div>';
+                        sectionsHTML += '</div>';
                     });
                 } else {
                     if (section.tags && section.tags.length > 0) {
                         section.tags.forEach(tag => {
-                            bodyHTML += '<span class="skill-tag ' + tag.type + '">' + tag.text + '</span>';
+                            sectionsHTML += '<span class="skill-tag ' + tag.type + '">' + tag.text + '</span>';
                         });
                     }
                 }
-                bodyHTML += '</div>';
+                sectionsHTML += '</div>';
             });
 
+            // 使用多列网格布局包裹
+            const bodyHTML = '<div class="skill-sections-grid">' + sectionsHTML + '</div>';
             document.getElementById('modalBody').innerHTML = bodyHTML;
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+            
+            // 防止弹窗内滚动穿透到背景页面
+            document.getElementById('modalBody').addEventListener('touchmove', function(e) {
+                e.stopPropagation();
+            }, { passive: true });
         }
 
         function closeSkillDetail() {
