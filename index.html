@@ -2083,8 +2083,8 @@
         function openSkillDetail(index) {
             const data = skillDetails[index];
             const modal = document.getElementById('skillDetailModal');
-            document.getElementById('modalIcon').textContent = data.icon;
-            document.getElementById('modalTitle').textContent = data.title;
+            // 将图标和标题合并显示
+            document.getElementById('modalTitle').textContent = data.icon + ' ' + data.title;
 
             let bodyHTML = '';
             data.sections.forEach(section => {
