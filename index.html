@@ -260,22 +260,24 @@
         /* 右侧：播放器面板 */
         .player-panel {
             flex: 1;
-            max-width: 400px;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        /* 波形屏幕 */
-        .waveform-screen {
+        /* 复古CRT屏幕 */
+        .crt-screen {
             background: var(--black);
             border: 3px solid var(--black);
-            border-radius: 18px 15px 20px 17px;
-            padding: 20px;
-            margin-bottom: 24px;
+            border-radius: 28px 25px 32px 30px;
+            padding: 24px;
             position: relative;
             overflow: hidden;
-            box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.15);
         }
 
-        .waveform-screen::before {
+        .crt-screen::before {
             content: '';
             position: absolute;
             top: 0;
@@ -286,84 +288,182 @@
                 0deg,
                 transparent,
                 transparent 2px,
-                rgba(255,255,255,0.02) 2px,
-                rgba(255,255,255,0.02) 4px
+                rgba(255,255,255,0.03) 2px,
+                rgba(255,255,255,0.03) 4px
             );
             pointer-events: none;
         }
 
+        .crt-inner {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 16px;
+            position: relative;
+        }
+
         .waveform-canvas {
             width: 100%;
-            height: 80px;
+            height: 100px;
             display: block;
         }
 
-        .waveform-info {
+        .crt-info {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-top: 12px;
             font-family: 'Noto Sans SC', sans-serif;
             font-size: 13px;
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.7);
+            letter-spacing: 2px;
         }
 
-        .waveform-bpm {
-            font-size: 14px;
+        /* 轨道选择器 */
+        .track-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .track-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border: 2px solid rgba(0,0,0,0.15);
+            border-radius: 12px 10px 14px 11px;
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
+        }
+
+        .track-item:hover, .track-item.active {
+            border-color: var(--black);
+            background: var(--bg);
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .track-number {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
             font-weight: 700;
-            color: rgba(255,255,255,0.9);
-            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        .track-item.active .track-number {
+            background: var(--black);
+            color: var(--white);
         }
 
         /* 播放器信息 */
         .player-info {
-            margin-bottom: 24px;
+            text-align: center;
+            padding: 8px 0;
         }
 
         .player-name {
             font-family: 'ZCOOL XiaoWei', serif;
-            font-size: 36px;
-            letter-spacing: 8px;
-            margin-bottom: 8px;
+            font-size: 32px;
+            letter-spacing: 6px;
+            margin-bottom: 6px;
+        }
+
+        .player-desc {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 10px;
         }
 
         .player-tags {
             display: flex;
-            gap: 12px;
+            justify-content: center;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .player-tag {
             font-family: 'Noto Sans SC', sans-serif;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--gray);
-            padding: 4px 12px;
-            border: 1.5px solid rgba(0,0,0,0.15);
-            border-radius: 20px;
+            padding: 3px 10px;
+            border: 1.5px solid rgba(0,0,0,0.12);
+            border-radius: 16px;
+        }
+
+        /* 参数控制按钮 */
+        .param-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 8px 0;
+        }
+
+        .param-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .param-icon {
+            width: 44px;
+            height: 44px;
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: var(--white);
+            box-shadow: 2px 2px 0 var(--black);
+            transition: all 0.2s;
+        }
+
+        .param-btn:hover .param-icon {
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0 var(--black);
+        }
+
+        .param-label {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 11px;
+            color: var(--gray);
+            letter-spacing: 1px;
         }
 
         /* 播放控制 */
         .player-controls {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 16px;
-            margin-bottom: 20px;
+            padding: 8px 0;
         }
 
         .play-btn {
-            width: 56px;
-            height: 56px;
+            width: 52px;
+            height: 52px;
             border: 3px solid var(--black);
             border-radius: 50%;
             background: var(--white);
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
             box-shadow: 3px 3px 0 var(--black);
-            flex-shrink: 0;
         }
 
         .play-btn:hover {
@@ -376,62 +476,36 @@
             box-shadow: 1px 1px 0 var(--black);
         }
 
-        /* 进度条 */
-        .progress-bar {
-            flex: 1;
+        /* 音量控制 */
+        .volume-section {
+            padding: 12px 16px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-radius: 14px 12px 16px 13px;
+            background: var(--white);
+        }
+
+        .volume-label {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 11px;
+            color: var(--gray);
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .volume-bar {
             height: 6px;
-            background: rgba(0,0,0,0.1);
+            background: rgba(0,0,0,0.08);
             border-radius: 3px;
             position: relative;
             overflow: hidden;
         }
 
-        .progress-fill {
+        .volume-fill {
             height: 100%;
+            width: 70%;
             background: var(--black);
             border-radius: 3px;
-            width: 35%;
-            animation: progressMove 12s linear infinite;
-        }
-
-        @keyframes progressMove {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        .progress-fill.paused {
-            animation-play-state: paused;
-        }
-
-        /* 音量控制 */
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Noto Sans SC', sans-serif;
-            font-size: 13px;
-            color: var(--gray);
-        }
-
-        .volume-slider {
-            flex: 1;
-            height: 4px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: rgba(0,0,0,0.1);
-            border-radius: 2px;
-            outline: none;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: var(--black);
-            cursor: pointer;
-            border: 2px solid var(--white);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
 
         /* 滚动提示 */
@@ -1645,40 +1719,74 @@
 
             <!-- 右侧：播放器面板 -->
             <div class="player-panel">
-                <!-- 波形屏幕 -->
-                <div class="waveform-screen">
-                    <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
-                    <div class="waveform-info">
-                        <span>♪ 正在播放</span>
-                        <span class="waveform-bpm">120 BPM</span>
+                <!-- 复古CRT屏幕 -->
+                <div class="crt-screen">
+                    <div class="crt-inner">
+                        <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
+                        <div class="crt-info">♪ 正在播放 · 120 BPM</div>
+                    </div>
+                </div>
+
+                <!-- 轨道选择器 -->
+                <div class="track-selector">
+                    <div class="track-item active" onclick="selectTrack(1)">
+                        <span class="track-number">1</span>
+                        <span>🎵 音乐艺术 · 企业文化</span>
+                    </div>
+                    <div class="track-item" onclick="selectTrack(2)">
+                        <span class="track-number">2</span>
+                        <span>💡 跨界破局 · 主动进化</span>
+                    </div>
+                    <div class="track-item" onclick="selectTrack(3)">
+                        <span class="track-number">3</span>
+                        <span>🌟 生活策展 · 长期践行</span>
+                    </div>
+                    <div class="track-item" onclick="selectTrack(4)">
+                        <span class="track-number">4</span>
+                        <span>✨ 步步向青山 · 期待相遇</span>
                     </div>
                 </div>
 
                 <!-- 播放器信息 -->
                 <div class="player-info">
                     <h1 class="player-name" id="intro-title">戴雯晞</h1>
+                    <p class="player-desc">音乐艺术背景的我，在找寻热爱与价值的路上步履不停，始终相信步步向青山的力量。</p>
                     <div class="player-tags">
-                        <span class="player-tag">🎵 音乐学</span>
-                        <span class="player-tag">💡 企业文化</span>
-                        <span class="player-tag">🎓 2026届</span>
+                        <span class="player-tag">音乐学</span>
+                        <span class="player-tag">企业文化</span>
+                        <span class="player-tag">2026届</span>
+                    </div>
+                </div>
+
+                <!-- 参数控制 -->
+                <div class="param-controls">
+                    <div class="param-btn">
+                        <div class="param-icon">🎵</div>
+                        <span class="param-label">SOUND</span>
+                    </div>
+                    <div class="param-btn">
+                        <div class="param-icon">⚡</div>
+                        <span class="param-label">SPEED</span>
+                    </div>
+                    <div class="param-btn">
+                        <div class="param-icon">🎛</div>
+                        <span class="param-label">DELAY</span>
                     </div>
                 </div>
 
                 <!-- 播放控制 -->
                 <div class="player-controls">
                     <button class="play-btn" id="playBtn" onclick="togglePlay()" aria-label="播放/暂停">
-                        <span id="playIcon">▶</span>
+                        <span id="playIcon">⏸</span>
                     </button>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
                 </div>
 
                 <!-- 音量控制 -->
-                <div class="volume-control">
-                    <span>🔈</span>
-                    <input type="range" class="volume-slider" min="0" max="100" value="75" aria-label="音量">
-                    <span>🔊</span>
+                <div class="volume-section">
+                    <div class="volume-label">VOLUME</div>
+                    <div class="volume-bar">
+                        <div class="volume-fill"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1870,17 +1978,21 @@
             isPlaying = !isPlaying;
             const disc = document.getElementById('vinylDisc');
             const icon = document.getElementById('playIcon');
-            const progress = document.getElementById('progressFill');
             
             if (isPlaying) {
                 disc.classList.remove('paused');
                 icon.textContent = '⏸';
-                progress.classList.remove('paused');
             } else {
                 disc.classList.add('paused');
                 icon.textContent = '▶';
-                progress.classList.add('paused');
             }
+        }
+
+        // 轨道切换
+        function selectTrack(num) {
+            document.querySelectorAll('.track-item').forEach((item, index) => {
+                item.classList.toggle('active', index === num - 1);
+            });
         }
 
         // 波形动画
