@@ -1985,7 +1985,7 @@
             element.classList.toggle('active');
         }
 
-        // 波形动画
+        // 音波动画（心跳图风格）
         function initWaveform() {
             const canvas = document.getElementById('waveformCanvas');
             if (!canvas) return;
@@ -1999,37 +1999,61 @@
             resize();
             window.addEventListener('resize', resize);
             
-            let offset = 0;
+            let time = 0;
+            const bars = 12; // 音波柱数量
+            const barWidth = 4;
+            const gap = 8;
+            
             function draw() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-                ctx.lineWidth = 1.5;
-                ctx.beginPath();
                 
-                for (let x = 0; x < canvas.width; x++) {
-                    const y = canvas.height / 2 + 
-                        Math.sin((x + offset) * 0.03) * 20 +
-                        Math.sin((x + offset) * 0.07) * 10 +
-                        Math.sin((x + offset) * 0.01) * 15;
-                    if (x === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const totalWidth = bars * (barWidth + gap) - gap;
+                const startX = centerX - totalWidth / 2;
+                
+                // 绘制音波柱
+                for (let i = 0; i < bars; i++) {
+                    const x = startX + i * (barWidth + gap);
+                    
+                    // 计算高度（模拟音波跳动）
+                    let height;
+                    if (!isPlaying) {
+                        height = 8; // 暂停时固定高度
+                    } else {
+                        // 中间高两边低的音波效果
+                        const distFromCenter = Math.abs(i - bars / 2 + 0.5) / (bars / 2);
+                        const baseHeight = 30 * (1 - distFromCenter * 0.5);
+                        const jump = Math.sin(time * 0.1 + i * 0.5) * 15;
+                        const randomJump = Math.sin(time * 0.2 + i * 0.3) * 8;
+                        height = Math.max(4, baseHeight + jump + randomJump);
+                    }
+                    
+                    // 绘制音波柱（上下对称）
+                    const alpha = 0.3 + (1 - Math.abs(i - bars / 2 + 0.5) / (bars / 2)) * 0.5;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                    
+                    // 上半部分
+                    ctx.fillRect(x, centerY - height, barWidth, height);
+                    // 下半部分
+                    ctx.fillRect(x, centerY, barWidth, height);
+                    
+                    // 圆角效果
+                    ctx.beginPath();
+                    ctx.arc(x + barWidth/2, centerY - height, barWidth/2, 0, Math.PI * 2);
+                    ctx.arc(x + barWidth/2, centerY + height, barWidth/2, 0, Math.PI * 2);
+                    ctx.fill();
                 }
-                ctx.stroke();
                 
-                // 第二条波形（更淡）
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                // 绘制中心线
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
                 ctx.lineWidth = 1;
                 ctx.beginPath();
-                for (let x = 0; x < canvas.width; x++) {
-                    const y = canvas.height / 2 + 
-                        Math.sin((x + offset * 1.3) * 0.05) * 15 +
-                        Math.cos((x + offset * 0.8) * 0.02) * 12;
-                    if (x === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
-                }
+                ctx.moveTo(0, centerY);
+                ctx.lineTo(canvas.width, centerY);
                 ctx.stroke();
                 
-                if (isPlaying) offset += 1.5;
+                if (isPlaying) time += 1;
                 requestAnimationFrame(draw);
             }
             draw();
