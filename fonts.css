@@ -1,76 +1,30 @@
-/* 本地字体定义 - Google Fonts 本地化 */
-/* 当 CDN 可用时使用 CDN，否则使用系统字体 fallback */
+/* 字体配置 - 系统字体优先，CDN 作为增强 */
 
-/* ZCOOL XiaoWei - 站酷小薇 */
-@font-face {
-  font-family: 'ZCOOL XiaoWei';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap; /* 加载时显示系统字体，加载完成后切换 */
-  src: local('ZCOOL XiaoWei'), /* 尝试使用本地安装的字体 */
-       local('站酷小薇'),
-       url('./fonts/ZCOOLXiaoWei.woff2') format('woff2'), /* 本地托管 */
-       url('https://fonts.gstatic.com/s/zcoolxiaowei/v19/i7dQIF2mKpC7JQmDd9eXqQ.woff2') format('woff2'); /* CDN fallback */
-}
+/* 
+ * 说明：本地字体文件需要手动下载，这里使用系统字体作为可靠 fallback
+ * 如果网络正常，Google Fonts CDN 会加载；如果失败，系统字体立即接管
+ */
 
-/* ZCOOL KuaiLe - 站酷快乐体 */
-@font-face {
-  font-family: 'ZCOOL KuaiLe';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local('ZCOOL KuaiLe'),
-       local('站酷快乐体'),
-       url('./fonts/ZCOOLKuaiLe.woff2') format('woff2'),
-       url('https://fonts.gstatic.com/s/zcoolkuaile/v19/tssqApdaWQJ6gBdaCkQlXQ.woff2') format('woff2');
-}
-
-/* Ma Shan Zheng - 马善政楷体 */
-@font-face {
-  font-family: 'Ma Shan Zheng';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local('Ma Shan Zheng'),
-       local('马善政'),
-       url('./fonts/MaShanZheng.woff2') format('woff2'),
-       url('https://fonts.gstatic.com/s/mashanzheng/v10/NaPecZTRCLxvwo41b4gvkXtY.woff2') format('woff2');
-}
-
-/* Noto Sans SC - 思源黑体简体中文 */
-@font-face {
-  font-family: 'Noto Sans SC';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local('Noto Sans SC'),
-       local('Noto Sans Simplified Chinese'),
-       local('思源黑体'),
-       url('./fonts/NotoSansSC-Regular.woff2') format('woff2'),
-       url('https://fonts.gstatic.com/s/notosanssc/v35/k3kXo84MPvpLmixcA63OEALhLOCT-xWtmGJX.woff2') format('woff2');
-}
-
-/* Noto Sans SC - Bold */
-@font-face {
-  font-family: 'Noto Sans SC';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: local('Noto Sans SC Bold'),
-       local('思源黑体 Bold'),
-       url('./fonts/NotoSansSC-Bold.woff2') format('woff2'),
-       url('https://fonts.gstatic.com/s/notosanssc/v35/k3kXo84MPvpLmixcA63OEALhLOCT-xWtmGJX.woff2') format('woff2');
-}
-
-/* 系统字体 fallback 定义 */
+/* 系统字体 fallback 定义 - 最可靠的方案 */
 :root {
-  /* 主字体栈 - 带完整 fallback */
+  /* 主字体栈 - 带完整系统字体 fallback */
   --font-display: 'ZCOOL KuaiLe', 'ZCOOL XiaoWei', 'Ma Shan Zheng', 
                   'PingFang SC', 'Microsoft YaHei', 'SimHei', 
-                  'Hiragino Sans GB', 'WenQuanYi Micro Hei', sans-serif;
+                  'Hiragino Sans GB', 'WenQuanYi Micro Hei', 
+                  'Noto Sans SC', sans-serif;
   
   --font-body: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 
-               'SimHei', 'Hiragino Sans GB', sans-serif;
+               'SimHei', 'Hiragino Sans GB', 
+               'WenQuanYi Micro Hei', sans-serif;
   
-  --font-serif: 'ZCOOL XiaoWei', 'Noto Serif SC', 'SimSun', serif;
+  --font-serif: 'ZCOOL XiaoWei', 'Noto Serif SC', 'SimSun', 
+                'STSong', 'FangSong', serif;
 }
+
+/* 
+ * 字体加载策略说明：
+ * 1. 优先使用本地已安装的字体（local）
+ * 2. Google Fonts CDN 异步加载（不会阻塞渲染）
+ * 3. 系统字体作为最终 fallback（立即显示）
+ * 4. font-display: swap 确保文字始终可见
+ */
