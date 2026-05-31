@@ -1,0 +1,76 @@
+/* 本地字体定义 - Google Fonts 本地化 */
+/* 当 CDN 可用时使用 CDN，否则使用系统字体 fallback */
+
+/* ZCOOL XiaoWei - 站酷小薇 */
+@font-face {
+  font-family: 'ZCOOL XiaoWei';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap; /* 加载时显示系统字体，加载完成后切换 */
+  src: local('ZCOOL XiaoWei'), /* 尝试使用本地安装的字体 */
+       local('站酷小薇'),
+       url('./fonts/ZCOOLXiaoWei.woff2') format('woff2'), /* 本地托管 */
+       url('https://fonts.gstatic.com/s/zcoolxiaowei/v19/i7dQIF2mKpC7JQmDd9eXqQ.woff2') format('woff2'); /* CDN fallback */
+}
+
+/* ZCOOL KuaiLe - 站酷快乐体 */
+@font-face {
+  font-family: 'ZCOOL KuaiLe';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('ZCOOL KuaiLe'),
+       local('站酷快乐体'),
+       url('./fonts/ZCOOLKuaiLe.woff2') format('woff2'),
+       url('https://fonts.gstatic.com/s/zcoolkuaile/v19/tssqApdaWQJ6gBdaCkQlXQ.woff2') format('woff2');
+}
+
+/* Ma Shan Zheng - 马善政楷体 */
+@font-face {
+  font-family: 'Ma Shan Zheng';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Ma Shan Zheng'),
+       local('马善政'),
+       url('./fonts/MaShanZheng.woff2') format('woff2'),
+       url('https://fonts.gstatic.com/s/mashanzheng/v10/NaPecZTRCLxvwo41b4gvkXtY.woff2') format('woff2');
+}
+
+/* Noto Sans SC - 思源黑体简体中文 */
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Noto Sans SC'),
+       local('Noto Sans Simplified Chinese'),
+       local('思源黑体'),
+       url('./fonts/NotoSansSC-Regular.woff2') format('woff2'),
+       url('https://fonts.gstatic.com/s/notosanssc/v35/k3kXo84MPvpLmixcA63OEALhLOCT-xWtmGJX.woff2') format('woff2');
+}
+
+/* Noto Sans SC - Bold */
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Noto Sans SC Bold'),
+       local('思源黑体 Bold'),
+       url('./fonts/NotoSansSC-Bold.woff2') format('woff2'),
+       url('https://fonts.gstatic.com/s/notosanssc/v35/k3kXo84MPvpLmixcA63OEALhLOCT-xWtmGJX.woff2') format('woff2');
+}
+
+/* 系统字体 fallback 定义 */
+:root {
+  /* 主字体栈 - 带完整 fallback */
+  --font-display: 'ZCOOL KuaiLe', 'ZCOOL XiaoWei', 'Ma Shan Zheng', 
+                  'PingFang SC', 'Microsoft YaHei', 'SimHei', 
+                  'Hiragino Sans GB', 'WenQuanYi Micro Hei', sans-serif;
+  
+  --font-body: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 
+               'SimHei', 'Hiragino Sans GB', sans-serif;
+  
+  --font-serif: 'ZCOOL XiaoWei', 'Noto Serif SC', 'SimSun', serif;
+}

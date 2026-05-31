@@ -1,0 +1,18 @@
+{
+  "name": "wenxi-portfolio",
+  "version": "1.0.0",
+  "description": "戴雯晞的个人作品集网站",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0",
+    "terser": "^5.31.0"
+  },
+  "keywords": ["portfolio", "personal-website", "enterprise-culture"],
+  "author": "戴雯晞",
+  "license": "MIT"
+}
