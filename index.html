@@ -1350,6 +1350,127 @@
             color: var(--primary);
         }
 
+        /* 工具快捷使用弹窗（横向） */
+        .tools-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tools-modal.active {
+            display: flex;
+        }
+
+        .tools-modal-content {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 16px;
+            max-width: 860px;
+            width: 92%;
+            position: relative;
+            padding: 28px;
+        }
+
+        .tools-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid var(--black);
+            border-radius: 50%;
+            background: var(--white);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tools-modal-title {
+            font-size: 20px;
+            color: var(--black);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .tools-modal-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .tools-modal-card {
+            padding: 20px 16px;
+            border: 1.5px solid rgba(0,0,0,0.15);
+            border-radius: 10px;
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tools-modal-card:hover {
+            border-color: var(--black);
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+            transform: translate(-1px, -1px);
+        }
+
+        .tools-modal-card .tools-modal-icon {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .tools-modal-card .tools-modal-name {
+            font-size: 16px;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .tools-modal-card .tools-modal-tags {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .tools-modal-card .tools-modal-brief {
+            font-size: 12px;
+            color: var(--tertiary);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .tools-modal-card .tools-modal-link {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        @media (max-width: 768px) {
+            .tools-modal-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .tools-modal-content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tools-modal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* PDF弹窗 */
         .pdf-modal {
             position: fixed;
@@ -2094,6 +2215,16 @@
             <div class="portfolio-arrow">→</div>
         </div>
         
+        <!-- 直接使用入口 -->
+        <div class="portfolio-banner" onclick="openToolsModal()" style="border-style: dashed;">
+            <div class="portfolio-icon">🛠️</div>
+            <div class="portfolio-content">
+                <h3 class="portfolio-title">直接使用这些小工具</h3>
+                <p class="portfolio-desc">转盘抽奖 · 随机抽签 · 投票助手 · 通知生成</p>
+            </div>
+            <div class="portfolio-arrow">→</div>
+        </div>
+        
         <div class="works-grid" role="list" aria-label="作品列表">
             <!-- 幸运转盘 -->
             <div class="work-card" onclick="openWorkDetail(0)">
@@ -2157,6 +2288,56 @@
             <div class="work-detail-content">
                 <button class="work-detail-close" onclick="closeWorkDetail()">×</button>
                 <div class="work-detail-body" id="workDetailBody"></div>
+            </div>
+        </div>
+        
+        <!-- 工具快捷使用弹窗（横向） -->
+        <div class="tools-modal" id="toolsModal" onclick="closeToolsModalOnOverlay(event)">
+            <div class="tools-modal-content">
+                <button class="tools-modal-close" onclick="closeToolsModal()">×</button>
+                <h3 class="tools-modal-title">🛠️ 直接能用的小工具</h3>
+                <div class="tools-modal-grid">
+                    <a href="wheel.html" class="tools-modal-card">
+                        <span class="tools-modal-icon">🎡</span>
+                        <h4 class="tools-modal-name">幸运转盘</h4>
+                        <div class="tools-modal-tags">
+                            <span class="tag-need">需求：年会抽奖公平性</span>
+                            <span class="tag-tech">技术：Canvas + 随机算法</span>
+                        </div>
+                        <p class="tools-modal-brief">可视化转盘抽奖，支持权重配置与结果记录</p>
+                        <span class="tools-modal-link">点击使用 →</span>
+                    </a>
+                    <a href="draw.html" class="tools-modal-card">
+                        <span class="tools-modal-icon">🎲</span>
+                        <h4 class="tools-modal-name">随机抽签</h4>
+                        <div class="tools-modal-tags">
+                            <span class="tag-need">需求：公平随机分配</span>
+                            <span class="tag-tech">技术：Fisher-Yates洗牌</span>
+                        </div>
+                        <p class="tools-modal-brief">支持分组抽签、顺序抽签与结果导出</p>
+                        <span class="tools-modal-link">点击使用 →</span>
+                    </a>
+                    <a href="vote.html" class="tools-modal-card">
+                        <span class="tools-modal-icon">📊</span>
+                        <h4 class="tools-modal-name">投票小助手</h4>
+                        <div class="tools-modal-tags">
+                            <span class="tag-need">需求：团队决策效率</span>
+                            <span class="tag-tech">技术：实时统计 + 可视化</span>
+                        </div>
+                        <p class="tools-modal-brief">多选项投票、实时票数显示与结果分析</p>
+                        <span class="tools-modal-link">点击使用 →</span>
+                    </a>
+                    <a href="notice.html" class="tools-modal-card">
+                        <span class="tools-modal-icon">📝</span>
+                        <h4 class="tools-modal-name">通知生成器</h4>
+                        <div class="tools-modal-tags">
+                            <span class="tag-need">需求：通知撰写效率</span>
+                            <span class="tag-tech">技术：模板引擎 + 预览</span>
+                        </div>
+                        <p class="tools-modal-brief">多场景模板、一键生成与格式复制</p>
+                        <span class="tools-modal-link">点击使用 →</span>
+                    </a>
+                </div>
             </div>
         </div>
         
@@ -2450,6 +2631,29 @@
             if (event.target === event.currentTarget) closeWorkDetail();
         }
 
+        // 工具快捷使用弹窗
+        function openToolsModal() {
+            // 打开弹窗前记录滚动位置
+            sessionStorage.setItem('scrollY', window.scrollY);
+            document.getElementById('toolsModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeToolsModal() {
+            document.getElementById('toolsModal').classList.remove('active');
+            document.body.style.overflow = '';
+            // 关闭弹窗后恢复滚动位置
+            const savedScrollY = sessionStorage.getItem('scrollY');
+            if (savedScrollY !== null) {
+                window.scrollTo(0, parseInt(savedScrollY));
+                sessionStorage.removeItem('scrollY');
+            }
+        }
+
+        function closeToolsModalOnOverlay(event) {
+            if (event.target === event.currentTarget) closeToolsModal();
+        }
+
         // PDF作品集
         function openPortfolio() {
             const modal = document.getElementById('pdfModal');
@@ -2471,6 +2675,14 @@
 
         // 初始化播放器
         document.addEventListener('DOMContentLoaded', function() {
+            // 从工具页面返回时恢复滚动位置
+            const savedScrollY = sessionStorage.getItem('scrollY');
+            if (savedScrollY !== null) {
+                setTimeout(function() {
+                    window.scrollTo(0, parseInt(savedScrollY));
+                    sessionStorage.removeItem('scrollY');
+                }, 10);
+            }
             initWaveform();
             // 默认播放状态
             document.getElementById('playIcon').textContent = '⏸';
