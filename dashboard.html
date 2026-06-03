@@ -345,6 +345,210 @@
         .risk-item:last-child {
             margin-bottom: 0;
         }
+
+        /* ========== 台账表格样式 ========== */
+        .task-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .task-table thead {
+            background: var(--bg);
+        }
+
+        .task-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .task-table th:hover {
+            background: #e8eaf6;
+        }
+
+        .task-table th .sort-indicator {
+            margin-left: 6px;
+            opacity: 0.3;
+            font-size: 12px;
+        }
+
+        .task-table th.sort-asc .sort-indicator::after {
+            content: "▲";
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .task-table th.sort-desc .sort-indicator::after {
+            content: "▼";
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .task-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        .task-table tbody tr:hover {
+            background: var(--accent-light);
+        }
+
+        .task-table tbody tr:hover td {
+            cursor: pointer;
+        }
+
+        /* 优先级标签 */
+        .priority-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .priority-high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .priority-medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .priority-low {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        /* 状态标签 */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-todo {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .status-in-progress {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-done {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-blocked {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-archived {
+            background: #f3f4f6;
+            color: #9ca3af;
+        }
+
+        /* 紧急度标签 */
+        .urgency-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .urgency-urgent {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .urgency-normal {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        /* 阻塞标记 */
+        .blocked-yes {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .blocked-no {
+            color: #6b7280;
+        }
+
+        /* 内联编辑样式 */
+        .cell-editing {
+            background: #fffbeb !important;
+            box-shadow: inset 0 0 0 2px var(--accent);
+        }
+
+        .cell-editor {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            background: white;
+        }
+
+        .cell-editor:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .cell-editor-select {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            background: white;
+            cursor: pointer;
+        }
+
+        .cell-editor-date {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            background: white;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
@@ -434,7 +638,7 @@
                 <div class="placeholder-text">运营仪表盘内容区域<br>数据图表与趋势分析</div>
             </div>
             <div class="tab-panel active" id="table">
-                <div class="placeholder-text">台账表格内容区域<br>任务明细与属性管理</div>
+                <div id="tableContainer"></div>
             </div>
             <div class="tab-panel" id="gantt">
                 <div class="placeholder-text">甘特图内容区域<br>时间线与里程碑排期</div>
@@ -546,6 +750,12 @@
         // 全局 tasks 数组
         let tasks = [];
 
+        // 排序状态
+        let sortState = {
+            column: null,
+            direction: 'asc' // 'asc' 或 'desc'
+        };
+
         // 辅助函数：获取相对日期的 YYYY-MM-DD 字符串
         function getFutureDate(daysOffset) {
             const d = new Date();
@@ -576,12 +786,345 @@
                 saveTasks();
                 console.log('🆕 No stored tasks found, initialized with defaults');
             }
-            // 打印到控制台
             console.log('Current tasks:', tasks);
         }
 
-        // 页面加载时调用
-        loadTasks();
+        // ==================== 表格渲染 ====================
+
+        // 表头配置
+        const tableColumns = [
+            { key: 'name', label: '任务名称', sortable: true },
+            { key: 'category', label: '分类', sortable: true },
+            { key: 'priority', label: '优先级', sortable: true },
+            { key: 'urgency', label: '紧急度', sortable: true },
+            { key: 'status', label: '状态', sortable: true },
+            { key: 'dueDate', label: '截止日期', sortable: true },
+            { key: 'completedDate', label: '实际完成日期', sortable: true },
+            { key: 'blocked', label: '阻塞标记', sortable: true }
+        ];
+
+        // 获取筛选条件
+        function getFilterValues() {
+            const searchText = document.querySelector('#globalSearch')?.value?.toLowerCase() || '';
+            const category = document.querySelector('#filterCategory')?.value || 'all';
+            const status = document.querySelector('#filterStatus')?.value || 'all';
+            const priority = document.querySelector('#filterPriority')?.value || 'all';
+            return { searchText, category, status, priority };
+        }
+
+        // 筛选任务
+        function filterTasks(taskList) {
+            const { searchText, category, status, priority } = getFilterValues();
+            
+            return taskList.filter(task => {
+                // 搜索筛选（任务名称包含搜索词，不区分大小写）
+                if (searchText && !task.name.toLowerCase().includes(searchText)) {
+                    return false;
+                }
+                // 分类精确匹配
+                if (category !== 'all' && task.category !== category) {
+                    return false;
+                }
+                // 状态精确匹配
+                if (status !== 'all' && task.status !== status) {
+                    return false;
+                }
+                // 优先级精确匹配
+                if (priority !== 'all' && task.priority !== priority) {
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        // 排序任务
+        function sortTasks(taskList) {
+            if (!sortState.column) return taskList;
+            
+            const sorted = [...taskList];
+            const column = sortState.column;
+            const dir = sortState.direction === 'asc' ? 1 : -1;
+            
+            sorted.sort((a, b) => {
+                let valA = a[column];
+                let valB = b[column];
+                
+                // 处理 null 值
+                if (valA === null && valB === null) return 0;
+                if (valA === null) return 1 * dir;
+                if (valB === null) return -1 * dir;
+                
+                // 日期列按时间戳排序
+                if (column === 'dueDate' || column === 'completedDate') {
+                    return (new Date(valA) - new Date(valB)) * dir;
+                }
+                
+                // 阻塞标记（布尔值）
+                if (column === 'blocked') {
+                    return (valA === valB ? 0 : valA ? 1 : -1) * dir;
+                }
+                
+                // 字符串按拼音/localeCompare排序
+                if (typeof valA === 'string' && typeof valB === 'string') {
+                    return valA.localeCompare(valB, 'zh-CN') * dir;
+                }
+                
+                // 默认比较
+                return (valA > valB ? 1 : -1) * dir;
+            });
+            
+            return sorted;
+        }
+
+        // 渲染优先级标签
+        function renderPriority(priority) {
+            const labels = { high: '高', medium: '中', low: '低' };
+            return `<span class="priority-badge priority-${priority}">${labels[priority] || priority}</span>`;
+        }
+
+        // 渲染状态标签
+        function renderStatus(status) {
+            const labels = { 
+                'todo': '待开始', 
+                'in-progress': '进行中', 
+                'done': '已完成',
+                'blocked': '阻塞暂停',
+                'archived': '已归档'
+            };
+            return `<span class="status-badge status-${status}">${labels[status] || status}</span>`;
+        }
+
+        // 渲染紧急度标签
+        function renderUrgency(urgency) {
+            const labels = { urgent: '紧急', normal: '普通' };
+            return `<span class="urgency-badge urgency-${urgency}">${labels[urgency] || urgency}</span>`;
+        }
+
+        // 渲染阻塞标记
+        function renderBlocked(blocked) {
+            return blocked 
+                ? '<span class="blocked-yes">是</span>' 
+                : '<span class="blocked-no">否</span>';
+        }
+
+        // 渲染日期
+        function renderDate(date) {
+            return date || '<span style="color:#94a3b8">-</span>';
+        }
+
+        // 主渲染函数
+        function renderTable() {
+            const container = document.getElementById('tableContainer');
+            if (!container) return;
+            
+            // 筛选并排序
+            let filtered = filterTasks(tasks);
+            filtered = sortTasks(filtered);
+            
+            // 空状态
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <p>暂无符合条件的任务</p>
+                        <p style="font-size:13px; margin-top:8px;">尝试调整筛选条件</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 构建表格
+            let html = '<table class="task-table"><thead><tr>';
+            
+            // 表头
+            tableColumns.forEach(col => {
+                const sortClass = sortState.column === col.key 
+                    ? (sortState.direction === 'asc' ? 'sort-asc' : 'sort-desc') 
+                    : '';
+                html += `<th class="${sortClass}" data-column="${col.key}" ${col.sortable ? '' : ''}>
+                    ${col.label}
+                    <span class="sort-indicator">▲</span>
+                </th>`;
+            });
+            html += '</tr></thead><tbody>';
+            
+            // 数据行
+            filtered.forEach(task => {
+                html += `<tr data-task-id="${task.id}">`;
+                html += `<td data-field="name">${task.name}</td>`;
+                html += `<td data-field="category">${task.category}</td>`;
+                html += `<td data-field="priority">${renderPriority(task.priority)}</td>`;
+                html += `<td data-field="urgency">${renderUrgency(task.urgency)}</td>`;
+                html += `<td data-field="status">${renderStatus(task.status)}</td>`;
+                html += `<td data-field="dueDate">${renderDate(task.dueDate)}</td>`;
+                html += `<td data-field="completedDate">${renderDate(task.completedDate)}</td>`;
+                html += `<td data-field="blocked">${renderBlocked(task.blocked)}</td>`;
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+            
+            // 绑定表头点击排序
+            container.querySelectorAll('th[data-column]').forEach(th => {
+                th.addEventListener('click', function() {
+                    const column = this.dataset.column;
+                    if (sortState.column === column) {
+                        // 切换方向
+                        sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        // 新列，默认升序
+                        sortState.column = column;
+                        sortState.direction = 'asc';
+                    }
+                    renderTable();
+                });
+            });
+            
+            // 绑定双击编辑
+            container.querySelectorAll('tbody td').forEach(td => {
+                td.addEventListener('dblclick', function() {
+                    startInlineEdit(this);
+                });
+            });
+        }
+
+        // ==================== 内联编辑 ====================
+
+        function startInlineEdit(cell) {
+            const field = cell.dataset.field;
+            const taskId = cell.closest('tr').dataset.taskId;
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            // 实际完成日期列不可编辑（根据需求）
+            if (field === 'completedDate') return;
+            
+            const currentValue = task[field];
+            cell.classList.add('cell-editing');
+            
+            let editor;
+            
+            // 根据字段类型创建不同的编辑器
+            if (field === 'priority') {
+                editor = document.createElement('select');
+                editor.className = 'cell-editor-select';
+                editor.innerHTML = `
+                    <option value="high" ${currentValue === 'high' ? 'selected' : ''}>高</option>
+                    <option value="medium" ${currentValue === 'medium' ? 'selected' : ''}>中</option>
+                    <option value="low" ${currentValue === 'low' ? 'selected' : ''}>低</option>
+                `;
+            } else if (field === 'urgency') {
+                editor = document.createElement('select');
+                editor.className = 'cell-editor-select';
+                editor.innerHTML = `
+                    <option value="urgent" ${currentValue === 'urgent' ? 'selected' : ''}>紧急</option>
+                    <option value="normal" ${currentValue === 'normal' ? 'selected' : ''}>普通</option>
+                `;
+            } else if (field === 'status') {
+                editor = document.createElement('select');
+                editor.className = 'cell-editor-select';
+                editor.innerHTML = `
+                    <option value="todo" ${currentValue === 'todo' ? 'selected' : ''}>待开始</option>
+                    <option value="in-progress" ${currentValue === 'in-progress' ? 'selected' : ''}>进行中</option>
+                    <option value="done" ${currentValue === 'done' ? 'selected' : ''}>已完成</option>
+                    <option value="blocked" ${currentValue === 'blocked' ? 'selected' : ''}>阻塞暂停</option>
+                    <option value="archived" ${currentValue === 'archived' ? 'selected' : ''}>已归档</option>
+                `;
+            } else if (field === 'blocked') {
+                editor = document.createElement('select');
+                editor.className = 'cell-editor-select';
+                editor.innerHTML = `
+                    <option value="true" ${currentValue === true ? 'selected' : ''}>是</option>
+                    <option value="false" ${currentValue === false ? 'selected' : ''}>否</option>
+                `;
+            } else if (field === 'dueDate') {
+                editor = document.createElement('input');
+                editor.type = 'date';
+                editor.className = 'cell-editor-date';
+                editor.value = currentValue || '';
+            } else if (field === 'category') {
+                editor = document.createElement('select');
+                editor.className = 'cell-editor-select';
+                const categories = ['活动策划', '媒体运营', '视觉设计', '员工关怀'];
+                editor.innerHTML = categories.map(c => 
+                    `<option value="${c}" ${currentValue === c ? 'selected' : ''}>${c}</option>`
+                ).join('');
+            } else {
+                // 默认文本输入（任务名称）
+                editor = document.createElement('input');
+                editor.type = 'text';
+                editor.className = 'cell-editor';
+                editor.value = currentValue || '';
+            }
+            
+            // 清空单元格并放入编辑器
+            cell.innerHTML = '';
+            cell.appendChild(editor);
+            editor.focus();
+            
+            // 保存编辑的函数
+            function saveEdit() {
+                let newValue;
+                if (field === 'blocked') {
+                    newValue = editor.value === 'true';
+                } else if (field === 'dueDate') {
+                    newValue = editor.value || null;
+                } else {
+                    newValue = editor.value;
+                }
+                
+                // 更新数据
+                task[field] = newValue;
+                saveTasks();
+                
+                // 重新渲染
+                renderTable();
+            }
+            
+            // 失焦保存
+            editor.addEventListener('blur', saveEdit);
+            
+            // Enter保存，Escape取消
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    saveEdit();
+                } else if (e.key === 'Escape') {
+                    renderTable(); // 取消编辑，重新渲染恢复原始值
+                }
+            });
+        }
+
+        // ==================== 筛选联动 ====================
+
+        function bindFilters() {
+            const searchInput = document.querySelector('#globalSearch');
+            const filterCategory = document.querySelector('#filterCategory');
+            const filterStatus = document.querySelector('#filterStatus');
+            const filterPriority = document.querySelector('#filterPriority');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', debounce(renderTable, 200));
+            }
+            if (filterCategory) {
+                filterCategory.addEventListener('change', renderTable);
+            }
+            if (filterStatus) {
+                filterStatus.addEventListener('change', renderTable);
+            }
+            if (filterPriority) {
+                filterPriority.addEventListener('change', renderTable);
+            }
+        }
+
+        // 防抖函数
+        function debounce(fn, delay) {
+            let timer = null;
+            return function() {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn.apply(this, arguments), delay);
+            };
+        }
 
         // ==================== Tab 切换 ====================
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -593,6 +1136,11 @@
                 document.getElementById(tabId).classList.add('active');
             });
         });
+
+        // ==================== 初始化 ====================
+        loadTasks();
+        renderTable();
+        bindFilters();
     </script>
 </body>
 </html>
