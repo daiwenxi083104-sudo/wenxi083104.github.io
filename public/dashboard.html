@@ -557,7 +557,155 @@
             background: white;
         }
 
-        /* 空状态 */
+        /* ========== 待办清单样式 ========== */
+        .todo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .todo-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .todo-stats span {
+            background: var(--bg);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        .todo-stats .stat-num {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .todo-filter-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .todo-filter-btn {
+            padding: 6px 16px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .todo-filter-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .todo-filter-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .todo-list {
+            list-style: none;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .todo-item:last-child {
+            border-bottom: none;
+        }
+
+        .todo-item:hover {
+            background: var(--accent-light);
+        }
+
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .todo-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .todo-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .todo-name:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .todo-item.is-done .todo-name {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .todo-meta {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+
+        .todo-tag {
+            font-size: 11px;
+            padding: 1px 8px;
+            border-radius: 10px;
+        }
+
+        .todo-tag-category {
+            background: #e0e7ff;
+            color: #4338ca;
+        }
+
+        .todo-due {
+            font-size: 12px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .todo-due.is-overdue {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .todo-due.is-today {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .todo-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* ========== 空状态 ========== */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -656,7 +804,15 @@
                 <div class="placeholder-text">泳道看板内容区域<br>按状态分列拖拽卡片</div>
             </div>
             <div class="tab-panel" id="todo">
-                <div class="placeholder-text">待办清单内容区域<br>按优先级排序的任务列表</div>
+                <div class="todo-header">
+                    <div class="todo-stats" id="todoStats"></div>
+                    <div class="todo-filter-btns">
+                        <button class="todo-filter-btn active" data-todo-filter="all">全局总览</button>
+                        <button class="todo-filter-btn" data-todo-filter="in-progress">进行中</button>
+                        <button class="todo-filter-btn" data-todo-filter="done">已完成</button>
+                    </div>
+                </div>
+                <div id="todoContainer"></div>
             </div>
             <div class="tab-panel" id="dashboard">
                 <div class="placeholder-text">运营仪表盘内容区域<br>数据图表与趋势分析</div>
@@ -1180,6 +1336,131 @@
             }, 300));
         }
 
+        // ==================== 待办清单 ====================
+
+        // 待办视图状态
+        let todoFilter = 'all'; // 'all' | 'in-progress' | 'done'
+
+        // 四象限排序权重
+        function quadrantWeight(task) {
+            if (task.urgency === 'urgent' && task.priority === 'high') return 1;       // 紧急+重要
+            if (task.priority === 'high' && task.urgency === 'normal') return 2;        // 重要不紧急
+            if (task.urgency === 'urgent' && task.priority !== 'high') return 3;       // 紧急不重要
+            return 4;                                                                   // 其他
+        }
+
+        // 渲染待办清单
+        function renderTodo() {
+            const container = document.getElementById('todoContainer');
+            const statsEl = document.getElementById('todoStats');
+            if (!container) return;
+
+            const today = new Date().toISOString().split('T')[0];
+
+            // 基础过滤：type === "task" 且 status !== "archived"
+            let filtered = tasks.filter(t => t.type === 'task' && t.status !== 'archived');
+
+            // 视图过滤
+            if (todoFilter === 'in-progress') {
+                filtered = filtered.filter(t => t.status === 'in-progress');
+            } else if (todoFilter === 'done') {
+                filtered = filtered.filter(t => t.status === 'done');
+            }
+
+            // 四象限排序 + 同象限按截止日期升序
+            filtered.sort((a, b) => {
+                const wA = quadrantWeight(a);
+                const wB = quadrantWeight(b);
+                if (wA !== wB) return wA - wB;
+                // 同象限按截止日期升序，无日期排后面
+                if (!a.dueDate && !b.dueDate) return 0;
+                if (!a.dueDate) return 1;
+                if (!b.dueDate) return -1;
+                return a.dueDate.localeCompare(b.dueDate);
+            });
+
+            // 今日统计
+            const todayDone = tasks.filter(t => t.completedDate === today).length;
+            const todayDue = tasks.filter(t => t.dueDate === today && t.status !== 'archived').length;
+            const todayRate = todayDue > 0 ? Math.round((todayDone / todayDue) * 100) : (todayDone > 0 ? 100 : 0);
+
+            statsEl.innerHTML = `
+                <span>今日完成 <span class="stat-num">${todayDone}</span> 项</span>
+                <span>待办完成率 <span class="stat-num">${todayRate}%</span></span>
+            `;
+
+            // 空状态
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="todo-empty">暂无符合条件的待办任务</div>';
+                return;
+            }
+
+            // 渲染列表
+            let html = '<ul class="todo-list">';
+            filtered.forEach(task => {
+                const isDone = task.status === 'done';
+                const dueClass = task.dueDate
+                    ? (task.dueDate < today ? 'is-overdue' : task.dueDate === today ? 'is-today' : '')
+                    : '';
+
+                html += `
+                <li class="todo-item ${isDone ? 'is-done' : ''}" data-task-id="${task.id}">
+                    <input type="checkbox" class="todo-checkbox" ${isDone ? 'checked' : ''}>
+                    <div class="todo-info">
+                        <div class="todo-name" data-task-id="${task.id}">${task.name}</div>
+                        <div class="todo-meta">
+                            ${renderPriority(task.priority)}
+                            ${renderUrgency(task.urgency)}
+                            <span class="todo-tag todo-tag-category">${task.category}</span>
+                        </div>
+                    </div>
+                    <div class="todo-due ${dueClass}">${task.dueDate || '-'}</div>
+                </li>`;
+            });
+            html += '</ul>';
+            container.innerHTML = html;
+
+            // 绑定复选框事件
+            container.querySelectorAll('.todo-checkbox').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    const taskId = this.closest('.todo-item').dataset.taskId;
+                    const task = tasks.find(t => t.id === taskId);
+                    if (!task) return;
+
+                    if (this.checked) {
+                        task.status = 'done';
+                        task.completedDate = today;
+                    } else {
+                        task.status = 'todo';
+                        task.completedDate = null;
+                    }
+                    saveTasks();
+                    updateKPI();
+                    renderTodo();
+                    renderTable();
+                });
+            });
+
+            // 绑定任务名称点击
+            container.querySelectorAll('.todo-name').forEach(nameEl => {
+                nameEl.addEventListener('click', function() {
+                    alert('任务ID: ' + this.dataset.taskId);
+                });
+            });
+        }
+
+        // 绑定待办筛选按钮
+        function bindTodoFilters() {
+            document.querySelectorAll('.todo-filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.todo-filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    todoFilter = this.dataset.todoFilter;
+                    renderTodo();
+                });
+            });
+        }
+
         // ==================== 筛选联动 ====================
 
         function bindFilters() {
@@ -1227,7 +1508,9 @@
         updateKPI();
         initGoal();
         renderTable();
+        renderTodo();
         bindFilters();
+        bindTodoFilters();
     </script>
 </body>
 </html>
