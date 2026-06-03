@@ -360,10 +360,49 @@
             margin-bottom: 8px;
             font-size: 13px;
             color: var(--text-secondary);
+            cursor: pointer;
+            transition: background 0.15s;
         }
 
         .risk-item:last-child {
             margin-bottom: 0;
+        }
+
+        .risk-item:hover {
+            background: #e0e7ff;
+        }
+
+        .risk-item-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .risk-item-name {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .risk-item-days {
+            flex-shrink: 0;
+            margin-left: 8px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .risk-item-days.overdue {
+            color: var(--danger);
+        }
+
+        .risk-item-days.soon {
+            color: var(--warning);
+        }
+
+        .risk-item-days.blocked {
+            color: #d97706;
         }
 
         /* ========== 台账表格样式 ========== */
@@ -831,9 +870,9 @@
                 <div class="risk-header">
                     <span class="risk-icon">⏰</span>
                     <span class="risk-title">即将到期（1-3天）</span>
-                    <span class="risk-count">0</span>
+                    <span class="risk-count" id="riskSoonCount">0</span>
                 </div>
-                <div class="risk-content">
+                <div class="risk-content" id="riskSoonList">
                     <div class="risk-item">暂无即将到期的任务</div>
                 </div>
             </div>
@@ -841,9 +880,9 @@
                 <div class="risk-header">
                     <span class="risk-icon">🔴</span>
                     <span class="risk-title">已超期</span>
-                    <span class="risk-count">0</span>
+                    <span class="risk-count" id="riskOverdueCount">0</span>
                 </div>
-                <div class="risk-content">
+                <div class="risk-content" id="riskOverdueList">
                     <div class="risk-item">暂无已超期的任务</div>
                 </div>
             </div>
@@ -851,9 +890,9 @@
                 <div class="risk-header">
                     <span class="risk-icon">🚧</span>
                     <span class="risk-title">阻塞卡点</span>
-                    <span class="risk-count">0</span>
+                    <span class="risk-count" id="riskBlockCount">0</span>
                 </div>
-                <div class="risk-content">
+                <div class="risk-content" id="riskBlockList">
                     <div class="risk-item">暂无阻塞中的任务</div>
                 </div>
             </div>
@@ -1258,6 +1297,7 @@
                 task[field] = newValue;
                 saveTasks();
                 updateKPI();
+                updateRisks();
 
                 // 重新渲染
                 renderTable();
@@ -1334,6 +1374,84 @@
             goalInput.addEventListener('input', debounce(function() {
                 localStorage.setItem('workboard_goal', goalInput.value);
             }, 300));
+        }
+
+        // ==================== 风险预警 ====================
+
+        function updateRisks() {
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            // 计算 today+1 和 today+3 的日期字符串
+            const d1 = new Date(today); d1.setDate(d1.getDate() + 1);
+            const d3 = new Date(today); d3.setDate(d3.getDate() + 3);
+            const soonStart = d1.toISOString().split('T')[0];
+            const soonEnd = d3.toISOString().split('T')[0];
+
+            const active = tasks.filter(t => t.status !== 'archived');
+
+            // 已超期：未完成 且 dueDate < 今天
+            const overdue = active.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < todayStr);
+
+            // 即将到期：未完成 且 dueDate 在 [today+1, today+3]
+            const soon = active.filter(t => t.status !== 'done' && t.dueDate && t.dueDate >= soonStart && t.dueDate <= soonEnd);
+
+            // 阻塞卡点：blocked === true 且 未完成
+            const blocked = active.filter(t => t.blocked === true && t.status !== 'done');
+
+            // 渲染已超期
+            document.getElementById('riskOverdueCount').textContent = overdue.length;
+            const overdueEl = document.getElementById('riskOverdueList');
+            if (overdue.length === 0) {
+                overdueEl.innerHTML = '<div class="risk-item">暂无已超期的任务</div>';
+            } else {
+                overdueEl.innerHTML = overdue.map(t => {
+                    const days = Math.ceil((today - new Date(t.dueDate)) / 86400000);
+                    return `<div class="risk-item" onclick="alert('任务ID: ${t.id}')">
+                        <div class="risk-item-link">
+                            <span class="risk-item-name">${t.name}</span>
+                            <span class="risk-item-days overdue">延迟${days}天</span>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            // 渲染即将到期
+            document.getElementById('riskSoonCount').textContent = soon.length;
+            const soonEl = document.getElementById('riskSoonList');
+            if (soon.length === 0) {
+                soonEl.innerHTML = '<div class="risk-item">暂无即将到期的任务</div>';
+            } else {
+                soonEl.innerHTML = soon.map(t => {
+                    const days = Math.ceil((new Date(t.dueDate) - today) / 86400000);
+                    return `<div class="risk-item" onclick="alert('任务ID: ${t.id}')">
+                        <div class="risk-item-link">
+                            <span class="risk-item-name">${t.name}</span>
+                            <span class="risk-item-days soon">剩余${days}天</span>
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            // 渲染阻塞卡点
+            document.getElementById('riskBlockCount').textContent = blocked.length;
+            const blockEl = document.getElementById('riskBlockList');
+            if (blocked.length === 0) {
+                blockEl.innerHTML = '<div class="risk-item">暂无阻塞中的任务</div>';
+            } else {
+                blockEl.innerHTML = blocked.map(t => {
+                    const daysText = t.dueDate
+                        ? (t.dueDate < todayStr
+                            ? `<span class="risk-item-days overdue">延迟${Math.ceil((today - new Date(t.dueDate)) / 86400000)}天</span>`
+                            : `<span class="risk-item-days soon">剩余${Math.ceil((new Date(t.dueDate) - today) / 86400000)}天</span>`)
+                        : '';
+                    return `<div class="risk-item" onclick="alert('任务ID: ${t.id}')">
+                        <div class="risk-item-link">
+                            <span class="risk-item-name">${t.name}</span>
+                            ${daysText}
+                        </div>
+                    </div>`;
+                }).join('');
+            }
         }
 
         // ==================== 待办清单 ====================
@@ -1436,6 +1554,7 @@
                     }
                     saveTasks();
                     updateKPI();
+                    updateRisks();
                     renderTodo();
                     renderTable();
                 });
@@ -1506,6 +1625,7 @@
         // ==================== 初始化 ====================
         loadTasks();
         updateKPI();
+        updateRisks();
         initGoal();
         renderTable();
         renderTodo();
