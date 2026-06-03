@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人工作看板</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #f5f6fa;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --text-muted: #8a8aa3;
+            --border: #e2e4f0;
+            --accent: #4f46e5;
+            --accent-light: #eef2ff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-hover: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-width: 1200px;
+            line-height: 1.5;
+        }
+
+        /* ========== 顶部导航 ========== */
+        .top-nav {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* ========== 主容器 ========== */
+        .main-container {
+            padding: 24px 32px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* ========== 第一行：目标 + KPI ========== */
+        .top-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: stretch;
+        }
+
+        .goal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 24px;
+            box-shadow: var(--shadow);
+            flex: 0 0 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .goal-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .goal-input {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            border: none;
+            background: transparent;
+            width: 100%;
+            outline: none;
+            padding: 4px 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .goal-input:focus {
+            border-bottom-color: var(--accent);
+        }
+
+        .goal-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .kpi-row {
+            display: flex;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 24px;
+            box-shadow: var(--shadow);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: box-shadow 0.2s;
+        }
+
+        .kpi-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .kpi-card:nth-child(1) .kpi-value { color: var(--accent); }
+        .kpi-card:nth-child(2) .kpi-value { color: var(--success); }
+        .kpi-card:nth-child(3) .kpi-value { color: var(--warning); }
+        .kpi-card:nth-child(4) .kpi-value { color: var(--danger); }
+
+        /* ========== 第二行：搜索 + 筛选 ========== */
+        .filter-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--card-bg);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent);
+        }
+
+        .search-box::before {
+            content: "🔍";
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            opacity: 0.5;
+        }
+
+        .filter-select {
+            padding: 10px 32px 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            cursor: pointer;
+            outline: none;
+            min-width: 140px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238a8aa3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        .filter-select:focus {
+            border-color: var(--accent);
+        }
+
+        /* ========== Tab 切换栏 ========== */
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 4px;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn {
+            padding: 10px 24px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: var(--bg);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        }
+
+        /* ========== 内容容器 ========== */
+        .content-area {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            min-height: 400px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .placeholder-text {
+            color: var(--text-muted);
+            font-size: 16px;
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        /* ========== 底部风险预警 ========== */
+        .risk-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .risk-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .risk-card.danger { border-left: 4px solid var(--danger); }
+        .risk-card.warning { border-left: 4px solid var(--warning); }
+        .risk-card.info { border-left: 4px solid var(--accent); }
+
+        .risk-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .risk-icon {
+            font-size: 16px;
+        }
+
+        .risk-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .risk-count {
+            margin-left: auto;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--bg);
+            color: var(--text-muted);
+        }
+
+        .risk-content {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .risk-item {
+            padding: 8px 12px;
+            background: var(--bg);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .risk-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ========== 台账表格样式 ========== */
+        .task-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .task-table thead {
+            background: var(--bg);
+        }
+
+        .task-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .task-table th:hover {
+            background: #e8eaf6;
+        }
+
+        .task-table th .sort-indicator {
+            margin-left: 6px;
+            opacity: 0.3;
+            font-size: 12px;
+        }
+
+        .task-table th.sort-asc .sort-indicator::after {
+            content: "▲";
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .task-table th.sort-desc .sort-indicator::after {
+            content: "▼";
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .task-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        .task-table tbody tr:hover {
+            background: var(--accent-light);
+        }
+
+        .task-table tbody tr:hover td {
+            cursor: pointer;
+        }
+
+        /* 优先级标签 */
+        .priority-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .priority-high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .priority-medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .priority-low {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        /* 状态标签 */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-todo {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .status-in-progress {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-done {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-blocked {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-archived {
+            background: #f3f4f6;
+            color: #9ca3af;
+        }
+
+        /* 紧急度标签 */
+        .urgency-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .urgency-urgent {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .urgency-normal {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        /* 阻塞标记 */
+        .blocked-yes {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .blocked-no {
+            color: #6b7280;
+        }
+
+        /* 内联编辑样式 */
+        .cell-editing {
+            background: #fffbeb !important;
+            box-shadow: inset 0 0 0 2px var(--accent);
+        }
+
+        .cell-editor {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            background: white;
+        }
+
+        .cell-editor:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .cell-editor-select {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            background: white;
+            cursor: pointer;
+        }
+
+        .cell-editor-date {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            background: white;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <div class="nav-brand">📋 个人工作看板</div>
+        <div class="nav-links">
+            <a href="index.html">返回作品集</a>
+            <a href="wheel.html">🎡 转盘</a>
+            <a href="draw.html">🎲 抽签</a>
+            <a href="vote.html">📊 投票</a>
+            <a href="notice.html">📝 通知</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- 第一行：目标 + KPI -->
+        <div class="top-row">
+            <div class="goal-card">
+                <div class="goal-label">本月目标</div>
+                <input type="text" class="goal-input" value="完成年度活动方案" placeholder="输入本月目标...">
+            </div>
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-label">任务总数</div>
+                    <div class="kpi-value">0</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">整体完成率</div>
+                    <div class="kpi-value">0%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">按时完成率</div>
+                    <div class="kpi-value">0%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">延期率</div>
+                    <div class="kpi-value">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二行：搜索 + 筛选 -->
+        <div class="filter-row">
+            <div class="search-box">
+                <input type="text" placeholder="搜索任务...">
+            </div>
+            <select class="filter-select">
+                <option>所有分类</option>
+                <option>活动策划</option>
+                <option>媒体运营</option>
+                <option>视觉设计</option>
+                <option>员工关怀</option>
+            </select>
+            <select class="filter-select">
+                <option>所有状态</option>
+                <option>待开始</option>
+                <option>进行中</option>
+                <option>已完成</option>
+            </select>
+            <select class="filter-select">
+                <option>所有优先级</option>
+                <option>高</option>
+                <option>中</option>
+                <option>低</option>
+            </select>
+        </div>
+
+        <!-- Tab 切换栏 -->
+        <div class="tab-bar">
+            <button class="tab-btn" data-tab="kanban">泳道看板</button>
+            <button class="tab-btn" data-tab="todo">待办清单</button>
+            <button class="tab-btn" data-tab="dashboard">运营仪表盘</button>
+            <button class="tab-btn active" data-tab="table">台账表格</button>
+            <button class="tab-btn" data-tab="gantt">甘特图</button>
+        </div>
+
+        <!-- 内容容器 -->
+        <div class="content-area">
+            <div class="tab-panel" id="kanban">
+                <div class="placeholder-text">泳道看板内容区域<br>按状态分列拖拽卡片</div>
+            </div>
+            <div class="tab-panel" id="todo">
+                <div class="placeholder-text">待办清单内容区域<br>按优先级排序的任务列表</div>
+            </div>
+            <div class="tab-panel" id="dashboard">
+                <div class="placeholder-text">运营仪表盘内容区域<br>数据图表与趋势分析</div>
+            </div>
+            <div class="tab-panel active" id="table">
+                <div id="tableContainer"></div>
+            </div>
+            <div class="tab-panel" id="gantt">
+                <div class="placeholder-text">甘特图内容区域<br>时间线与里程碑排期</div>
+            </div>
+        </div>
+
+        <!-- 底部风险预警 -->
+        <div class="risk-bar">
+            <div class="risk-card info">
+                <div class="risk-header">
+                    <span class="risk-icon">⏰</span>
+                    <span class="risk-title">即将到期（1-3天）</span>
+                    <span class="risk-count">0</span>
+                </div>
+                <div class="risk-content">
+                    <div class="risk-item">暂无即将到期的任务</div>
+                </div>
+            </div>
+            <div class="risk-card danger">
+                <div class="risk-header">
+                    <span class="risk-icon">🔴</span>
+                    <span class="risk-title">已超期</span>
+                    <span class="risk-count">0</span>
+                </div>
+                <div class="risk-content">
+                    <div class="risk-item">暂无已超期的任务</div>
+                </div>
+            </div>
+            <div class="risk-card warning">
+                <div class="risk-header">
+                    <span class="risk-icon">🚧</span>
+                    <span class="risk-title">阻塞卡点</span>
+                    <span class="risk-count">0</span>
+                </div>
+                <div class="risk-content">
+                    <div class="risk-item">暂无阻塞中的任务</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 数据模型 ====================
+
+        // 默认示例任务
+        const defaultTasks = [
+            {
+                id: "1",
+                name: "2024年度企业文化活动方案",
+                type: "project",
+                category: "活动策划",
+                priority: "high",
+                urgency: "urgent",
+                status: "in-progress",
+                dueDate: getFutureDate(3),
+                completedDate: null,
+                blocked: false,
+                tags: ["#年度", "#策划", "#文化"],
+                parentId: null,
+                milestone: true
+            },
+            {
+                id: "2",
+                name: "季度内刊排版设计",
+                type: "task",
+                category: "视觉设计",
+                priority: "medium",
+                urgency: "normal",
+                status: "done",
+                dueDate: getFutureDate(-1),
+                completedDate: getFutureDate(-2),
+                blocked: false,
+                tags: ["#内刊", "#排版"],
+                parentId: null,
+                milestone: false
+            },
+            {
+                id: "3",
+                name: "员工生日会物料采购",
+                type: "task",
+                category: "员工关怀",
+                priority: "medium",
+                urgency: "normal",
+                status: "todo",
+                dueDate: getFutureDate(-1),
+                completedDate: null,
+                blocked: false,
+                tags: ["#生日会", "#采购"],
+                parentId: null,
+                milestone: false
+            },
+            {
+                id: "4",
+                name: "年会场地确认与合同签署",
+                type: "task",
+                category: "活动策划",
+                priority: "high",
+                urgency: "urgent",
+                status: "blocked",
+                dueDate: getFutureDate(5),
+                completedDate: null,
+                blocked: true,
+                tags: ["#年会", "#场地", "#合同"],
+                parentId: "1",
+                milestone: false
+            }
+        ];
+
+        // 全局 tasks 数组
+        let tasks = [];
+
+        // 排序状态
+        let sortState = {
+            column: null,
+            direction: 'asc' // 'asc' 或 'desc'
+        };
+
+        // 辅助函数：获取相对日期的 YYYY-MM-DD 字符串
+        function getFutureDate(daysOffset) {
+            const d = new Date();
+            d.setDate(d.getDate() + daysOffset);
+            return d.toISOString().split('T')[0];
+        }
+
+        // 保存 tasks 到 localStorage
+        function saveTasks() {
+            localStorage.setItem('workboard_tasks', JSON.stringify(tasks));
+            console.log('✅ Tasks saved to localStorage');
+        }
+
+        // 从 localStorage 读取 tasks，若无则使用默认示例
+        function loadTasks() {
+            const stored = localStorage.getItem('workboard_tasks');
+            if (stored) {
+                try {
+                    tasks = JSON.parse(stored);
+                    console.log('📦 Tasks loaded from localStorage');
+                } catch (e) {
+                    console.warn('⚠️ Failed to parse stored tasks, using defaults');
+                    tasks = JSON.parse(JSON.stringify(defaultTasks));
+                    saveTasks();
+                }
+            } else {
+                tasks = JSON.parse(JSON.stringify(defaultTasks));
+                saveTasks();
+                console.log('🆕 No stored tasks found, initialized with defaults');
+            }
+            console.log('Current tasks:', tasks);
+        }
+
+        // ==================== 表格渲染 ====================
+
+        // 表头配置
+        const tableColumns = [
+            { key: 'name', label: '任务名称', sortable: true },
+            { key: 'category', label: '分类', sortable: true },
+            { key: 'priority', label: '优先级', sortable: true },
+            { key: 'urgency', label: '紧急度', sortable: true },
+            { key: 'status', label: '状态', sortable: true },
+            { key: 'dueDate', label: '截止日期', sortable: true },
+            { key: 'completedDate', label: '实际完成日期', sortable: true },
+            { key: 'blocked', label: '阻塞标记', sortable: true }
+        ];
+
+        // 获取筛选条件
+        function getFilterValues() {
+            const searchText = document.querySelector('#globalSearch')?.value?.toLowerCase() || '';
+            const category = document.querySelector('#filterCategory')?.value || 'all';
+            const status = document.querySelector('#filterStatus')?.value || 'all';
+            const priority = document.querySelector('#filterPriority')?.value || 'all';
+            return { searchText, category, status, priority };
+        }
+
+        // 筛选任务
+        function filterTasks(taskList) {
+            const { searchText, category, status, priority } = getFilterValues();
+            
+            return taskList.filter(task => {
+                // 搜索筛选（任务名称包含搜索词，不区分大小写）
+                if (searchText && !task.name.toLowerCase().includes(searchText)) {
+                    return false;
+                }
+                // 分类精确匹配
+                if (category !== 'all' && task.category !== category) {
+                    return false;
+                }
+                // 状态精确匹配
+                if (status !== 'all' && task.status !== status) {
+                    return false;
+                }
+                // 优先级精确匹配
+                if (priority !== 'all' && task.priority !== priority) {
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        // 排序任务
+        function sortTasks(taskList) {
+            if (!sortState.column) return taskList;
+            
+            const sorted = [...taskList];
+            const column = sortState.column;
+            const dir = sortState.direction === 'asc' ? 1 : -1;
+            
+            sorted.sort((a, b) => {
+                let valA = a[column];
+                let valB = b[column];
+                
+                // 处理 null 值
+                if (valA === null && valB === null) return 0;
+                if (valA === null) return 1 * dir;
+                if (valB === null) return -1 * dir;
+                
+                // 日期列按时间戳排序
+                if (column === 'dueDate' || column === 'completedDate') {
+                    return (new Date(valA) - new Date(valB)) * dir;
+                }
+                
+                // 阻塞标记（布尔值）
+                if (column === 'blocked') {
+                    return (valA === valB ? 0 : valA ? 1 : -1) * dir;
+                }
+                
+                // 字符串按拼音/localeCompare排序
+                if (typeof valA === 'string' && typeof valB === 'string') {
+                    return valA.localeCompare(valB, 'zh-CN') * dir;
+                }
+                
+                // 默认比较
+                return (valA > valB ? 1 : -1) * dir;
+            });
+            
+            return sorted;
+        }
+
+        // 渲染优先级标签
+        function renderPriority(priority) {
+            const labels = { high: '高', medium: '中', low: '低' };
+            return `<span class="priority-badge priority-${priority}">${labels[priority] || priority}</span>`;
+        }
+
+        // 渲染状态标签
+        function renderStatus(status) {
+            const labels = { 
+                'todo': '待开始', 
+                'in-progress': '进行中', 
+                'done': '已完成',
+                'blocked': '阻塞暂停',
+                'archived': '已归档'
+            };
+            return `<span class="status-badge status-${status}">${labels[status] || status}</span>`;
+        }
+
+        // 渲染紧急度标签
+        function renderUrgency(urgency) {
+            const labels = { urgent: '紧急', normal: '普通' };
+            return `<span class="urgency-badge urgency-${urgency}">${labels[urgency] || urgency}</span>`;
+        }
+
+        // 渲染阻塞标记
+        function renderBlocked(blocked) {
+            return blocked 
+                ? '<span class="blocked-yes">是</span>' 
+                : '<span class="blocked-no">否</span>';
+        }
+
+        // 渲染日期
+        function renderDate(date) {
+            return date || '<span style="color:#94a3b8">-</span>';
+        }
+
+        // 主渲染函数
+        function renderTable() {
+            const container = document.getElementById('tableContainer');
+            if (!container) return;
+            
+            // 筛选并排序
+            let filtered = filterTasks(tasks);
+            filtered = sortTasks(filtered);
+            
+            // 空状态
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📋</div>
+                        <p>暂无符合条件的任务</p>
+                        <p style="font-size:13px; margin-top:8px;">尝试调整筛选条件</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 构建表格
+            let html = '<table class="task-table"><thead><tr>';
+            
+            // 表头
+            tableColumns.forEach(col => {
+                const sortClass = sortState.column === col.key 
+                    ? (sortState.direction === 'asc' ? 'sort-asc' : 'sort-desc') 
+                    : '';
+                html += `<th class="${sortClass}" data-column="${col.key}" ${col.sortable ? '' : ''}>
+                    ${col.label}
+                    <span class="sort-indicator">▲</span>
+                </th>`;
+            });
+            html += '</tr></thead><tbody>';
+            
+            // 数据行
+            filtered.forEach(task => {
+                html += `<tr data-task-id="${task.id}">`;
+                html += `<td data-field="name">${task.name}</td>`;
+                html += `<td data-field="category">${task.category}</td>`;
+                html += `<td data-field="priority">${renderPriority(task.priority)}</td>`;
+                html += `<td data-field="urgency">${renderUrgency(task.urgency)}</td>`;
+                html += `<td data-field="status">${renderStatus(task.status)}</td>`;
+                html += `<td data-field="dueDate">${renderDate(task.dueDate)}</td>`;
+                html += `<td data-field="completedDate">${renderDate(task.completedDate)}</td>`;
+                html += `<td data-field="blocked">${renderBlocked(task.blocked)}</td>`;
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+            
+            // 绑定表头点击排序
+            container.querySelectorAll('th[data-column]').forEach(th => {
+                th.addEventListener('click', function() {
+                    const column = this.dataset.column;
+                    if (sortState.column === column) {
+                        // 切换方向
+                        sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        // 新列，默认升序
+                        sortState.column = column;
+                        sortState.direction = 'asc';
+                    }
+                    renderTable();
+                });
+            });
+            
+            // 绑定双击编辑
+            container.querySelectorAll('tbody td').forEach(td => {
+                td.addEventListener('dblclick', function() {
+                    startInlineEdit(this);
+                });
+            });
+        }
+
+        // ==================== 内联编辑 ====================
+
+        function startInlineEdit(cell) {
+            const field = cell.dataset.field;
+            const taskId = cell.closest('tr').dataset.taskId;
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
+            // 实际完成日期列不可编辑（根据需求）
+            if (field === 'completedDate') return;
+            
+            const currentValue = task[field];
+            cell.classList.add('cell-editing');
+            
+            let editor;
+            
+            // 根据字段类型创建不同的编辑器
+            if (field === 'priority') {
+                editor = document.createElement('select');
+                editor.className = 'cell-editor-select';
+                editor.innerHTML = `
+                    <option value="high" ${currentValue === 'high' ? 'selected' : ''}>高</option>
+                    <option value="medium" ${currentValue === 'medium' ? 'selected' : ''}>中</option>
+                    <option value="low" ${currentValue === 'low' ? 'selected' : ''}>低</option>
+                `;
+            } else if (field === 'urgency') {
+                editor = document.createElement('select');
+                editor.className = 'cell-editor-select';
+                editor.innerHTML = `
+                    <option value="urgent" ${currentValue === 'urgent' ? 'selected' : ''}>紧急</option>
+                    <option value="normal" ${currentValue === 'normal' ? 'selected' : ''}>普通</option>
+                `;
+            } else if (field === 'status') {
+                editor = document.createElement('select');
+                editor.className = 'cell-editor-select';
+                editor.innerHTML = `
+                    <option value="todo" ${currentValue === 'todo' ? 'selected' : ''}>待开始</option>
+                    <option value="in-progress" ${currentValue === 'in-progress' ? 'selected' : ''}>进行中</option>
+                    <option value="done" ${currentValue === 'done' ? 'selected' : ''}>已完成</option>
+                    <option value="blocked" ${currentValue === 'blocked' ? 'selected' : ''}>阻塞暂停</option>
+                    <option value="archived" ${currentValue === 'archived' ? 'selected' : ''}>已归档</option>
+                `;
+            } else if (field === 'blocked') {
+                editor = document.createElement('select');
+                editor.className = 'cell-editor-select';
+                editor.innerHTML = `
+                    <option value="true" ${currentValue === true ? 'selected' : ''}>是</option>
+                    <option value="false" ${currentValue === false ? 'selected' : ''}>否</option>
+                `;
+            } else if (field === 'dueDate') {
+                editor = document.createElement('input');
+                editor.type = 'date';
+                editor.className = 'cell-editor-date';
+                editor.value = currentValue || '';
+            } else if (field === 'category') {
+                editor = document.createElement('select');
+                editor.className = 'cell-editor-select';
+                const categories = ['活动策划', '媒体运营', '视觉设计', '员工关怀'];
+                editor.innerHTML = categories.map(c => 
+                    `<option value="${c}" ${currentValue === c ? 'selected' : ''}>${c}</option>`
+                ).join('');
+            } else {
+                // 默认文本输入（任务名称）
+                editor = document.createElement('input');
+                editor.type = 'text';
+                editor.className = 'cell-editor';
+                editor.value = currentValue || '';
+            }
+            
+            // 清空单元格并放入编辑器
+            cell.innerHTML = '';
+            cell.appendChild(editor);
+            editor.focus();
+            
+            // 保存编辑的函数
+            function saveEdit() {
+                let newValue;
+                if (field === 'blocked') {
+                    newValue = editor.value === 'true';
+                } else if (field === 'dueDate') {
+                    newValue = editor.value || null;
+                } else {
+                    newValue = editor.value;
+                }
+                
+                // 更新数据
+                task[field] = newValue;
+                saveTasks();
+                
+                // 重新渲染
+                renderTable();
+            }
+            
+            // 失焦保存
+            editor.addEventListener('blur', saveEdit);
+            
+            // Enter保存，Escape取消
+            editor.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    saveEdit();
+                } else if (e.key === 'Escape') {
+                    renderTable(); // 取消编辑，重新渲染恢复原始值
+                }
+            });
+        }
+
+        // ==================== 筛选联动 ====================
+
+        function bindFilters() {
+            const searchInput = document.querySelector('#globalSearch');
+            const filterCategory = document.querySelector('#filterCategory');
+            const filterStatus = document.querySelector('#filterStatus');
+            const filterPriority = document.querySelector('#filterPriority');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', debounce(renderTable, 200));
+            }
+            if (filterCategory) {
+                filterCategory.addEventListener('change', renderTable);
+            }
+            if (filterStatus) {
+                filterStatus.addEventListener('change', renderTable);
+            }
+            if (filterPriority) {
+                filterPriority.addEventListener('change', renderTable);
+            }
+        }
+
+        // 防抖函数
+        function debounce(fn, delay) {
+            let timer = null;
+            return function() {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn.apply(this, arguments), delay);
+            };
+        }
+
+        // ==================== Tab 切换 ====================
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                const tabId = this.dataset.tab;
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // ==================== 初始化 ====================
+        loadTasks();
+        renderTable();
+        bindFilters();
+    </script>
+</body>
+</html>
