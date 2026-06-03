@@ -477,14 +477,117 @@
     </div>
 
     <script>
-        // Tab 切换
+        // ==================== 数据模型 ====================
+
+        // 默认示例任务
+        const defaultTasks = [
+            {
+                id: "1",
+                name: "2024年度企业文化活动方案",
+                type: "project",
+                category: "活动策划",
+                priority: "high",
+                urgency: "urgent",
+                status: "in-progress",
+                dueDate: getFutureDate(3),
+                completedDate: null,
+                blocked: false,
+                tags: ["#年度", "#策划", "#文化"],
+                parentId: null,
+                milestone: true
+            },
+            {
+                id: "2",
+                name: "季度内刊排版设计",
+                type: "task",
+                category: "视觉设计",
+                priority: "medium",
+                urgency: "normal",
+                status: "done",
+                dueDate: getFutureDate(-1),
+                completedDate: getFutureDate(-2),
+                blocked: false,
+                tags: ["#内刊", "#排版"],
+                parentId: null,
+                milestone: false
+            },
+            {
+                id: "3",
+                name: "员工生日会物料采购",
+                type: "task",
+                category: "员工关怀",
+                priority: "medium",
+                urgency: "normal",
+                status: "todo",
+                dueDate: getFutureDate(-1),
+                completedDate: null,
+                blocked: false,
+                tags: ["#生日会", "#采购"],
+                parentId: null,
+                milestone: false
+            },
+            {
+                id: "4",
+                name: "年会场地确认与合同签署",
+                type: "task",
+                category: "活动策划",
+                priority: "high",
+                urgency: "urgent",
+                status: "blocked",
+                dueDate: getFutureDate(5),
+                completedDate: null,
+                blocked: true,
+                tags: ["#年会", "#场地", "#合同"],
+                parentId: "1",
+                milestone: false
+            }
+        ];
+
+        // 全局 tasks 数组
+        let tasks = [];
+
+        // 辅助函数：获取相对日期的 YYYY-MM-DD 字符串
+        function getFutureDate(daysOffset) {
+            const d = new Date();
+            d.setDate(d.getDate() + daysOffset);
+            return d.toISOString().split('T')[0];
+        }
+
+        // 保存 tasks 到 localStorage
+        function saveTasks() {
+            localStorage.setItem('workboard_tasks', JSON.stringify(tasks));
+            console.log('✅ Tasks saved to localStorage');
+        }
+
+        // 从 localStorage 读取 tasks，若无则使用默认示例
+        function loadTasks() {
+            const stored = localStorage.getItem('workboard_tasks');
+            if (stored) {
+                try {
+                    tasks = JSON.parse(stored);
+                    console.log('📦 Tasks loaded from localStorage');
+                } catch (e) {
+                    console.warn('⚠️ Failed to parse stored tasks, using defaults');
+                    tasks = JSON.parse(JSON.stringify(defaultTasks));
+                    saveTasks();
+                }
+            } else {
+                tasks = JSON.parse(JSON.stringify(defaultTasks));
+                saveTasks();
+                console.log('🆕 No stored tasks found, initialized with defaults');
+            }
+            // 打印到控制台
+            console.log('Current tasks:', tasks);
+        }
+
+        // 页面加载时调用
+        loadTasks();
+
+        // ==================== Tab 切换 ====================
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                // 移除所有 active
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-                
-                // 添加 active
                 this.classList.add('active');
                 const tabId = this.dataset.tab;
                 document.getElementById(tabId).classList.add('active');
