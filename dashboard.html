@@ -162,6 +162,26 @@
         .kpi-card:nth-child(3) .kpi-value { color: var(--warning); }
         .kpi-card:nth-child(4) .kpi-value { color: var(--danger); }
 
+        /* KPI 进度条 */
+        .kpi-bar-wrap {
+            margin-top: 10px;
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .kpi-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .kpi-card:nth-child(1) .kpi-bar-fill { background: var(--accent); }
+        .kpi-card:nth-child(2) .kpi-bar-fill { background: var(--success); }
+        .kpi-card:nth-child(3) .kpi-bar-fill { background: var(--warning); }
+        .kpi-card:nth-child(4) .kpi-bar-fill { background: var(--danger); }
+
         /* ========== 第二行：搜索 + 筛选 ========== */
         .filter-row {
             display: flex;
@@ -569,24 +589,28 @@
         <div class="top-row">
             <div class="goal-card">
                 <div class="goal-label">本月目标</div>
-                <input type="text" class="goal-input" value="完成年度活动方案" placeholder="输入本月目标...">
+                <input type="text" id="goalInput" class="goal-input" value="完成年度活动方案" placeholder="输入本月目标...">
             </div>
             <div class="kpi-row">
                 <div class="kpi-card">
                     <div class="kpi-label">任务总数</div>
-                    <div class="kpi-value">0</div>
+                    <div class="kpi-value" id="kpiTotal">0</div>
+                    <div class="kpi-bar-wrap"><div class="kpi-bar-fill" id="kpiTotalBar" style="width:0%"></div></div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">整体完成率</div>
-                    <div class="kpi-value">0%</div>
+                    <div class="kpi-value" id="kpiDone">0%</div>
+                    <div class="kpi-bar-wrap"><div class="kpi-bar-fill" id="kpiDoneBar" style="width:0%"></div></div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">按时完成率</div>
-                    <div class="kpi-value">0%</div>
+                    <div class="kpi-value" id="kpiOnTime">0%</div>
+                    <div class="kpi-bar-wrap"><div class="kpi-bar-fill" id="kpiOnTimeBar" style="width:0%"></div></div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">延期率</div>
-                    <div class="kpi-value">0%</div>
+                    <div class="kpi-value" id="kpiOverdue">0%</div>
+                    <div class="kpi-bar-wrap"><div class="kpi-bar-fill" id="kpiOverdueBar" style="width:0%"></div></div>
                 </div>
             </div>
         </div>
@@ -1077,7 +1101,8 @@
                 // 更新数据
                 task[field] = newValue;
                 saveTasks();
-                
+                updateKPI();
+
                 // 重新渲染
                 renderTable();
             }
@@ -1093,6 +1118,66 @@
                     renderTable(); // 取消编辑，重新渲染恢复原始值
                 }
             });
+        }
+
+        // ==================== KPI 自动计算 ====================
+
+        function updateKPI() {
+            // 排除归档任务
+            const active = tasks.filter(t => t.status !== 'archived');
+            const total = active.length;
+
+            // 已完成任务
+            const doneTasks = active.filter(t => t.status === 'done');
+            const doneCount = doneTasks.length;
+
+            // 按时完成：completedDate <= dueDate
+            const onTimeCount = doneTasks.filter(t => {
+                if (!t.completedDate || !t.dueDate) return false;
+                return t.completedDate <= t.dueDate;
+            }).length;
+
+            // 延期：未完成 且 dueDate < 今天
+            const today = new Date().toISOString().split('T')[0];
+            const overdueCount = active.filter(t => {
+                return t.status !== 'done' && t.dueDate && t.dueDate < today;
+            }).length;
+
+            // 计算百分比
+            const doneRate = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+            const onTimeRate = doneCount > 0 ? Math.round((onTimeCount / doneCount) * 100) : 0;
+            const overdueRate = total > 0 ? Math.round((overdueCount / total) * 100) : 0;
+
+            // 更新 DOM
+            document.getElementById('kpiTotal').textContent = total;
+            document.getElementById('kpiTotalBar').style.width = Math.min(total * 10, 100) + '%';
+
+            document.getElementById('kpiDone').textContent = doneRate + '%';
+            document.getElementById('kpiDoneBar').style.width = doneRate + '%';
+
+            document.getElementById('kpiOnTime').textContent = onTimeRate + '%';
+            document.getElementById('kpiOnTimeBar').style.width = onTimeRate + '%';
+
+            document.getElementById('kpiOverdue').textContent = overdueRate + '%';
+            document.getElementById('kpiOverdueBar').style.width = overdueRate + '%';
+        }
+
+        // ==================== 本月目标持久化 ====================
+
+        function initGoal() {
+            const goalInput = document.getElementById('goalInput');
+            if (!goalInput) return;
+
+            // 从 localStorage 恢复
+            const saved = localStorage.getItem('workboard_goal');
+            if (saved) {
+                goalInput.value = saved;
+            }
+
+            // 修改后自动保存
+            goalInput.addEventListener('input', debounce(function() {
+                localStorage.setItem('workboard_goal', goalInput.value);
+            }, 300));
         }
 
         // ==================== 筛选联动 ====================
@@ -1139,6 +1224,8 @@
 
         // ==================== 初始化 ====================
         loadTasks();
+        updateKPI();
+        initGoal();
         renderTable();
         bindFilters();
     </script>
