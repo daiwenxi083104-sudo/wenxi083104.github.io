@@ -1022,6 +1022,152 @@
             color: #fff;
         }
 
+        /* ========== 泳道看板 ========== */
+        .kanban-board {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            min-height: 400px;
+        }
+
+        .kanban-lane {
+            flex-shrink: 0;
+            width: 320px;
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            max-height: 70vh;
+        }
+
+        .kanban-lane-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .kanban-lane-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .kanban-lane-count {
+            font-size: 12px;
+            background: var(--card-bg);
+            padding: 2px 10px;
+            border-radius: 10px;
+            color: var(--text-secondary);
+        }
+
+        .kanban-cards {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 60px;
+        }
+
+        .kanban-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 10px;
+            cursor: grab;
+            transition: box-shadow 0.2s, transform 0.15s;
+        }
+
+        .kanban-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .kanban-card:active {
+            cursor: grabbing;
+        }
+
+        .kanban-card-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .kanban-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .kanban-card-due {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .kanban-card-due.overdue {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .kanban-progress-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .kanban-progress-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--bg);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .kanban-progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .kanban-progress-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            flex-shrink: 0;
+            min-width: 32px;
+            text-align: right;
+        }
+
+        .kanban-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* SortableJS 拖拽样式 */
+        .sortable-ghost {
+            opacity: 0.4;
+            background: var(--accent-light);
+            border: 2px dashed var(--accent);
+        }
+
+        .sortable-drag {
+            opacity: 0.9;
+            transform: rotate(2deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
         /* ========== 空状态 ========== */
         .empty-state {
             text-align: center;
@@ -1118,7 +1264,7 @@
         <!-- 内容容器 -->
         <div class="content-area">
             <div class="tab-panel" id="kanban">
-                <div class="placeholder-text">泳道看板内容区域<br>按状态分列拖拽卡片</div>
+                <div id="kanbanContainer"></div>
             </div>
             <div class="tab-panel" id="todo">
                 <div class="todo-header">
@@ -1299,6 +1445,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
         // ==================== 数据模型 ====================
 
@@ -1318,6 +1465,7 @@
                 tags: ["#年度", "#策划", "#文化"],
                 parentId: null,
                 milestone: true,
+                order: 0,
                 detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
             },
             {
@@ -1334,6 +1482,7 @@
                 tags: ["#内刊", "#排版"],
                 parentId: null,
                 milestone: false,
+                order: 1,
                 detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
             },
             {
@@ -1350,6 +1499,7 @@
                 tags: ["#生日会", "#采购"],
                 parentId: null,
                 milestone: false,
+                order: 2,
                 detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
             },
             {
@@ -1366,6 +1516,7 @@
                 tags: ["#年会", "#场地", "#合同"],
                 parentId: "1",
                 milestone: false,
+                order: 3,
                 detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
             }
         ];
@@ -2002,6 +2153,119 @@
             if (e.key === 'Escape') closeTaskDetail();
         });
 
+        // ==================== 泳道看板 ====================
+
+        let kanbanSortables = [];
+
+        function renderKanban() {
+            const container = document.getElementById('kanbanContainer');
+            if (!container) return;
+
+            // 过滤 project 类型且非归档
+            let projects = tasks.filter(t => t.type === 'project' && t.status !== 'archived');
+
+            // 按 category 分组
+            const categories = [...new Set(projects.map(t => t.category))].sort();
+            if (categories.length === 0) {
+                container.innerHTML = '<div class="kanban-empty">暂无项目，请在台账表格中添加 type 为 "project" 的任务</div>';
+                return;
+            }
+
+            // 每个分类内按 order 排序
+            let html = '<div class="kanban-board">';
+            categories.forEach(cat => {
+                const catTasks = projects.filter(t => t.category === cat).sort((a, b) => (a.order || 0) - (b.order || 0));
+                html += `
+                <div class="kanban-lane" data-category="${cat}">
+                    <div class="kanban-lane-header">
+                        <span class="kanban-lane-title">${cat}</span>
+                        <span class="kanban-lane-count">${catTasks.length}</span>
+                    </div>
+                    <div class="kanban-cards" data-category="${cat}">
+                        ${catTasks.map(t => renderKanbanCard(t)).join('')}
+                        ${catTasks.length === 0 ? '<div class="kanban-empty">拖拽任务到此处</div>' : ''}
+                    </div>
+                </div>`;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+
+            // 绑定卡片点击打开详情
+            container.querySelectorAll('.kanban-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.target.closest('.kanban-card')) {
+                        openTaskDetail(this.dataset.taskId);
+                    }
+                });
+            });
+
+            // 初始化 SortableJS 拖拽
+            initKanbanSortable();
+        }
+
+        function renderKanbanCard(task) {
+            const today = new Date().toISOString().split('T')[0];
+            const dueClass = task.dueDate
+                ? (task.dueDate < today ? 'overdue' : task.dueDate === today ? 'today' : '')
+                : '';
+            const progress = task.progress || 0;
+            return `
+            <div class="kanban-card" data-task-id="${task.id}">
+                <div class="kanban-card-name">${task.name}</div>
+                <div class="kanban-card-meta">
+                    <span class="kanban-card-due ${dueClass}">📅 ${task.dueDate || '无截止日期'}</span>
+                    <span>${renderPriority(task.priority)}</span>
+                </div>
+                <div class="kanban-progress-wrap">
+                    <div class="kanban-progress-bar">
+                        <div class="kanban-progress-fill" style="width:${progress}%"></div>
+                    </div>
+                    <span class="kanban-progress-text">${progress}%</span>
+                </div>
+            </div>`;
+        }
+
+        function initKanbanSortable() {
+            // 销毁旧的 sortable 实例
+            kanbanSortables.forEach(s => s.destroy());
+            kanbanSortables = [];
+
+            document.querySelectorAll('.kanban-cards').forEach(el => {
+                const sortable = new Sortable(el, {
+                    group: 'kanban', // 允许跨泳道拖拽
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    dragClass: 'sortable-drag',
+                    onEnd: function(evt) {
+                        const newCategory = evt.to.dataset.category;
+                        const oldCategory = evt.from.dataset.category;
+                        const taskId = evt.item.dataset.taskId;
+                        const task = tasks.find(t => t.id === taskId);
+                        if (!task) return;
+
+                        // 更新 category
+                        if (newCategory !== oldCategory) {
+                            task.category = newCategory;
+                        }
+
+                        // 更新 order：按新顺序重新分配
+                        const newOrderIds = [...evt.to.children]
+                            .filter(child => child.classList.contains('kanban-card'))
+                            .map(child => child.dataset.taskId);
+
+                        newOrderIds.forEach((id, idx) => {
+                            const t = tasks.find(x => x.id === id);
+                            if (t) t.order = idx;
+                        });
+
+                        saveTasks();
+                        refreshAll();
+                    }
+                });
+                kanbanSortables.push(sortable);
+            });
+        }
+
         // ==================== 风险预警 ====================
 
         function updateRisks() {
@@ -2255,6 +2519,7 @@
         initGoal();
         renderTable();
         renderTodo();
+        renderKanban();
         bindFilters();
         bindTodoFilters();
     </script>
