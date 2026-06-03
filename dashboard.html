@@ -556,11 +556,11 @@
     <nav class="top-nav">
         <div class="nav-brand">📋 个人工作看板</div>
         <div class="nav-links">
-            <a href="index.html">返回作品集</a>
-            <a href="wheel.html">🎡 转盘</a>
-            <a href="draw.html">🎲 抽签</a>
-            <a href="vote.html">📊 投票</a>
-            <a href="notice.html">📝 通知</a>
+            <a href="../index.html">返回作品集</a>
+            <a href="../wheel.html">🎡 转盘</a>
+            <a href="../draw.html">🎲 抽签</a>
+            <a href="../vote.html">📊 投票</a>
+            <a href="../notice.html">📝 通知</a>
         </div>
     </nav>
 
@@ -594,26 +594,26 @@
         <!-- 第二行：搜索 + 筛选 -->
         <div class="filter-row">
             <div class="search-box">
-                <input type="text" placeholder="搜索任务...">
+                <input type="text" id="globalSearch" placeholder="搜索任务...">
             </div>
-            <select class="filter-select">
-                <option>所有分类</option>
-                <option>活动策划</option>
-                <option>媒体运营</option>
-                <option>视觉设计</option>
-                <option>员工关怀</option>
+            <select class="filter-select" id="filterCategory">
+                <option value="all">所有分类</option>
+                <option value="活动策划">活动策划</option>
+                <option value="媒体运营">媒体运营</option>
+                <option value="视觉设计">视觉设计</option>
+                <option value="员工关怀">员工关怀</option>
             </select>
-            <select class="filter-select">
-                <option>所有状态</option>
-                <option>待开始</option>
-                <option>进行中</option>
-                <option>已完成</option>
+            <select class="filter-select" id="filterStatus">
+                <option value="all">所有状态</option>
+                <option value="todo">待开始</option>
+                <option value="in-progress">进行中</option>
+                <option value="done">已完成</option>
             </select>
-            <select class="filter-select">
-                <option>所有优先级</option>
-                <option>高</option>
-                <option>中</option>
-                <option>低</option>
+            <select class="filter-select" id="filterPriority">
+                <option value="all">所有优先级</option>
+                <option value="high">高</option>
+                <option value="medium">中</option>
+                <option value="low">低</option>
             </select>
         </div>
 
