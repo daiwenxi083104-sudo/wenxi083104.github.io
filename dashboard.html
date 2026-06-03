@@ -744,6 +744,284 @@
             font-size: 14px;
         }
 
+        /* ========== 任务详情弹窗 ========== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--card-bg);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 680px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            animation: modalIn 0.25s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            width: 32px; height: 32px;
+            border: none;
+            background: var(--bg);
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.15s;
+        }
+
+        .modal-close:hover {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .modal-body {
+            padding: 24px;
+            max-height: 65vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--card-bg);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.08);
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .form-check input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+        }
+
+        .detail-section {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .detail-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-add-btn {
+            padding: 4px 12px;
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            background: transparent;
+            color: var(--accent);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .detail-add-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .detail-list {
+            list-style: none;
+        }
+
+        .detail-list-item {
+            padding: 8px 12px;
+            background: var(--bg);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .detail-list-item .item-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .detail-list-item .item-content {
+            flex: 1;
+            word-break: break-all;
+        }
+
+        .detail-list-item .item-del {
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .detail-list-item .item-del:hover {
+            color: var(--danger);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #fecaca;
+        }
+
+        .btn-ghost {
+            background: var(--bg);
+            color: var(--text-secondary);
+        }
+
+        .btn-ghost:hover {
+            background: #e2e4f0;
+        }
+
+        .inline-add-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .inline-add-row input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .inline-add-row input:focus {
+            border-color: var(--accent);
+        }
+
+        .inline-add-row button {
+            padding: 6px 12px;
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--accent);
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .inline-add-row button:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
         /* ========== 空状态 ========== */
         .empty-state {
             text-align: center;
@@ -899,6 +1177,128 @@
         </div>
     </div>
 
+    <!-- 任务详情弹窗 -->
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="modal-title">📋 任务详情</span>
+                <button class="modal-close" onclick="closeTaskDetail()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">任务名称</label>
+                    <input type="text" class="form-input" id="detailName">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">分类</label>
+                        <input type="text" class="form-input" id="detailCategory" list="categoryList" placeholder="选择或输入">
+                        <datalist id="categoryList">
+                            <option value="活动策划">
+                            <option value="媒体运营">
+                            <option value="视觉设计">
+                            <option value="员工关怀">
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">优先级</label>
+                        <select class="form-select" id="detailPriority">
+                            <option value="high">高</option>
+                            <option value="medium">中</option>
+                            <option value="low">低</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">紧急度</label>
+                        <select class="form-select" id="detailUrgency">
+                            <option value="urgent">紧急</option>
+                            <option value="normal">常规</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">状态</label>
+                        <select class="form-select" id="detailStatus">
+                            <option value="todo">待开始</option>
+                            <option value="in-progress">进行中</option>
+                            <option value="review">待验收</option>
+                            <option value="done">已完成</option>
+                            <option value="blocked">阻塞暂停</option>
+                            <option value="delayed">已延期</option>
+                            <option value="archived">已归档</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">截止日期</label>
+                        <input type="date" class="form-input" id="detailDueDate">
+                    </div>
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">标签（逗号分隔）</label>
+                        <input type="text" class="form-input" id="detailTags" placeholder="#标签1, #标签2">
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check" style="margin-top:24px">
+                            <input type="checkbox" id="detailBlocked">
+                            <label for="detailBlocked">阻塞标记</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">需求文档（支持 Markdown）</label>
+                    <textarea class="form-textarea" id="detailDoc" placeholder="输入需求描述..."></textarea>
+                </div>
+
+                <!-- 沟通记录 -->
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        <span>💬 沟通记录</span>
+                        <button class="detail-add-btn" onclick="addCommRow()">+ 新增</button>
+                    </div>
+                    <ul class="detail-list" id="commList"></ul>
+                    <div class="inline-add-row" id="commAddRow" style="display:none">
+                        <input type="date" id="commDate">
+                        <input type="text" id="commContent" placeholder="沟通内容">
+                        <button onclick="confirmAddComm()">确认</button>
+                    </div>
+                </div>
+
+                <!-- 阶段性成果 -->
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        <span>🏆 阶段性成果</span>
+                        <button class="detail-add-btn" onclick="addAchRow()">+ 新增</button>
+                    </div>
+                    <ul class="detail-list" id="achList"></ul>
+                    <div class="inline-add-row" id="achAddRow" style="display:none">
+                        <input type="text" id="achContent" placeholder="成果描述或链接">
+                        <button onclick="confirmAddAch()">确认</button>
+                    </div>
+                </div>
+
+                <!-- 变更日志 -->
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        <span>📝 变更日志</span>
+                        <button class="detail-add-btn" onclick="addLogRow()">+ 新增</button>
+                    </div>
+                    <ul class="detail-list" id="logList"></ul>
+                    <div class="inline-add-row" id="logAddRow" style="display:none">
+                        <input type="text" id="logContent" placeholder="变更描述">
+                        <button onclick="confirmAddLog()">确认</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" onclick="deleteTask()">🗑 删除</button>
+                <button class="btn btn-ghost" onclick="closeTaskDetail()">取消</button>
+                <button class="btn btn-primary" onclick="saveTaskDetail()">💾 保存</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ==================== 数据模型 ====================
 
@@ -917,7 +1317,8 @@
                 blocked: false,
                 tags: ["#年度", "#策划", "#文化"],
                 parentId: null,
-                milestone: true
+                milestone: true,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
             },
             {
                 id: "2",
@@ -932,7 +1333,8 @@
                 blocked: false,
                 tags: ["#内刊", "#排版"],
                 parentId: null,
-                milestone: false
+                milestone: false,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
             },
             {
                 id: "3",
@@ -947,7 +1349,8 @@
                 blocked: false,
                 tags: ["#生日会", "#采购"],
                 parentId: null,
-                milestone: false
+                milestone: false,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
             },
             {
                 id: "4",
@@ -962,7 +1365,8 @@
                 blocked: true,
                 tags: ["#年会", "#场地", "#合同"],
                 parentId: "1",
-                milestone: false
+                milestone: false,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
             }
         ];
 
@@ -1206,6 +1610,14 @@
                     startInlineEdit(this);
                 });
             });
+
+            // 绑定单击行打开详情（任务名称列）
+            container.querySelectorAll('tbody td[data-field="name"]').forEach(td => {
+                td.addEventListener('click', function() {
+                    const taskId = this.closest('tr').dataset.taskId;
+                    openTaskDetail(taskId);
+                });
+            });
         }
 
         // ==================== 内联编辑 ====================
@@ -1376,6 +1788,220 @@
             }, 300));
         }
 
+        // ==================== 任务详情弹窗 ====================
+
+        let currentDetailTaskId = null;
+
+        // 确保 task 有 detail 字段
+        function ensureDetail(task) {
+            if (!task.detail) {
+                task.detail = { communications: [], achievements: [], changeLogs: [], doc: '' };
+            }
+            if (!task.detail.communications) task.detail.communications = [];
+            if (!task.detail.achievements) task.detail.achievements = [];
+            if (!task.detail.changeLogs) task.detail.changeLogs = [];
+            if (task.detail.doc === undefined) task.detail.doc = '';
+        }
+
+        function openTaskDetail(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+            currentDetailTaskId = taskId;
+            ensureDetail(task);
+
+            // 填充表单
+            document.getElementById('detailName').value = task.name;
+            document.getElementById('detailCategory').value = task.category;
+            document.getElementById('detailPriority').value = task.priority;
+            document.getElementById('detailUrgency').value = task.urgency;
+            document.getElementById('detailStatus').value = task.status;
+            document.getElementById('detailDueDate').value = task.dueDate || '';
+            document.getElementById('detailBlocked').checked = !!task.blocked;
+            document.getElementById('detailTags').value = (task.tags || []).join(', ');
+            document.getElementById('detailDoc').value = task.detail.doc || '';
+
+            // 渲染列表
+            renderDetailList('commList', task.detail.communications);
+            renderDetailList('achList', task.detail.achievements, true);
+            renderDetailList('logList', task.detail.changeLogs);
+
+            // 隐藏新增行
+            document.getElementById('commAddRow').style.display = 'none';
+            document.getElementById('achAddRow').style.display = 'none';
+            document.getElementById('logAddRow').style.display = 'none';
+
+            // 显示弹窗
+            document.getElementById('taskModal').classList.add('active');
+        }
+
+        function closeTaskDetail() {
+            document.getElementById('taskModal').classList.remove('active');
+            currentDetailTaskId = null;
+        }
+
+        function renderDetailList(listId, items, noDate) {
+            const ul = document.getElementById(listId);
+            if (!items || items.length === 0) {
+                ul.innerHTML = '<li class="detail-list-item" style="color:var(--text-muted);justify-content:center">暂无记录</li>';
+                return;
+            }
+            ul.innerHTML = items.map((item, idx) => {
+                const dateStr = noDate ? '' : `<span class="item-date">${item.date || ''}</span>`;
+                return `<li class="detail-list-item">
+                    ${dateStr}
+                    <span class="item-content">${item.content || item}</span>
+                    <span class="item-del" onclick="removeDetailItem('${listId}',${idx})">✕</span>
+                </li>`;
+            }).join('');
+        }
+
+        function removeDetailItem(listId, idx) {
+            const task = tasks.find(t => t.id === currentDetailTaskId);
+            if (!task) return;
+            ensureDetail(task);
+            let arr;
+            if (listId === 'commList') arr = task.detail.communications;
+            else if (listId === 'achList') arr = task.detail.achievements;
+            else arr = task.detail.changeLogs;
+            arr.splice(idx, 1);
+            renderDetailList(listId, arr, listId === 'achList');
+        }
+
+        // 沟通记录新增
+        function addCommRow() {
+            const row = document.getElementById('commAddRow');
+            row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+            if (row.style.display === 'flex') {
+                document.getElementById('commDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('commContent').value = '';
+                document.getElementById('commContent').focus();
+            }
+        }
+
+        function confirmAddComm() {
+            const content = document.getElementById('commContent').value.trim();
+            if (!content) return;
+            const task = tasks.find(t => t.id === currentDetailTaskId);
+            if (!task) return;
+            ensureDetail(task);
+            task.detail.communications.push({ date: document.getElementById('commDate').value, content });
+            renderDetailList('commList', task.detail.communications);
+            document.getElementById('commAddRow').style.display = 'none';
+        }
+
+        // 阶段性成果新增
+        function addAchRow() {
+            const row = document.getElementById('achAddRow');
+            row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+            if (row.style.display === 'flex') {
+                document.getElementById('achContent').value = '';
+                document.getElementById('achContent').focus();
+            }
+        }
+
+        function confirmAddAch() {
+            const content = document.getElementById('achContent').value.trim();
+            if (!content) return;
+            const task = tasks.find(t => t.id === currentDetailTaskId);
+            if (!task) return;
+            ensureDetail(task);
+            task.detail.achievements.push(content);
+            renderDetailList('achList', task.detail.achievements, true);
+            document.getElementById('achAddRow').style.display = 'none';
+        }
+
+        // 变更日志新增
+        function addLogRow() {
+            const row = document.getElementById('logAddRow');
+            row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+            if (row.style.display === 'flex') {
+                document.getElementById('logContent').value = '';
+                document.getElementById('logContent').focus();
+            }
+        }
+
+        function confirmAddLog() {
+            const content = document.getElementById('logContent').value.trim();
+            if (!content) return;
+            const task = tasks.find(t => t.id === currentDetailTaskId);
+            if (!task) return;
+            ensureDetail(task);
+            const now = new Date();
+            const timeStr = now.toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+            task.detail.changeLogs.push({ date: timeStr, content });
+            renderDetailList('logList', task.detail.changeLogs);
+            document.getElementById('logAddRow').style.display = 'none';
+        }
+
+        // 保存任务详情
+        function saveTaskDetail() {
+            const task = tasks.find(t => t.id === currentDetailTaskId);
+            if (!task) return;
+            ensureDetail(task);
+
+            const oldStatus = task.status;
+            const today = new Date().toISOString().split('T')[0];
+
+            task.name = document.getElementById('detailName').value.trim() || task.name;
+            task.category = document.getElementById('detailCategory').value.trim() || task.category;
+            task.priority = document.getElementById('detailPriority').value;
+            task.urgency = document.getElementById('detailUrgency').value;
+            task.status = document.getElementById('detailStatus').value;
+            task.dueDate = document.getElementById('detailDueDate').value || null;
+            task.blocked = document.getElementById('detailBlocked').checked;
+            task.tags = document.getElementById('detailTags').value.split(',').map(s => s.trim()).filter(Boolean);
+            task.detail.doc = document.getElementById('detailDoc').value;
+
+            // 自动记录状态变更
+            if (oldStatus !== task.status) {
+                const now = new Date();
+                const timeStr = now.toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+                task.detail.changeLogs.push({ date: timeStr, content: `状态从"${statusLabel(oldStatus)}"变更为"${statusLabel(task.status)}"` });
+            }
+
+            // 自动设置完成日期
+            if (task.status === 'done' && !task.completedDate) {
+                task.completedDate = today;
+            }
+
+            saveTasks();
+            closeTaskDetail();
+            refreshAll();
+        }
+
+        function statusLabel(status) {
+            const map = { 'todo':'待开始', 'in-progress':'进行中', 'review':'待验收', 'done':'已完成', 'blocked':'阻塞暂停', 'delayed':'已延期', 'archived':'已归档' };
+            return map[status] || status;
+        }
+
+        // 删除任务
+        function deleteTask() {
+            if (!currentDetailTaskId) return;
+            if (!confirm('确定要删除这个任务吗？此操作不可撤销。')) return;
+            tasks = tasks.filter(t => t.id !== currentDetailTaskId);
+            saveTasks();
+            closeTaskDetail();
+            refreshAll();
+        }
+
+        // 刷新所有模块
+        function refreshAll() {
+            updateKPI();
+            updateRisks();
+            renderTable();
+            renderTodo();
+        }
+
+        // 点击弹窗外部关闭
+        document.getElementById('taskModal').addEventListener('click', function(e) {
+            if (e.target === this) closeTaskDetail();
+        });
+
+        // ESC 关闭弹窗
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeTaskDetail();
+        });
+
         // ==================== 风险预警 ====================
 
         function updateRisks() {
@@ -1406,7 +2032,7 @@
             } else {
                 overdueEl.innerHTML = overdue.map(t => {
                     const days = Math.ceil((today - new Date(t.dueDate)) / 86400000);
-                    return `<div class="risk-item" onclick="alert('任务ID: ${t.id}')">
+                    return `<div class="risk-item" onclick="openTaskDetail('${t.id}')">
                         <div class="risk-item-link">
                             <span class="risk-item-name">${t.name}</span>
                             <span class="risk-item-days overdue">延迟${days}天</span>
@@ -1423,7 +2049,7 @@
             } else {
                 soonEl.innerHTML = soon.map(t => {
                     const days = Math.ceil((new Date(t.dueDate) - today) / 86400000);
-                    return `<div class="risk-item" onclick="alert('任务ID: ${t.id}')">
+                    return `<div class="risk-item" onclick="openTaskDetail('${t.id}')">
                         <div class="risk-item-link">
                             <span class="risk-item-name">${t.name}</span>
                             <span class="risk-item-days soon">剩余${days}天</span>
@@ -1444,7 +2070,7 @@
                             ? `<span class="risk-item-days overdue">延迟${Math.ceil((today - new Date(t.dueDate)) / 86400000)}天</span>`
                             : `<span class="risk-item-days soon">剩余${Math.ceil((new Date(t.dueDate) - today) / 86400000)}天</span>`)
                         : '';
-                    return `<div class="risk-item" onclick="alert('任务ID: ${t.id}')">
+                    return `<div class="risk-item" onclick="openTaskDetail('${t.id}')">
                         <div class="risk-item-link">
                             <span class="risk-item-name">${t.name}</span>
                             ${daysText}
@@ -1563,7 +2189,7 @@
             // 绑定任务名称点击
             container.querySelectorAll('.todo-name').forEach(nameEl => {
                 nameEl.addEventListener('click', function() {
-                    alert('任务ID: ' + this.dataset.taskId);
+                    openTaskDetail(this.dataset.taskId);
                 });
             });
         }
