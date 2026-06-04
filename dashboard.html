@@ -1328,7 +1328,7 @@
             color: var(--text-muted);
         }
 
-        /* ========== 甘特图 ========== */
+        /* ========== 甘特图（自定义时间轴） ========== */
         .gantt-container {
             background: var(--card-bg);
             border-radius: 16px;
@@ -1381,16 +1381,177 @@
             border-color: var(--accent);
         }
 
-        #ganttChart {
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
         .gantt-empty {
             text-align: center;
             padding: 60px 20px;
             color: var(--text-muted);
             font-size: 14px;
+        }
+
+        /* 自定义时间轴 */
+        .timeline-wrap {
+            display: flex;
+            min-width: 800px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .timeline-sidebar {
+            width: 260px;
+            flex-shrink: 0;
+            background: #fafbfc;
+            border-right: 1px solid var(--border);
+        }
+
+        .timeline-sidebar-header {
+            height: 44px;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            background: #f0f1f5;
+        }
+
+        .timeline-task-row {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            border-bottom: 1px solid var(--border);
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .timeline-task-row:hover {
+            background: var(--accent-light);
+        }
+
+        .timeline-task-name {
+            font-size: 13px;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .timeline-task-meta {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .timeline-task-tag {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .timeline-body {
+            flex: 1;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .timeline-header {
+            height: 44px;
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            background: #f0f1f5;
+        }
+
+        .timeline-header-cell {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            border-right: 1px solid var(--border);
+            font-weight: 500;
+        }
+
+        .timeline-grid {
+            position: relative;
+        }
+
+        .timeline-grid-row {
+            height: 48px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .timeline-grid-cell {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            border-right: 1px dashed #e8e8f0;
+        }
+
+        .timeline-grid-cell.weekend {
+            background: #f8f9fc;
+        }
+
+        .timeline-today-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--danger);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .timeline-today-label {
+            position: absolute;
+            top: -20px;
+            left: -16px;
+            font-size: 10px;
+            color: var(--danger);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .timeline-bar {
+            position: absolute;
+            height: 22px;
+            top: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #fff;
+            font-weight: 600;
+            z-index: 2;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 0 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .timeline-bar:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+            z-index: 3;
+        }
+
+        .timeline-bar.done { background: var(--success); }
+        .timeline-bar.in-progress { background: var(--accent); }
+        .timeline-bar.todo { background: #9ca3af; }
+        .timeline-bar.blocked { background: var(--danger); }
+        .timeline-bar.overdue {
+            background: #f97316;
+            border: 2px solid #ea580c;
         }
 
         /* ========== 空状态 ========== */
@@ -1671,8 +1832,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/frappe-gantt@0.6.1/dist/frappe-gantt.css">
-    <script src="https://unpkg.com/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
     <script>
         // ==================== 数据模型 ====================
 
@@ -2871,15 +3030,14 @@
             </div>`;
         }
 
-        // ==================== 甘特图 ====================
+        // ==================== 甘特图（自定义时间轴） ====================
 
-        let ganttInstance = null;
+        let ganttViewMode = 'week';
 
         function renderGantt() {
             const container = document.getElementById('ganttContainer');
             if (!container) return;
 
-            // 过滤有截止日期的非归档任务
             const ganttTasks = tasks.filter(t => t.status !== 'archived' && t.dueDate);
 
             if (ganttTasks.length === 0) {
@@ -2887,71 +3045,150 @@
                 return;
             }
 
-            // 计算开始日期（截止日期往前推7天或更早）
+            // 计算时间范围
+            const range = getGanttRange(ganttViewMode);
+            const days = Math.round((range.end - range.start) / (1000 * 60 * 60 * 24)) + 1;
+            const dayWidth = ganttViewMode === 'day' ? 80 : ganttViewMode === 'week' ? 40 : 20;
+            const totalWidth = days * dayWidth;
             const today = new Date();
-            const ganttData = ganttTasks.map(t => {
-                const due = new Date(t.dueDate);
-                // 开始日期：截止日期往前推14天，或取completedDate
-                let start;
+            today.setHours(0,0,0,0);
+
+            // 生成头部日期
+            let headerCells = '';
+            for (let i = 0; i < days; i++) {
+                const d = new Date(range.start);
+                d.setDate(d.getDate() + i);
+                const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+                const label = ganttViewMode === 'day'
+                    ? `${d.getMonth()+1}/${d.getDate()}`
+                    : ganttViewMode === 'week'
+                        ? (d.getDay() === 1 || i === 0 ? `${d.getMonth()+1}/${d.getDate()}` : `${d.getDate()}`)
+                        : (d.getDate() === 1 || i === 0 ? `${d.getMonth()+1}月` : '');
+                headerCells += `<div class="timeline-header-cell" style="width:${dayWidth}px;${isWeekend?'background:#f0f1f5;':''}">${label}</div>`;
+            }
+
+            // 生成任务行
+            let sidebarRows = '';
+            let gridRows = '';
+            const priorityColor = { high: '#fee2e2', medium: '#fef3c7', low: '#e0e7ff' };
+            const priorityText = { high: '高', medium: '中', low: '低' };
+
+            ganttTasks.forEach(t => {
+                const statusColors = {
+                    done: '#dcfce7',
+                    'in-progress': '#dbeafe',
+                    todo: '#f3f4f6',
+                    blocked: '#fee2e2'
+                };
+                const statusLabels = {
+                    done: '已完成',
+                    'in-progress': '进行中',
+                    todo: '待开始',
+                    blocked: '阻塞'
+                };
+
+                sidebarRows += `
+                <div class="timeline-task-row" onclick="openTaskDetail('${t.id}')">
+                    <span class="timeline-task-name" title="${t.name}">${t.name}</span>
+                    <div class="timeline-task-meta">
+                        <span class="timeline-task-tag" style="background:${statusColors[t.status]||'#f3f4f6'};color:${t.status==='done'?'#166534':t.status==='in-progress'?'#1e40af':t.status==='blocked'?'#991b1b':'#4b5563'}">${statusLabels[t.status]||t.status}</span>
+                        <span class="timeline-task-tag" style="background:${priorityColor[t.priority]||'#f3f4f6'};color:#374151">${priorityText[t.priority]||t.priority}</span>
+                    </div>
+                </div>`;
+
+                // 计算任务条位置和宽度
+                let taskStart, taskEnd;
                 if (t.completedDate) {
-                    start = new Date(t.completedDate);
-                    if (start > due) start = new Date(due);
+                    taskStart = new Date(t.completedDate);
+                    taskEnd = new Date(t.dueDate);
+                    if (taskStart > taskEnd) taskStart = new Date(taskEnd);
                 } else {
-                    start = new Date(due);
-                    start.setDate(start.getDate() - 14);
+                    taskEnd = new Date(t.dueDate);
+                    taskStart = new Date(taskEnd);
+                    taskStart.setDate(taskStart.getDate() - 14);
                 }
-                // 开始日期不能晚于截止日期
-                if (start > due) start = new Date(due);
+                taskStart.setHours(0,0,0,0);
+                taskEnd.setHours(23,59,59,999);
+
+                const startOffset = Math.round((taskStart - range.start) / (1000*60*60*24));
+                const endOffset = Math.round((taskEnd - range.start) / (1000*60*60*24));
+                const barLeft = Math.max(0, startOffset * dayWidth);
+                const barWidth = Math.max(dayWidth * 0.5, Math.min((endOffset - startOffset + 1) * dayWidth, totalWidth - barLeft));
 
                 const progress = t.status === 'done' ? 100 : t.status === 'in-progress' ? 50 : t.status === 'blocked' ? 20 : 0;
-                const isOverdue = t.status !== 'done' && t.dueDate < today.toISOString().split('T')[0];
+                const isOverdue = t.status !== 'done' && t.dueDate < formatDate(today);
+                const barClass = isOverdue ? 'overdue' : t.status;
 
-                return {
-                    id: t.id,
-                    name: t.name,
-                    start: formatDate(start),
-                    end: t.dueDate,
-                    progress: progress,
-                    dependencies: t.parentId || '',
-                    custom_class: isOverdue ? 'gantt-overdue' : ''
-                };
+                let barsHtml = '';
+                if (endOffset >= 0 && startOffset < days) {
+                    barsHtml = `<div class="timeline-bar ${barClass}" style="left:${barLeft}px;width:${barWidth}px;" onclick="openTaskDetail('${t.id}')">${progress}%</div>`;
+                }
+
+                // 网格背景列
+                let cellsHtml = '';
+                for (let i = 0; i < days; i++) {
+                    const d = new Date(range.start);
+                    d.setDate(d.getDate() + i);
+                    const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+                    cellsHtml += `<div class="timeline-grid-cell ${isWeekend?'weekend':''}" style="left:${i*dayWidth}px;width:${dayWidth}px;"></div>`;
+                }
+
+                // 今天竖线
+                const todayOffset = Math.round((today - range.start) / (1000*60*60*24));
+                let todayLine = '';
+                if (todayOffset >= 0 && todayOffset < days) {
+                    todayLine = `<div class="timeline-today-line" style="left:${todayOffset * dayWidth + dayWidth/2}px;"><span class="timeline-today-label">今天</span></div>`;
+                }
+
+                gridRows += `
+                <div class="timeline-grid-row" style="width:${totalWidth}px;">
+                    ${cellsHtml}
+                    ${barsHtml}
+                    ${todayLine}
+                </div>`;
             });
 
             container.innerHTML = `
             <div class="gantt-container">
                 <div class="gantt-toolbar">
-                    <span class="gantt-toolbar-title">📊 项目甘特图（${ganttTasks.length} 个任务）</span>
+                    <span class="gantt-toolbar-title">📊 项目时间轴（${ganttTasks.length} 个任务）</span>
                     <div class="gantt-toolbar-btns">
-                        <button class="gantt-btn" onclick="ganttViewChange('day')">日</button>
-                        <button class="gantt-btn active" onclick="ganttViewChange('week')">周</button>
-                        <button class="gantt-btn" onclick="ganttViewChange('month')">月</button>
+                        <button class="gantt-btn ${ganttViewMode==='day'?'active':''}" onclick="ganttViewChange('day')">日</button>
+                        <button class="gantt-btn ${ganttViewMode==='week'?'active':''}" onclick="ganttViewChange('week')">周</button>
+                        <button class="gantt-btn ${ganttViewMode==='month'?'active':''}" onclick="ganttViewChange('month')">月</button>
                     </div>
                 </div>
-                <div id="ganttChart"></div>
+                <div class="timeline-wrap">
+                    <div class="timeline-sidebar">
+                        <div class="timeline-sidebar-header">任务</div>
+                        ${sidebarRows}
+                    </div>
+                    <div class="timeline-body">
+                        <div class="timeline-header" style="width:${totalWidth}px;">${headerCells}</div>
+                        <div class="timeline-grid">${gridRows}</div>
+                    </div>
+                </div>
             </div>`;
+        }
 
-            // 初始化 Frappe Gantt
-            try {
-                ganttInstance = new Gantt('#ganttChart', ganttData, {
-                    view_mode: 'week',
-                    date_format: 'YYYY-MM-DD',
-                    custom_popup_html: function(task) {
-                        const t = tasks.find(x => x.id === task.id);
-                        if (!t) return '';
-                        return `<div class="gantt-popup">
-                            <strong>${t.name}</strong><br>
-                            ${t.category} · ${statusLabel(t.status)}<br>
-                            📅 ${task.start} → ${task.end}<br>
-                            进度: ${task.progress}%
-                        </div>`;
-                    },
-                    on_click: function(task) {
-                        openTaskDetail(task.id);
-                    }
-                });
-            } catch(e) {
-                container.innerHTML = `<div class="gantt-empty">甘特图加载失败: ${e.message}<br>请刷新页面重试</div>`;
+        function getGanttRange(mode) {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            let start = new Date(today);
+            let end = new Date(today);
+            if (mode === 'day') {
+                start.setDate(today.getDate() - 3);
+                end.setDate(today.getDate() + 3);
+            } else if (mode === 'week') {
+                start.setDate(today.getDate() - 14);
+                end.setDate(today.getDate() + 13);
+            } else {
+                start.setMonth(today.getMonth() - 1);
+                start.setDate(1);
+                end.setMonth(today.getMonth() + 2);
+                end.setDate(0);
             }
+            return { start, end };
         }
 
         function formatDate(date) {
@@ -2962,10 +3199,8 @@
         }
 
         function ganttViewChange(mode) {
-            if (!ganttInstance) return;
-            ganttInstance.change_view_mode(mode);
-            document.querySelectorAll('.gantt-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            ganttViewMode = mode;
+            renderGantt();
         }
 
         // ==================== 初始化 ====================
