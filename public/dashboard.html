@@ -1168,6 +1168,231 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
+        /* ========== 运营仪表盘 ========== */
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .dash-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .dash-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            padding-left: 10px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .dash-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .dash-stat-row {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            padding: 12px 0;
+        }
+
+        .dash-stat-item {
+            flex: 1;
+        }
+
+        .dash-stat-num {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .dash-stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .dash-bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .dash-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dash-bar-label {
+            width: 80px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .dash-bar-track {
+            flex: 1;
+            height: 24px;
+            background: var(--bg);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .dash-bar-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 0.6s ease;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #fff;
+            min-width: fit-content;
+        }
+
+        .dash-bar-fill.cat-1 { background: #6366f1; }
+        .dash-bar-fill.cat-2 { background: #f59e0b; }
+        .dash-bar-fill.cat-3 { background: #10b981; }
+        .dash-bar-fill.cat-4 { background: #ec4899; }
+
+        .dash-priority-pie {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 8px 0;
+        }
+
+        .dash-pie-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .dash-pie-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dash-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dash-timeline-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .dash-timeline-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-top: 5px;
+            flex-shrink: 0;
+        }
+
+        .dash-timeline-dot.done { background: var(--success); }
+        .dash-timeline-dot.progress { background: var(--accent); }
+        .dash-timeline-dot.todo { background: var(--text-muted); }
+
+        .dash-timeline-content {
+            flex: 1;
+        }
+
+        .dash-timeline-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .dash-timeline-date {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* ========== 甘特图 ========== */
+        .gantt-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .gantt-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .gantt-toolbar-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            padding-left: 10px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .gantt-toolbar-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .gantt-btn {
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .gantt-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .gantt-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        #ganttChart {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .gantt-empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
         /* ========== 空状态 ========== */
         .empty-state {
             text-align: center;
@@ -1278,13 +1503,13 @@
                 <div id="todoContainer"></div>
             </div>
             <div class="tab-panel" id="dashboard">
-                <div class="placeholder-text">运营仪表盘内容区域<br>数据图表与趋势分析</div>
+                <div id="dashboardContainer"></div>
             </div>
             <div class="tab-panel active" id="table">
                 <div id="tableContainer"></div>
             </div>
             <div class="tab-panel" id="gantt">
-                <div class="placeholder-text">甘特图内容区域<br>时间线与里程碑排期</div>
+                <div id="ganttContainer"></div>
             </div>
         </div>
 
@@ -1446,6 +1671,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@1.1.0/dist/frappe-gantt.css">
+    <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@1.1.0/dist/frappe-gantt.min.js"></script>
     <script>
         // ==================== 数据模型 ====================
 
@@ -2512,6 +2739,235 @@
             });
         });
 
+        // ==================== 运营仪表盘 ====================
+
+        function renderDashboard() {
+            const container = document.getElementById('dashboardContainer');
+            if (!container) return;
+
+            const active = tasks.filter(t => t.status !== 'archived');
+            const total = active.length;
+            const today = new Date().toISOString().split('T')[0];
+
+            // 按分类统计
+            const categories = ['活动策划', '媒体运营', '视觉设计', '员工关怀'];
+            const catColors = ['cat-1', 'cat-2', 'cat-3', 'cat-4'];
+            const catCounts = categories.map(cat => active.filter(t => t.category === cat).length);
+            const maxCat = Math.max(...catCounts, 1);
+
+            // 按优先级统计
+            const highCount = active.filter(t => t.priority === 'high').length;
+            const medCount = active.filter(t => t.priority === 'medium').length;
+            const lowCount = active.filter(t => t.priority === 'low').length;
+
+            // 按状态统计
+            const todoCount = active.filter(t => t.status === 'todo').length;
+            const ipCount = active.filter(t => t.status === 'in-progress').length;
+            const doneCount = active.filter(t => t.status === 'done').length;
+            const blockedCount = active.filter(t => t.status === 'blocked').length;
+
+            // 今日完成
+            const todayDone = active.filter(t => t.completedDate === today).length;
+
+            // 最近活动时间线
+            const recentTasks = [...active]
+                .filter(t => t.completedDate || t.dueDate)
+                .sort((a, b) => {
+                    const da = a.completedDate || a.dueDate;
+                    const db = b.completedDate || b.dueDate;
+                    return db.localeCompare(da);
+                })
+                .slice(0, 8);
+
+            container.innerHTML = `
+            <div class="dash-grid">
+                <!-- 总览卡片 -->
+                <div class="dash-card full-width">
+                    <div class="dash-card-title">📊 任务总览</div>
+                    <div class="dash-stat-row">
+                        <div class="dash-stat-item">
+                            <div class="dash-stat-num" style="color:var(--accent)">${total}</div>
+                            <div class="dash-stat-label">任务总数</div>
+                        </div>
+                        <div class="dash-stat-item">
+                            <div class="dash-stat-num" style="color:var(--success)">${doneCount}</div>
+                            <div class="dash-stat-label">已完成</div>
+                        </div>
+                        <div class="dash-stat-item">
+                            <div class="dash-stat-num" style="color:var(--warning)">${ipCount}</div>
+                            <div class="dash-stat-label">进行中</div>
+                        </div>
+                        <div class="dash-stat-item">
+                            <div class="dash-stat-num" style="color:var(--text-muted)">${todoCount}</div>
+                            <div class="dash-stat-label">待开始</div>
+                        </div>
+                        <div class="dash-stat-item">
+                            <div class="dash-stat-num" style="color:var(--danger)">${blockedCount}</div>
+                            <div class="dash-stat-label">阻塞</div>
+                        </div>
+                        <div class="dash-stat-item">
+                            <div class="dash-stat-num" style="color:#3b82f6">${todayDone}</div>
+                            <div class="dash-stat-label">今日完成</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分类分布 -->
+                <div class="dash-card">
+                    <div class="dash-card-title">📁 分类分布</div>
+                    <div class="dash-bar-chart">
+                        ${categories.map((cat, i) => `
+                        <div class="dash-bar-row">
+                            <span class="dash-bar-label">${cat}</span>
+                            <div class="dash-bar-track">
+                                <div class="dash-bar-fill ${catColors[i]}" style="width:${Math.max(catCounts[i] / maxCat * 100, catCounts[i] > 0 ? 8 : 0)}%">${catCounts[i]}</div>
+                            </div>
+                        </div>`).join('')}
+                    </div>
+                </div>
+
+                <!-- 优先级分布 -->
+                <div class="dash-card">
+                    <div class="dash-card-title">🎯 优先级分布</div>
+                    <div class="dash-priority-pie">
+                        <div class="dash-pie-item"><span class="dash-pie-dot" style="background:var(--danger)"></span> 高优先级 ${highCount} (${total > 0 ? Math.round(highCount/total*100) : 0}%)</div>
+                        <div class="dash-pie-item"><span class="dash-pie-dot" style="background:var(--warning)"></span> 中优先级 ${medCount} (${total > 0 ? Math.round(medCount/total*100) : 0}%)</div>
+                        <div class="dash-pie-item"><span class="dash-pie-dot" style="background:var(--accent)"></span> 低优先级 ${lowCount} (${total > 0 ? Math.round(lowCount/total*100) : 0}%)</div>
+                    </div>
+                    <div class="dash-bar-chart" style="margin-top:16px">
+                        <div class="dash-bar-row">
+                            <span class="dash-bar-label">高</span>
+                            <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${total > 0 ? highCount/total*100 : 0}%;background:var(--danger)">${highCount}</div></div>
+                        </div>
+                        <div class="dash-bar-row">
+                            <span class="dash-bar-label">中</span>
+                            <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${total > 0 ? medCount/total*100 : 0}%;background:var(--warning)">${medCount}</div></div>
+                        </div>
+                        <div class="dash-bar-row">
+                            <span class="dash-bar-label">低</span>
+                            <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${total > 0 ? lowCount/total*100 : 0}%;background:var(--accent)">${lowCount}</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 最近动态 -->
+                <div class="dash-card full-width">
+                    <div class="dash-card-title">🕐 最近动态</div>
+                    <div class="dash-timeline">
+                        ${recentTasks.length === 0 ? '<div class="gantt-empty">暂无任务动态</div>' :
+                        recentTasks.map(t => {
+                            const dotClass = t.status === 'done' ? 'done' : t.status === 'in-progress' ? 'progress' : 'todo';
+                            const dateText = t.completedDate ? `完成于 ${t.completedDate}` : `截止 ${t.dueDate || '未设置'}`;
+                            return `<div class="dash-timeline-item" style="cursor:pointer" onclick="openTaskDetail('${t.id}')">
+                                <span class="dash-timeline-dot ${dotClass}"></span>
+                                <div class="dash-timeline-content">
+                                    <div class="dash-timeline-name">${t.name}</div>
+                                    <div class="dash-timeline-date">${dateText} · ${t.category} · ${statusLabel(t.status)}</div>
+                                </div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        // ==================== 甘特图 ====================
+
+        let ganttInstance = null;
+
+        function renderGantt() {
+            const container = document.getElementById('ganttContainer');
+            if (!container) return;
+
+            // 过滤有截止日期的非归档任务
+            const ganttTasks = tasks.filter(t => t.status !== 'archived' && t.dueDate);
+
+            if (ganttTasks.length === 0) {
+                container.innerHTML = '<div class="gantt-empty">暂无可显示的甘特图数据，请确保任务有截止日期</div>';
+                return;
+            }
+
+            // 计算开始日期（截止日期往前推7天或更早）
+            const today = new Date();
+            const ganttData = ganttTasks.map(t => {
+                const due = new Date(t.dueDate);
+                // 开始日期：截止日期往前推14天，或取completedDate
+                let start;
+                if (t.completedDate) {
+                    start = new Date(t.completedDate);
+                    if (start > due) start = new Date(due);
+                } else {
+                    start = new Date(due);
+                    start.setDate(start.getDate() - 14);
+                }
+                // 开始日期不能晚于截止日期
+                if (start > due) start = new Date(due);
+
+                const progress = t.status === 'done' ? 100 : t.status === 'in-progress' ? 50 : t.status === 'blocked' ? 20 : 0;
+                const isOverdue = t.status !== 'done' && t.dueDate < today.toISOString().split('T')[0];
+
+                return {
+                    id: t.id,
+                    name: t.name,
+                    start: formatDate(start),
+                    end: t.dueDate,
+                    progress: progress,
+                    dependencies: t.parentId || '',
+                    custom_class: isOverdue ? 'gantt-overdue' : ''
+                };
+            });
+
+            container.innerHTML = `
+            <div class="gantt-container">
+                <div class="gantt-toolbar">
+                    <span class="gantt-toolbar-title">📊 项目甘特图（${ganttTasks.length} 个任务）</span>
+                    <div class="gantt-toolbar-btns">
+                        <button class="gantt-btn" onclick="ganttViewChange('day')">日</button>
+                        <button class="gantt-btn active" onclick="ganttViewChange('week')">周</button>
+                        <button class="gantt-btn" onclick="ganttViewChange('month')">月</button>
+                    </div>
+                </div>
+                <div id="ganttChart"></div>
+            </div>`;
+
+            // 初始化 Frappe Gantt
+            try {
+                ganttInstance = new Gantt('#ganttChart', ganttData, {
+                    view_mode: 'week',
+                    date_format: 'YYYY-MM-DD',
+                    custom_popup_html: function(task) {
+                        const t = tasks.find(x => x.id === task.id);
+                        if (!t) return '';
+                        return `<div class="gantt-popup">
+                            <strong>${t.name}</strong><br>
+                            ${t.category} · ${statusLabel(t.status)}<br>
+                            📅 ${task.start} → ${task.end}<br>
+                            进度: ${task.progress}%
+                        </div>`;
+                    },
+                    on_click: function(task) {
+                        openTaskDetail(task.id);
+                    }
+                });
+            } catch(e) {
+                container.innerHTML = `<div class="gantt-empty">甘特图加载失败: ${e.message}<br>请刷新页面重试</div>`;
+            }
+        }
+
+        function formatDate(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function ganttViewChange(mode) {
+            if (!ganttInstance) return;
+            ganttInstance.change_view_mode(mode);
+            document.querySelectorAll('.gantt-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
         // ==================== 初始化 ====================
         loadTasks();
         updateKPI();
@@ -2520,6 +2976,8 @@
         renderTable();
         renderTodo();
         renderKanban();
+        renderDashboard();
+        renderGantt();
         bindFilters();
         bindTodoFilters();
     </script>
