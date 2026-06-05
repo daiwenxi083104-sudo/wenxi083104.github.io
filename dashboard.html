@@ -240,6 +240,25 @@
             border-color: var(--accent);
         }
 
+        .btn-add-task {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .btn-add-task:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
         /* ========== Tab 切换栏 ========== */
         .tab-bar {
             display: flex;
@@ -1636,6 +1655,7 @@
                 <option value="medium">中</option>
                 <option value="low">低</option>
             </select>
+            <button class="btn-add-task" onclick="openNewTask()">+ 新增任务</button>
         </div>
 
         <!-- Tab 切换栏 -->
@@ -2340,11 +2360,64 @@
             if (task.detail.doc === undefined) task.detail.doc = '';
         }
 
+        // 新增任务
+        function openNewTask() {
+            const today = new Date().toISOString().split('T')[0];
+            const nextWeek = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+            const newId = 'task_' + Date.now();
+            const newTask = {
+                id: newId,
+                name: '',
+                type: 'task',
+                category: '活动策划',
+                priority: 'medium',
+                urgency: 'normal',
+                status: 'todo',
+                dueDate: nextWeek,
+                completedDate: null,
+                blocked: false,
+                tags: [],
+                parentId: null,
+                milestone: false,
+                order: tasks.length,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
+            };
+            tasks.push(newTask);
+            currentDetailTaskId = newId;
+
+            // 填充表单
+            document.getElementById('detailName').value = '';
+            document.getElementById('detailCategory').value = '活动策划';
+            document.getElementById('detailPriority').value = 'medium';
+            document.getElementById('detailUrgency').value = 'normal';
+            document.getElementById('detailStatus').value = 'todo';
+            document.getElementById('detailDueDate').value = nextWeek;
+            document.getElementById('detailBlocked').checked = false;
+            document.getElementById('detailTags').value = '';
+            document.getElementById('detailDoc').value = '';
+
+            renderDetailList('commList', []);
+            renderDetailList('achList', [], true);
+            renderDetailList('logList', []);
+
+            document.getElementById('commAddRow').style.display = 'none';
+            document.getElementById('achAddRow').style.display = 'none';
+            document.getElementById('logAddRow').style.display = 'none';
+
+            document.querySelector('.modal-title').textContent = '✨ 新增任务';
+            document.getElementById('taskModal').classList.add('active');
+
+            // 聚焦到名称输入框
+            setTimeout(() => document.getElementById('detailName').focus(), 300);
+        }
+
         function openTaskDetail(taskId) {
             const task = tasks.find(t => t.id === taskId);
             if (!task) return;
             currentDetailTaskId = taskId;
             ensureDetail(task);
+
+            document.querySelector('.modal-title').textContent = '📋 任务详情';
 
             // 填充表单
             document.getElementById('detailName').value = task.name;
@@ -2475,6 +2548,16 @@
             const task = tasks.find(t => t.id === currentDetailTaskId);
             if (!task) return;
             ensureDetail(task);
+
+            const nameVal = document.getElementById('detailName').value.trim();
+            // 如果名称为空，视为取消新增，删除该任务
+            if (!nameVal) {
+                tasks = tasks.filter(t => t.id !== currentDetailTaskId);
+                saveTasks();
+                closeTaskDetail();
+                refreshAll();
+                return;
+            }
 
             const oldStatus = task.status;
             const today = new Date().toISOString().split('T')[0];
