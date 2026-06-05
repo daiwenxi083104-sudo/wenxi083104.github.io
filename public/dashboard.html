@@ -1347,6 +1347,189 @@
             color: var(--text-muted);
         }
 
+        /* ========== 环形图 ========== */
+        .ring-chart-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ring-chart {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .ring-chart svg {
+            transform: rotate(-90deg);
+        }
+
+        .ring-chart-bg {
+            fill: none;
+            stroke: var(--bg);
+            stroke-width: 10;
+        }
+
+        .ring-chart-fill {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.8s ease;
+        }
+
+        .ring-chart-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .ring-chart-num {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .ring-chart-text {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* ========== 四象限待办 ========== */
+        .quadrant-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .quadrant-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            min-height: 180px;
+        }
+
+        .quadrant-card.q1 { border-left: 4px solid #ef4444; }
+        .quadrant-card.q2 { border-left: 4px solid #f59e0b; }
+        .quadrant-card.q3 { border-left: 4px solid #3b82f6; }
+        .quadrant-card.q4 { border-left: 4px solid #94a3b8; }
+
+        .quadrant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .quadrant-title {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .quadrant-title.q1 { color: #ef4444; }
+        .quadrant-title.q2 { color: #f59e0b; }
+        .quadrant-title.q3 { color: #3b82f6; }
+        .quadrant-title.q4 { color: #94a3b8; }
+
+        .quadrant-count {
+            font-size: 11px;
+            background: var(--bg);
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: var(--text-secondary);
+        }
+
+        .quadrant-list {
+            list-style: none;
+        }
+
+        .quadrant-item {
+            padding: 8px 10px;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: background 0.15s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quadrant-item:hover {
+            background: #e0e7ff;
+        }
+
+        .quadrant-item-name {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .quadrant-item-due {
+            font-size: 11px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .quadrant-empty {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        /* ========== 运营指标卡片 ========== */
+        .ops-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+        }
+
+        .ops-stat-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 18px 14px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .ops-stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .ops-stat-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .ops-stat-num {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .ops-stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .ops-charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
         /* ========== 甘特图（自定义时间轴） ========== */
         .gantt-container {
             background: var(--card-bg);
@@ -2983,36 +3166,161 @@
 
         // ==================== 运营仪表盘 ====================
 
+        // 生成环形图 SVG
+        function ringChart(pct, color, label) {
+            const r = 45;
+            const c = 2 * Math.PI * r;
+            const offset = c - (pct / 100) * c;
+            return `<div class="ring-chart-wrap">
+                <div class="ring-chart">
+                    <svg width="120" height="120" viewBox="0 0 120 120">
+                        <circle class="ring-chart-bg" cx="60" cy="60" r="${r}"/>
+                        <circle class="ring-chart-fill" cx="60" cy="60" r="${r}"
+                            stroke="${color}"
+                            stroke-dasharray="${c}"
+                            stroke-dashoffset="${offset}"/>
+                    </svg>
+                    <div class="ring-chart-label">
+                        <div class="ring-chart-num">${pct}%</div>
+                    </div>
+                </div>
+                <div class="ring-chart-text">${label}</div>
+            </div>`;
+        }
+
         function renderDashboard() {
             const container = document.getElementById('dashboardContainer');
             if (!container) return;
 
-            const active = tasks.filter(t => t.status !== 'archived');
-            const total = active.length;
             const today = new Date().toISOString().split('T')[0];
+            const active = tasks.filter(t => t.status !== 'archived');
 
-            // 按分类统计
-            const categories = ['活动策划', '媒体运营', '视觉设计', '员工关怀'];
-            const catColors = ['cat-1', 'cat-2', 'cat-3', 'cat-4'];
-            const catCounts = categories.map(cat => active.filter(t => t.category === cat).length);
-            const maxCat = Math.max(...catCounts, 1);
+            // ====== 运营专属指标 ======
+            // 本月运营项目总数（排除 archived）
+            const opsTotal = active.length;
 
-            // 按优先级统计
-            const highCount = active.filter(t => t.priority === 'high').length;
-            const medCount = active.filter(t => t.priority === 'medium').length;
-            const lowCount = active.filter(t => t.priority === 'low').length;
+            // 内容产出量（标签含 #内容）
+            const contentCount = active.filter(t => (t.tags || []).some(tag => tag.includes('内容'))).length;
 
-            // 按状态统计
-            const todoCount = active.filter(t => t.status === 'todo').length;
-            const ipCount = active.filter(t => t.status === 'in-progress').length;
-            const doneCount = active.filter(t => t.status === 'done').length;
-            const blockedCount = active.filter(t => t.status === 'blocked').length;
+            // 活动落地次数（标签含 #活动）
+            const activityCount = active.filter(t => (t.tags || []).some(tag => tag.includes('活动'))).length;
+
+            // 运营任务闭环率
+            const opsDone = active.filter(t => t.status === 'done').length;
+            const closeRate = opsTotal > 0 ? Math.round(opsDone / opsTotal * 100) : 0;
+
+            // 延期占比
+            const overdueCount = active.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < today).length;
+            const overdueRate = opsTotal > 0 ? Math.round(overdueCount / opsTotal * 100) : 0;
+
+            // ====== 四象限待办 ======
+            const todoTasks = active.filter(t => t.status !== 'done');
+            const q1 = todoTasks.filter(t => t.priority === 'high' && t.urgency === 'urgent');   // 紧急+重要
+            const q2 = todoTasks.filter(t => t.priority === 'high' && t.urgency !== 'urgent');    // 重要不紧急
+            const q3 = todoTasks.filter(t => t.priority !== 'high' && t.urgency === 'urgent');   // 紧急不重要
+            const q4 = todoTasks.filter(t => t.priority !== 'high' && t.urgency !== 'urgent');    // 其他
 
             // 今日完成
             const todayDone = active.filter(t => t.completedDate === today).length;
+            const todoRate = todoTasks.length > 0 ? Math.round(opsDone / active.length * 100) : 0;
 
-            // 最近活动时间线
-            const recentTasks = [...active]
+            container.innerHTML = `
+            <div class="dash-grid">
+                <!-- 运营专属指标 -->
+                <div class="dash-card full-width">
+                    <div class="dash-card-title">📊 运营数据专属仪表盘</div>
+                    <div class="ops-stat-grid">
+                        <div class="ops-stat-card">
+                            <div class="ops-stat-icon">📋</div>
+                            <div class="ops-stat-num" style="color:var(--accent)">${opsTotal}</div>
+                            <div class="ops-stat-label">本月运营项目总数</div>
+                        </div>
+                        <div class="ops-stat-card">
+                            <div class="ops-stat-icon">📝</div>
+                            <div class="ops-stat-num" style="color:#10b981">${contentCount}</div>
+                            <div class="ops-stat-label">内容产出量（#内容）</div>
+                        </div>
+                        <div class="ops-stat-card">
+                            <div class="ops-stat-icon">🎯</div>
+                            <div class="ops-stat-num" style="color:#f59e0b">${activityCount}</div>
+                            <div class="ops-stat-label">活动落地次数（#活动）</div>
+                        </div>
+                        <div class="ops-stat-card">
+                            <div class="ops-stat-icon">✅</div>
+                            <div class="ops-stat-num" style="color:var(--success)">${closeRate}%</div>
+                            <div class="ops-stat-label">运营任务闭环率</div>
+                        </div>
+                        <div class="ops-stat-card">
+                            <div class="ops-stat-icon">⚠️</div>
+                            <div class="ops-stat-num" style="color:var(--danger)">${overdueRate}%</div>
+                            <div class="ops-stat-label">运营任务延期占比</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 环形图行 -->
+                <div class="ops-charts-row">
+                    <div class="dash-card" style="display:flex;justify-content:center;align-items:center">
+                        ${ringChart(closeRate, '#10b981', '任务闭环率')}
+                    </div>
+                    <div class="dash-card" style="display:flex;justify-content:center;align-items:center">
+                        ${ringChart(100 - overdueRate, overdueRate > 30 ? '#ef4444' : '#f59e0b', '按时完成率')}
+                    </div>
+                    <div class="dash-card" style="display:flex;justify-content:center;align-items:center">
+                        ${ringChart(opsTotal > 0 ? Math.round((opsTotal - overdueCount - opsDone) / opsTotal * 100) : 0, '#6366f1', '进行中占比')}
+                    </div>
+                </div>
+
+                <!-- 四象限待办 -->
+                <div class="dash-card full-width">
+                    <div class="dash-card-title" style="display:flex;justify-content:space-between;align-items:center">
+                        <span>🎯 四象限优先级待办</span>
+                        <span style="font-size:12px;color:var(--text-muted);font-weight:400">今日完成 <strong style="color:var(--accent)">${todayDone}</strong> 项 · 待办完成率 <strong style="color:var(--accent)">${todoRate}%</strong></span>
+                    </div>
+                    <div class="quadrant-grid">
+                        ${renderQuadrant('q1', '🔴 紧急且重要', q1)}
+                        ${renderQuadrant('q2', '🟡 重要不紧急', q2)}
+                        ${renderQuadrant('q3', '🔵 紧急不重要', q3)}
+                        ${renderQuadrant('q4', '⚪ 常规事项', q4)}
+                    </div>
+                </div>
+
+                <!-- 最近动态 -->
+                <div class="dash-card full-width">
+                    <div class="dash-card-title">🕐 最近动态</div>
+                    <div class="dash-timeline">
+                        ${renderTimeline(active, today)}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function renderQuadrant(cls, title, items) {
+            if (items.length === 0) {
+                return `<div class="quadrant-card ${cls}">
+                    <div class="quadrant-header">
+                        <span class="quadrant-title ${cls}">${title}</span>
+                        <span class="quadrant-count">0</span>
+                    </div>
+                    <div class="quadrant-empty">暂无</div>
+                </div>`;
+            }
+            return `<div class="quadrant-card ${cls}">
+                <div class="quadrant-header">
+                    <span class="quadrant-title ${cls}">${title}</span>
+                    <span class="quadrant-count">${items.length}</span>
+                </div>
+                <ul class="quadrant-list">
+                    ${items.map(t => `<li class="quadrant-item" onclick="openTaskDetail('${t.id}')">
+                        <span class="quadrant-item-name">${t.name}</span>
+                        <span class="quadrant-item-due">${t.dueDate || ''}</span>
+                    </li>`).join('')}
+                </ul>
+            </div>`;
+        }
+
+        function renderTimeline(active, today) {
+            const recent = [...active]
                 .filter(t => t.completedDate || t.dueDate)
                 .sort((a, b) => {
                     const da = a.completedDate || a.dueDate;
@@ -3021,96 +3329,19 @@
                 })
                 .slice(0, 8);
 
-            container.innerHTML = `
-            <div class="dash-grid">
-                <!-- 总览卡片 -->
-                <div class="dash-card full-width">
-                    <div class="dash-card-title">📊 任务总览</div>
-                    <div class="dash-stat-row">
-                        <div class="dash-stat-item">
-                            <div class="dash-stat-num" style="color:var(--accent)">${total}</div>
-                            <div class="dash-stat-label">任务总数</div>
-                        </div>
-                        <div class="dash-stat-item">
-                            <div class="dash-stat-num" style="color:var(--success)">${doneCount}</div>
-                            <div class="dash-stat-label">已完成</div>
-                        </div>
-                        <div class="dash-stat-item">
-                            <div class="dash-stat-num" style="color:var(--warning)">${ipCount}</div>
-                            <div class="dash-stat-label">进行中</div>
-                        </div>
-                        <div class="dash-stat-item">
-                            <div class="dash-stat-num" style="color:var(--text-muted)">${todoCount}</div>
-                            <div class="dash-stat-label">待开始</div>
-                        </div>
-                        <div class="dash-stat-item">
-                            <div class="dash-stat-num" style="color:var(--danger)">${blockedCount}</div>
-                            <div class="dash-stat-label">阻塞</div>
-                        </div>
-                        <div class="dash-stat-item">
-                            <div class="dash-stat-num" style="color:#3b82f6">${todayDone}</div>
-                            <div class="dash-stat-label">今日完成</div>
-                        </div>
-                    </div>
-                </div>
+            if (recent.length === 0) return '<div class="gantt-empty">暂无任务动态</div>';
 
-                <!-- 分类分布 -->
-                <div class="dash-card">
-                    <div class="dash-card-title">📁 分类分布</div>
-                    <div class="dash-bar-chart">
-                        ${categories.map((cat, i) => `
-                        <div class="dash-bar-row">
-                            <span class="dash-bar-label">${cat}</span>
-                            <div class="dash-bar-track">
-                                <div class="dash-bar-fill ${catColors[i]}" style="width:${Math.max(catCounts[i] / maxCat * 100, catCounts[i] > 0 ? 8 : 0)}%">${catCounts[i]}</div>
-                            </div>
-                        </div>`).join('')}
+            return recent.map(t => {
+                const dotClass = t.status === 'done' ? 'done' : t.status === 'in-progress' ? 'progress' : 'todo';
+                const dateText = t.completedDate ? `完成于 ${t.completedDate}` : `截止 ${t.dueDate || '未设置'}`;
+                return `<div class="dash-timeline-item" style="cursor:pointer" onclick="openTaskDetail('${t.id}')">
+                    <span class="dash-timeline-dot ${dotClass}"></span>
+                    <div class="dash-timeline-content">
+                        <div class="dash-timeline-name">${t.name}</div>
+                        <div class="dash-timeline-date">${dateText} · ${t.category} · ${statusLabel(t.status)}</div>
                     </div>
-                </div>
-
-                <!-- 优先级分布 -->
-                <div class="dash-card">
-                    <div class="dash-card-title">🎯 优先级分布</div>
-                    <div class="dash-priority-pie">
-                        <div class="dash-pie-item"><span class="dash-pie-dot" style="background:var(--danger)"></span> 高优先级 ${highCount} (${total > 0 ? Math.round(highCount/total*100) : 0}%)</div>
-                        <div class="dash-pie-item"><span class="dash-pie-dot" style="background:var(--warning)"></span> 中优先级 ${medCount} (${total > 0 ? Math.round(medCount/total*100) : 0}%)</div>
-                        <div class="dash-pie-item"><span class="dash-pie-dot" style="background:var(--accent)"></span> 低优先级 ${lowCount} (${total > 0 ? Math.round(lowCount/total*100) : 0}%)</div>
-                    </div>
-                    <div class="dash-bar-chart" style="margin-top:16px">
-                        <div class="dash-bar-row">
-                            <span class="dash-bar-label">高</span>
-                            <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${total > 0 ? highCount/total*100 : 0}%;background:var(--danger)">${highCount}</div></div>
-                        </div>
-                        <div class="dash-bar-row">
-                            <span class="dash-bar-label">中</span>
-                            <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${total > 0 ? medCount/total*100 : 0}%;background:var(--warning)">${medCount}</div></div>
-                        </div>
-                        <div class="dash-bar-row">
-                            <span class="dash-bar-label">低</span>
-                            <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${total > 0 ? lowCount/total*100 : 0}%;background:var(--accent)">${lowCount}</div></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 最近动态 -->
-                <div class="dash-card full-width">
-                    <div class="dash-card-title">🕐 最近动态</div>
-                    <div class="dash-timeline">
-                        ${recentTasks.length === 0 ? '<div class="gantt-empty">暂无任务动态</div>' :
-                        recentTasks.map(t => {
-                            const dotClass = t.status === 'done' ? 'done' : t.status === 'in-progress' ? 'progress' : 'todo';
-                            const dateText = t.completedDate ? `完成于 ${t.completedDate}` : `截止 ${t.dueDate || '未设置'}`;
-                            return `<div class="dash-timeline-item" style="cursor:pointer" onclick="openTaskDetail('${t.id}')">
-                                <span class="dash-timeline-dot ${dotClass}"></span>
-                                <div class="dash-timeline-content">
-                                    <div class="dash-timeline-name">${t.name}</div>
-                                    <div class="dash-timeline-date">${dateText} · ${t.category} · ${statusLabel(t.status)}</div>
-                                </div>
-                            </div>`;
-                        }).join('')}
-                    </div>
-                </div>
-            </div>`;
+                </div>`;
+            }).join('');
         }
 
         // ==================== 甘特图（自定义时间轴） ====================
