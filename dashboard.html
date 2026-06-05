@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人工作看板</title>
+    <title>企业文化工作看板</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #f5f6fa;
-            --card-bg: #ffffff;
-            --text-primary: #1a1a2e;
-            --text-secondary: #4a4a6a;
-            --text-muted: #8a8aa3;
-            --border: #e2e4f0;
-            --accent: #4f46e5;
-            --accent-light: #eef2ff;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --shadow: 0 1px 3px rgba(0,0,0,0.08);
-            --shadow-hover: 0 4px 12px rgba(0,0,0,0.12);
+            --bg: #0f1419;
+            --card-bg: #1a1f2e;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --text-muted: #6b7280;
+            --border: rgba(255,255,255,0.08);
+            --accent: #4285f4;
+            --accent-light: rgba(66,133,244,0.12);
+            --success: #34a853;
+            --warning: #fbbc04;
+            --danger: #ea4335;
+            --shadow: 0 1px 3px rgba(0,0,0,0.25);
+            --shadow-hover: 0 4px 12px rgba(0,0,0,0.35);
         }
 
         body {
@@ -28,7 +28,9 @@
             background: var(--bg);
             color: var(--text-primary);
             min-width: 1200px;
-            line-height: 1.5;
+            line-height: 1.45;
+            font-size: 14px;
+            letter-spacing: -0.01em;
         }
 
         /* ========== 顶部导航 ========== */
@@ -43,10 +45,10 @@
         }
 
         .nav-brand {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             color: var(--text-primary);
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
 
         .nav-links {
@@ -57,7 +59,7 @@
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             transition: color 0.2s;
         }
 
@@ -101,7 +103,7 @@
         }
 
         .goal-input {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--text-primary);
             border: none;
@@ -151,7 +153,7 @@
         }
 
         .kpi-value {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1;
@@ -200,14 +202,19 @@
             padding: 10px 16px 10px 40px;
             border: 1px solid var(--border);
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             background: var(--card-bg);
+            color: var(--text-primary);
             outline: none;
             transition: border-color 0.2s;
         }
 
         .search-box input:focus {
             border-color: var(--accent);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
         }
 
         .search-box::before {
@@ -224,14 +231,14 @@
             padding: 10px 32px 10px 14px;
             border: 1px solid var(--border);
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             background: var(--card-bg);
             color: var(--text-secondary);
             cursor: pointer;
             outline: none;
             min-width: 140px;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238a8aa3' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
         }
@@ -292,7 +299,7 @@
         .tab-btn.active {
             background: var(--accent);
             color: #fff;
-            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
         }
 
         /* ========== 内容容器 ========== */
@@ -448,7 +455,7 @@
         }
 
         .task-table th:hover {
-            background: #e8eaf6;
+            background: rgba(66,133,244,0.08);
         }
 
         .task-table th .sort-indicator {
@@ -477,7 +484,7 @@
         }
 
         .task-table tbody tr:hover {
-            background: var(--accent-light);
+            background: rgba(66,133,244,0.06);
         }
 
         .task-table tbody tr:hover td {
@@ -494,18 +501,18 @@
         }
 
         .priority-high {
-            background: #fee2e2;
-            color: #dc2626;
+            background: rgba(234,67,53,0.15);
+            color: #ff6b6b;
         }
 
         .priority-medium {
-            background: #fef3c7;
-            color: #d97706;
+            background: rgba(251,188,4,0.15);
+            color: #fbbc04;
         }
 
         .priority-low {
-            background: #dbeafe;
-            color: #2563eb;
+            background: rgba(66,133,244,0.15);
+            color: #4285f4;
         }
 
         /* 状态标签 */
@@ -518,28 +525,28 @@
         }
 
         .status-todo {
-            background: #f3f4f6;
-            color: #6b7280;
+            background: rgba(255,255,255,0.06);
+            color: #9aa0a6;
         }
 
         .status-in-progress {
-            background: #dbeafe;
-            color: #2563eb;
+            background: rgba(66,133,244,0.15);
+            color: #4285f4;
         }
 
         .status-done {
-            background: #d1fae5;
-            color: #059669;
+            background: rgba(52,168,83,0.15);
+            color: #34a853;
         }
 
         .status-blocked {
-            background: #fee2e2;
-            color: #dc2626;
+            background: rgba(234,67,53,0.15);
+            color: #ea4335;
         }
 
         .status-archived {
-            background: #f3f4f6;
-            color: #9ca3af;
+            background: rgba(255,255,255,0.04);
+            color: #6b7280;
         }
 
         /* 紧急度标签 */
@@ -552,18 +559,18 @@
         }
 
         .urgency-urgent {
-            background: #fee2e2;
-            color: #dc2626;
+            background: rgba(234,67,53,0.15);
+            color: #ff6b6b;
         }
 
         .urgency-normal {
-            background: #f3f4f6;
-            color: #6b7280;
+            background: rgba(255,255,255,0.06);
+            color: #9aa0a6;
         }
 
         /* 阻塞标记 */
         .blocked-yes {
-            color: #dc2626;
+            color: #ea4335;
             font-weight: 600;
         }
 
@@ -573,7 +580,7 @@
 
         /* 内联编辑样式 */
         .cell-editing {
-            background: #fffbeb !important;
+            background: rgba(66,133,244,0.08) !important;
             box-shadow: inset 0 0 0 2px var(--accent);
         }
 
@@ -585,11 +592,12 @@
             font-size: 14px;
             font-family: inherit;
             outline: none;
-            background: white;
+            background: #0f1419;
+            color: var(--text-primary);
         }
 
         .cell-editor:focus {
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            box-shadow: 0 0 0 3px rgba(66,133,244,0.15);
         }
 
         .cell-editor-select {
@@ -600,7 +608,8 @@
             font-size: 14px;
             font-family: inherit;
             outline: none;
-            background: white;
+            background: #0f1419;
+            color: var(--text-primary);
             cursor: pointer;
         }
 
@@ -612,7 +621,8 @@
             font-size: 14px;
             font-family: inherit;
             outline: none;
-            background: white;
+            background: #0f1419;
+            color: var(--text-primary);
         }
 
         /* ========== 待办清单样式 ========== */
@@ -688,7 +698,7 @@
         }
 
         .todo-item:hover {
-            background: var(--accent-light);
+            background: rgba(66,133,244,0.06);
         }
 
         .todo-checkbox {
@@ -736,8 +746,8 @@
         }
 
         .todo-tag-category {
-            background: #e0e7ff;
-            color: #4338ca;
+            background: rgba(66,133,244,0.12);
+            color: #4285f4;
         }
 
         .todo-due {
@@ -820,7 +830,7 @@
         }
 
         .modal-close:hover {
-            background: #fee2e2;
+            background: rgba(234,67,53,0.15);
             color: var(--danger);
         }
 
@@ -857,7 +867,7 @@
 
         .form-input:focus, .form-select:focus, .form-textarea:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(79,70,229,0.08);
+            box-shadow: 0 0 0 3px rgba(66,133,244,0.12);
         }
 
         .form-textarea {
@@ -989,21 +999,21 @@
         }
 
         .btn-danger {
-            background: #fee2e2;
+            background: rgba(234,67,53,0.12);
             color: var(--danger);
         }
 
         .btn-danger:hover {
-            background: #fecaca;
+            background: rgba(234,67,53,0.2);
         }
 
         .btn-ghost {
-            background: var(--bg);
+            background: rgba(255,255,255,0.04);
             color: var(--text-secondary);
         }
 
         .btn-ghost:hover {
-            background: #e2e4f0;
+            background: rgba(255,255,255,0.08);
         }
 
         .inline-add-row {
@@ -1177,14 +1187,14 @@
         /* SortableJS 拖拽样式 */
         .sortable-ghost {
             opacity: 0.4;
-            background: var(--accent-light);
+            background: rgba(66,133,244,0.1);
             border: 2px dashed var(--accent);
         }
 
         .sortable-drag {
             opacity: 0.9;
             transform: rotate(2deg);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
         }
 
         /* ========== 可视化分析面板 ========== */
@@ -1225,17 +1235,17 @@
 
         .analytics-kpi-row {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 14px;
             margin-bottom: 20px;
         }
 
         .analytics-kpi {
-            background: linear-gradient(135deg, #f8f9fc, #ffffff);
+            background: rgba(255,255,255,0.03);
             border-radius: 14px;
             padding: 18px 14px;
             text-align: center;
-            border: 1px solid #eef2f7;
+            border: 1px solid rgba(255,255,255,0.06);
             transition: transform 0.2s;
         }
 
@@ -1276,10 +1286,10 @@
         }
 
         .analytics-card {
-            background: #fafbfc;
+            background: rgba(255,255,255,0.03);
             border-radius: 14px;
             padding: 16px;
-            border: 1px solid #eef2f7;
+            border: 1px solid rgba(255,255,255,0.06);
         }
 
         .analytics-card-title {
@@ -1316,7 +1326,7 @@
         .bar-chart-track {
             flex: 1;
             height: 22px;
-            background: #eef2f7;
+            background: rgba(255,255,255,0.05);
             border-radius: 11px;
             overflow: hidden;
             position: relative;
@@ -1381,17 +1391,17 @@
             padding: 8px 6px;
             color: var(--text-muted);
             font-weight: 500;
-            border-bottom: 1px solid #eef2f7;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
 
         .analytics-table td {
             padding: 8px 6px;
-            border-bottom: 1px solid #f5f6f8;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
             color: var(--text-secondary);
         }
 
         .analytics-table tr:hover td {
-            background: #f0f4ff;
+            background: rgba(66,133,244,0.06);
         }
 
         .analytics-tag {
@@ -1402,10 +1412,10 @@
             font-weight: 500;
         }
 
-        .analytics-tag.done { background: #d1fae5; color: #065f46; }
-        .analytics-tag.progress { background: #dbeafe; color: #1e40af; }
-        .analytics-tag.todo { background: #f3f4f6; color: #4b5563; }
-        .analytics-tag.overdue { background: #fee2e2; color: #991b1b; }
+        .analytics-tag.done { background: rgba(52,168,83,0.15); color: #34a853; }
+        .analytics-tag.progress { background: rgba(66,133,244,0.15); color: #4285f4; }
+        .analytics-tag.todo { background: rgba(255,255,255,0.06); color: #9aa0a6; }
+        .analytics-tag.overdue { background: rgba(234,67,53,0.15); color: #ea4335; }
 
         /* ========== 运营仪表盘 ========== */
         .dash-grid {
@@ -1499,10 +1509,12 @@
             min-width: fit-content;
         }
 
-        .dash-bar-fill.cat-1 { background: #6366f1; }
-        .dash-bar-fill.cat-2 { background: #f59e0b; }
-        .dash-bar-fill.cat-3 { background: #10b981; }
-        .dash-bar-fill.cat-4 { background: #ec4899; }
+        .dash-bar-fill.cat-1 { background: #4285f4; }
+        .dash-bar-fill.cat-2 { background: #fbbc04; }
+        .dash-bar-fill.cat-3 { background: #34a853; }
+        .dash-bar-fill.cat-4 { background: #ea4335; }
+        .dash-bar-fill.cat-5 { background: #8ab4f8; }
+        .dash-bar-fill.cat-6 { background: #f28b82; }
 
         .dash-priority-pie {
             display: flex;
@@ -1633,10 +1645,10 @@
             min-height: 180px;
         }
 
-        .quadrant-card.q1 { border-left: 4px solid #ef4444; }
-        .quadrant-card.q2 { border-left: 4px solid #f59e0b; }
-        .quadrant-card.q3 { border-left: 4px solid #3b82f6; }
-        .quadrant-card.q4 { border-left: 4px solid #94a3b8; }
+        .quadrant-card.q1 { border-left: 4px solid #ea4335; }
+        .quadrant-card.q2 { border-left: 4px solid #fbbc04; }
+        .quadrant-card.q3 { border-left: 4px solid #4285f4; }
+        .quadrant-card.q4 { border-left: 4px solid #9aa0a6; }
 
         .quadrant-header {
             display: flex;
@@ -1650,10 +1662,10 @@
             font-weight: 700;
         }
 
-        .quadrant-title.q1 { color: #ef4444; }
-        .quadrant-title.q2 { color: #f59e0b; }
-        .quadrant-title.q3 { color: #3b82f6; }
-        .quadrant-title.q4 { color: #94a3b8; }
+        .quadrant-title.q1 { color: #ea4335; }
+        .quadrant-title.q2 { color: #fbbc04; }
+        .quadrant-title.q3 { color: #4285f4; }
+        .quadrant-title.q4 { color: #9aa0a6; }
 
         .quadrant-count {
             font-size: 11px;
@@ -1682,7 +1694,7 @@
         }
 
         .quadrant-item:hover {
-            background: #e0e7ff;
+            background: rgba(66,133,244,0.1);
         }
 
         .quadrant-item-name {
@@ -1822,7 +1834,7 @@
         .timeline-sidebar {
             width: 260px;
             flex-shrink: 0;
-            background: #fafbfc;
+            background: #141a25;
             border-right: 1px solid var(--border);
         }
 
@@ -1835,7 +1847,7 @@
             font-weight: 600;
             color: var(--text-secondary);
             border-bottom: 1px solid var(--border);
-            background: #f0f1f5;
+            background: #1a1f2e;
         }
 
         .timeline-task-row {
@@ -1850,7 +1862,7 @@
         }
 
         .timeline-task-row:hover {
-            background: var(--accent-light);
+            background: rgba(66,133,244,0.08);
         }
 
         .timeline-task-name {
@@ -1886,7 +1898,7 @@
             height: 44px;
             display: flex;
             border-bottom: 1px solid var(--border);
-            background: #f0f1f5;
+            background: #1a1f2e;
         }
 
         .timeline-header-cell {
@@ -1914,11 +1926,11 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            border-right: 1px dashed #e8e8f0;
+            border-right: 1px dashed rgba(255,255,255,0.06);
         }
 
         .timeline-grid-cell.weekend {
-            background: #f8f9fc;
+            background: rgba(255,255,255,0.02);
         }
 
         .timeline-today-line {
@@ -1969,11 +1981,11 @@
 
         .timeline-bar.done { background: var(--success); }
         .timeline-bar.in-progress { background: var(--accent); }
-        .timeline-bar.todo { background: #9ca3af; }
+        .timeline-bar.todo { background: #5f6368; }
         .timeline-bar.blocked { background: var(--danger); }
         .timeline-bar.overdue {
-            background: #f97316;
-            border: 2px solid #ea580c;
+            background: #f28b82;
+            border: 2px solid #ea4335;
         }
 
         /* ========== 空状态 ========== */
@@ -1993,7 +2005,7 @@
 <body>
     <!-- 顶部导航 -->
     <nav class="top-nav">
-        <div class="nav-brand">📋 个人工作看板</div>
+        <div class="nav-brand">🏢 企业文化工作看板</div>
         <div class="nav-links">
             <a href="../index.html">返回作品集</a>
             <a href="../wheel.html">🎡 转盘</a>
@@ -2053,10 +2065,12 @@
             </div>
             <select class="filter-select" id="filterCategory">
                 <option value="all">所有分类</option>
-                <option value="活动策划">活动策划</option>
-                <option value="媒体运营">媒体运营</option>
-                <option value="视觉设计">视觉设计</option>
+                <option value="文化活动">文化活动</option>
                 <option value="员工关怀">员工关怀</option>
+                <option value="品牌传播">品牌传播</option>
+                <option value="视觉设计">视觉设计</option>
+                <option value="培训发展">培训发展</option>
+                <option value="荣誉激励">荣誉激励</option>
             </select>
             <select class="filter-select" id="filterStatus">
                 <option value="all">所有状态</option>
@@ -2161,10 +2175,12 @@
                         <label class="form-label">分类</label>
                         <input type="text" class="form-input" id="detailCategory" list="categoryList" placeholder="选择或输入">
                         <datalist id="categoryList">
-                            <option value="活动策划">
-                            <option value="媒体运营">
-                            <option value="视觉设计">
+                            <option value="文化活动">
                             <option value="员工关怀">
+                            <option value="品牌传播">
+                            <option value="视觉设计">
+                            <option value="培训发展">
+                            <option value="荣誉激励">
                         </datalist>
                     </div>
                     <div class="form-group">
@@ -2276,7 +2292,7 @@
                 id: "1",
                 name: "2024年度企业文化活动方案",
                 type: "project",
-                category: "活动策划",
+                category: "文化活动",
                 priority: "high",
                 urgency: "urgent",
                 status: "in-progress",
@@ -2293,7 +2309,7 @@
                 id: "2",
                 name: "季度内刊排版设计",
                 type: "task",
-                category: "视觉设计",
+                category: "品牌传播",
                 priority: "medium",
                 urgency: "normal",
                 status: "done",
@@ -2327,7 +2343,7 @@
                 id: "4",
                 name: "年会场地确认与合同签署",
                 type: "task",
-                category: "活动策划",
+                category: "文化活动",
                 priority: "high",
                 urgency: "urgent",
                 status: "blocked",
@@ -2338,6 +2354,108 @@
                 parentId: "1",
                 milestone: false,
                 order: 3,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
+            },
+            {
+                id: "5",
+                name: "新员工入职培训课件制作",
+                type: "task",
+                category: "培训发展",
+                priority: "high",
+                urgency: "normal",
+                status: "in-progress",
+                dueDate: getFutureDate(7),
+                completedDate: null,
+                blocked: false,
+                tags: ["#新员工", "#课件"],
+                parentId: null,
+                milestone: false,
+                order: 4,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
+            },
+            {
+                id: "6",
+                name: "年度评优表彰方案设计",
+                type: "task",
+                category: "荣誉激励",
+                priority: "medium",
+                urgency: "normal",
+                status: "todo",
+                dueDate: getFutureDate(14),
+                completedDate: null,
+                blocked: false,
+                tags: ["#评优", "#表彰"],
+                parentId: null,
+                milestone: false,
+                order: 5,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
+            },
+            {
+                id: "7",
+                name: "VI视觉识别系统更新",
+                type: "project",
+                category: "视觉设计",
+                priority: "high",
+                urgency: "urgent",
+                status: "in-progress",
+                dueDate: getFutureDate(10),
+                completedDate: null,
+                blocked: false,
+                tags: ["#VI", "#品牌"],
+                parentId: null,
+                milestone: true,
+                order: 6,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
+            },
+            {
+                id: "8",
+                name: "端午节团建活动执行",
+                type: "task",
+                category: "文化活动",
+                priority: "medium",
+                urgency: "urgent",
+                status: "todo",
+                dueDate: getFutureDate(2),
+                completedDate: null,
+                blocked: false,
+                tags: ["#端午", "#团建"],
+                parentId: null,
+                milestone: false,
+                order: 7,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
+            },
+            {
+                id: "9",
+                name: "公众号月度内容排期",
+                type: "task",
+                category: "品牌传播",
+                priority: "low",
+                urgency: "normal",
+                status: "done",
+                dueDate: getFutureDate(-3),
+                completedDate: getFutureDate(-3),
+                blocked: false,
+                tags: ["#公众号", "#内容"],
+                parentId: null,
+                milestone: false,
+                order: 8,
+                detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
+            },
+            {
+                id: "10",
+                name: "心理关怀热线宣传海报",
+                type: "task",
+                category: "员工关怀",
+                priority: "medium",
+                urgency: "normal",
+                status: "in-progress",
+                dueDate: getFutureDate(4),
+                completedDate: null,
+                blocked: false,
+                tags: ["#心理", "#海报"],
+                parentId: null,
+                milestone: false,
+                order: 9,
                 detail: { communications: [], achievements: [], changeLogs: [], doc: '' }
             }
         ];
@@ -2649,7 +2767,7 @@
             } else if (field === 'category') {
                 editor = document.createElement('select');
                 editor.className = 'cell-editor-select';
-                const categories = ['活动策划', '媒体运营', '视觉设计', '员工关怀'];
+                const categories = ['文化活动', '员工关怀', '品牌传播', '视觉设计', '培训发展', '荣誉激励'];
                 editor.innerHTML = categories.map(c => 
                     `<option value="${c}" ${currentValue === c ? 'selected' : ''}>${c}</option>`
                 ).join('');
@@ -2784,7 +2902,7 @@
                 id: newId,
                 name: '',
                 type: 'task',
-                category: '活动策划',
+                category: '文化活动',
                 priority: 'medium',
                 urgency: 'normal',
                 status: 'todo',
@@ -2802,7 +2920,7 @@
 
             // 填充表单
             document.getElementById('detailName').value = '';
-            document.getElementById('detailCategory').value = '活动策划';
+            document.getElementById('detailCategory').value = '文化活动';
             document.getElementById('detailPriority').value = 'medium';
             document.getElementById('detailUrgency').value = 'normal';
             document.getElementById('detailStatus').value = 'todo';
@@ -3427,79 +3545,136 @@
             const today = new Date().toISOString().split('T')[0];
             const active = tasks.filter(t => t.status !== 'archived');
 
-            // ====== 运营专属指标 ======
-            // 本月运营项目总数（排除 archived）
-            const opsTotal = active.length;
+            // 6模块完成率对比
+            const catCompletion = CATEGORIES.map(cat => {
+                const catTasks = active.filter(t => t.category === cat.key);
+                const total = catTasks.length;
+                const done = catTasks.filter(t => t.status === 'done').length;
+                return { ...cat, total, done, rate: total > 0 ? Math.round(done / total * 100) : 0 };
+            });
+            const maxRate = Math.max(...catCompletion.map(c => c.rate), 1);
 
-            // 内容产出量（标签含 #内容）
-            const contentCount = active.filter(t => (t.tags || []).some(tag => tag.includes('内容'))).length;
+            // 优先级-紧急度矩阵（四象限热力图）
+            const matrix = {
+                'high-urgent': active.filter(t => t.priority === 'high' && t.urgency === 'urgent').length,
+                'high-normal': active.filter(t => t.priority === 'high' && t.urgency === 'normal').length,
+                'low-urgent': active.filter(t => t.priority !== 'high' && t.urgency === 'urgent').length,
+                'low-normal': active.filter(t => t.priority !== 'high' && t.urgency === 'normal').length
+            };
+            const maxMatrixVal = Math.max(...Object.values(matrix), 1);
 
-            // 活动落地次数（标签含 #活动）
-            const activityCount = active.filter(t => (t.tags || []).some(tag => tag.includes('活动'))).length;
+            // 本周vs上周完成趋势
+            const weekData = getWeekTrend();
 
-            // 运营任务闭环率
-            const opsDone = active.filter(t => t.status === 'done').length;
-            const closeRate = opsTotal > 0 ? Math.round(opsDone / opsTotal * 100) : 0;
-
-            // 延期占比
-            const overdueCount = active.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < today).length;
-            const overdueRate = opsTotal > 0 ? Math.round(overdueCount / opsTotal * 100) : 0;
-
-            // ====== 四象限待办 ======
-            const todoTasks = active.filter(t => t.status !== 'done');
-            const q1 = todoTasks.filter(t => t.priority === 'high' && t.urgency === 'urgent');   // 紧急+重要
-            const q2 = todoTasks.filter(t => t.priority === 'high' && t.urgency !== 'urgent');    // 重要不紧急
-            const q3 = todoTasks.filter(t => t.priority !== 'high' && t.urgency === 'urgent');   // 紧急不重要
-            const q4 = todoTasks.filter(t => t.priority !== 'high' && t.urgency !== 'urgent');    // 其他
-
-            // 今日完成
-            const todayDone = active.filter(t => t.completedDate === today).length;
-            const todoRate = todoTasks.length > 0 ? Math.round(opsDone / active.length * 100) : 0;
+            // 模块健康度评分（0-100分，基于完成率和延期率计算）
+            const healthScores = CATEGORIES.map(cat => {
+                const catTasks = active.filter(t => t.category === cat.key);
+                const total = catTasks.length;
+                if (total === 0) return { ...cat, score: 0, label: '无数据' };
+                const done = catTasks.filter(t => t.status === 'done').length;
+                const overdue = catTasks.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < today).length;
+                const rate = done / total;
+                const overdueRate = overdue / total;
+                // 评分公式：完成率*70 + (1-延期率)*30，封顶100
+                let score = Math.round(rate * 70 + (1 - overdueRate) * 30);
+                if (score < 0) score = 0;
+                let label = '优秀';
+                if (score < 60) label = '告警';
+                else if (score < 80) label = '关注';
+                return { ...cat, score, label, total, done, overdue };
+            });
 
             container.innerHTML = `
             <div class="dash-grid">
-                <!-- 运营专属指标 -->
-                <div class="dash-card full-width">
-                    <div class="dash-card-title">📊 运营数据专属仪表盘</div>
-                    <div class="ops-stat-grid">
-                        <div class="ops-stat-card">
-                            <div class="ops-stat-icon">📋</div>
-                            <div class="ops-stat-num" style="color:var(--accent)">${opsTotal}</div>
-                            <div class="ops-stat-label">本月运营项目总数</div>
+                <!-- 6模块完成率对比 -->
+                <div class="dash-card">
+                    <div class="dash-card-title">📊 6模块完成率对比</div>
+                    <div class="dash-bar-chart">
+                        ${catCompletion.map((c, i) => `
+                        <div class="dash-bar-row">
+                            <span class="dash-bar-label">${c.icon} ${c.key.slice(0,4)}</span>
+                            <div class="dash-bar-track">
+                                <div class="dash-bar-fill cat-${i+1}" style="width:${Math.max(c.rate / maxRate * 100, c.rate > 0 ? 8 : 0)}%">${c.rate}%</div>
+                            </div>
+                        </div>`).join('')}
+                    </div>
+                </div>
+
+                <!-- 优先级-紧急度矩阵 -->
+                <div class="dash-card">
+                    <div class="dash-card-title">🎯 优先级-紧急度矩阵</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+                        <div style="padding:12px;border-radius:10px;background:rgba(234,67,53,${0.1 + matrix['high-urgent']/maxMatrixVal*0.3});border:1px solid rgba(234,67,53,0.2)">
+                            <div style="font-size:11px;color:#ea4335;font-weight:600">高优+紧急</div>
+                            <div style="font-size:22px;font-weight:700;color:var(--text-primary);margin-top:4px">${matrix['high-urgent']}</div>
                         </div>
-                        <div class="ops-stat-card">
-                            <div class="ops-stat-icon">📝</div>
-                            <div class="ops-stat-num" style="color:#10b981">${contentCount}</div>
-                            <div class="ops-stat-label">内容产出量（#内容）</div>
+                        <div style="padding:12px;border-radius:10px;background:rgba(251,188,4,${0.1 + matrix['high-normal']/maxMatrixVal*0.3});border:1px solid rgba(251,188,4,0.2)">
+                            <div style="font-size:11px;color:#fbbc04;font-weight:600">高优+常规</div>
+                            <div style="font-size:22px;font-weight:700;color:var(--text-primary);margin-top:4px">${matrix['high-normal']}</div>
                         </div>
-                        <div class="ops-stat-card">
-                            <div class="ops-stat-icon">🎯</div>
-                            <div class="ops-stat-num" style="color:#f59e0b">${activityCount}</div>
-                            <div class="ops-stat-label">活动落地次数（#活动）</div>
+                        <div style="padding:12px;border-radius:10px;background:rgba(66,133,244,${0.1 + matrix['low-urgent']/maxMatrixVal*0.3});border:1px solid rgba(66,133,244,0.2)">
+                            <div style="font-size:11px;color:#4285f4;font-weight:600">普通+紧急</div>
+                            <div style="font-size:22px;font-weight:700;color:var(--text-primary);margin-top:4px">${matrix['low-urgent']}</div>
                         </div>
-                        <div class="ops-stat-card">
-                            <div class="ops-stat-icon">✅</div>
-                            <div class="ops-stat-num" style="color:var(--success)">${closeRate}%</div>
-                            <div class="ops-stat-label">运营任务闭环率</div>
-                        </div>
-                        <div class="ops-stat-card">
-                            <div class="ops-stat-icon">⚠️</div>
-                            <div class="ops-stat-num" style="color:var(--danger)">${overdueRate}%</div>
-                            <div class="ops-stat-label">运营任务延期占比</div>
+                        <div style="padding:12px;border-radius:10px;background:rgba(255,255,255,${0.03 + matrix['low-normal']/maxMatrixVal*0.06});border:1px solid rgba(255,255,255,0.08)">
+                            <div style="font-size:11px;color:var(--text-muted);font-weight:600">普通+常规</div>
+                            <div style="font-size:22px;font-weight:700;color:var(--text-primary);margin-top:4px">${matrix['low-normal']}</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 环形图行 -->
-                <div class="ops-charts-row">
-                    <div class="dash-card" style="display:flex;justify-content:center;align-items:center">
-                        ${ringChart(closeRate, '#10b981', '任务闭环率')}
+                <!-- 本周vs上周完成趋势 -->
+                <div class="dash-card">
+                    <div class="dash-card-title">📈 本周 vs 上周完成趋势</div>
+                    <div style="display:flex;gap:12px;margin-top:8px">
+                        <div style="flex:1;text-align:center;padding:14px;background:rgba(255,255,255,0.03);border-radius:12px">
+                            <div style="font-size:11px;color:var(--text-muted)">本周完成</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--success);margin-top:4px">${weekData.thisWeek}</div>
+                        </div>
+                        <div style="flex:1;text-align:center;padding:14px;background:rgba(255,255,255,0.03);border-radius:12px">
+                            <div style="font-size:11px;color:var(--text-muted)">上周完成</div>
+                            <div style="font-size:28px;font-weight:700;color:var(--accent);margin-top:4px">${weekData.lastWeek}</div>
+                        </div>
+                        <div style="flex:1;text-align:center;padding:14px;background:rgba(255,255,255,0.03);border-radius:12px">
+                            <div style="font-size:11px;color:var(--text-muted)">环比</div>
+                            <div style="font-size:28px;font-weight:700;color:${weekData.change >= 0 ? 'var(--success)' : 'var(--danger)'};margin-top:4px">${weekData.change >= 0 ? '+' : ''}${weekData.change}%</div>
+                        </div>
                     </div>
-                    <div class="dash-card" style="display:flex;justify-content:center;align-items:center">
-                        ${ringChart(100 - overdueRate, overdueRate > 30 ? '#ef4444' : '#f59e0b', '按时完成率')}
+                    <div style="margin-top:12px;height:80px;display:flex;align-items:flex-end;gap:6px;padding:0 8px">
+                        ${weekData.daily.map((d, i) => {
+                            const maxDay = Math.max(...weekData.daily.map(x => Math.max(x.thisWeek, x.lastWeek)), 1);
+                            const h1 = maxDay > 0 ? (d.thisWeek / maxDay * 60) : 0;
+                            const h2 = maxDay > 0 ? (d.lastWeek / maxDay * 60) : 0;
+                            return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+                                <div style="display:flex;gap:2px;align-items:flex-end;height:60px">
+                                    <div style="width:8px;height:${h1}px;background:var(--success);border-radius:2px;opacity:0.9"></div>
+                                    <div style="width:8px;height:${h2}px;background:rgba(255,255,255,0.15);border-radius:2px"></div>
+                                </div>
+                                <div style="font-size:9px;color:var(--text-muted)">${d.day}</div>
+                            </div>`;
+                        }).join('')}
                     </div>
-                    <div class="dash-card" style="display:flex;justify-content:center;align-items:center">
-                        ${ringChart(opsTotal > 0 ? Math.round((opsTotal - overdueCount - opsDone) / opsTotal * 100) : 0, '#6366f1', '进行中占比')}
+                    <div style="display:flex;gap:12px;justify-content:center;margin-top:4px;font-size:10px">
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--success);margin-right:4px"></span>本周</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:rgba(255,255,255,0.15);margin-right:4px"></span>上周</span>
+                    </div>
+                </div>
+
+                <!-- 模块健康度评分 -->
+                <div class="dash-card">
+                    <div class="dash-card-title">🏥 模块健康度评分</div>
+                    <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+                        ${healthScores.map(h => `
+                        <div style="display:flex;align-items:center;gap:10px">
+                            <div style="width:70px;font-size:12px;color:var(--text-secondary)">${h.icon} ${h.key.slice(0,4)}</div>
+                            <div style="flex:1;height:10px;background:rgba(255,255,255,0.05);border-radius:5px;overflow:hidden">
+                                <div style="width:${h.score}%;height:100%;background:${h.score >= 80 ? '#34a853' : h.score >= 60 ? '#fbbc04' : '#ea4335'};border-radius:5px;transition:width 0.6s"></div>
+                            </div>
+                            <div style="width:50px;text-align:right">
+                                <span style="font-size:14px;font-weight:700;color:var(--text-primary)">${h.score}</span>
+                                <span style="font-size:10px;color:var(--text-muted)">${h.label}</span>
+                            </div>
+                        </div>`).join('')}
                     </div>
                 </div>
 
@@ -3507,13 +3682,13 @@
                 <div class="dash-card full-width">
                     <div class="dash-card-title" style="display:flex;justify-content:space-between;align-items:center">
                         <span>🎯 四象限优先级待办</span>
-                        <span style="font-size:12px;color:var(--text-muted);font-weight:400">今日完成 <strong style="color:var(--accent)">${todayDone}</strong> 项 · 待办完成率 <strong style="color:var(--accent)">${todoRate}%</strong></span>
+                        <span style="font-size:12px;color:var(--text-muted);font-weight:400">今日完成 <strong style="color:var(--accent)">${active.filter(t => t.completedDate === today).length}</strong> 项</span>
                     </div>
                     <div class="quadrant-grid">
-                        ${renderQuadrant('q1', '🔴 紧急且重要', q1)}
-                        ${renderQuadrant('q2', '🟡 重要不紧急', q2)}
-                        ${renderQuadrant('q3', '🔵 紧急不重要', q3)}
-                        ${renderQuadrant('q4', '⚪ 常规事项', q4)}
+                        ${renderQuadrant('q1', '🔴 紧急且重要', active.filter(t => t.status !== 'done' && t.priority === 'high' && t.urgency === 'urgent'))}
+                        ${renderQuadrant('q2', '🟡 重要不紧急', active.filter(t => t.status !== 'done' && t.priority === 'high' && t.urgency === 'normal'))}
+                        ${renderQuadrant('q3', '🔵 紧急不重要', active.filter(t => t.status !== 'done' && t.priority !== 'high' && t.urgency === 'urgent'))}
+                        ${renderQuadrant('q4', '⚪ 常规事项', active.filter(t => t.status !== 'done' && t.priority !== 'high' && t.urgency === 'normal'))}
                     </div>
                 </div>
 
@@ -3525,6 +3700,29 @@
                     </div>
                 </div>
             </div>`;
+        }
+
+        function getWeekTrend() {
+            const today = new Date();
+            const dayOfWeek = today.getDay() || 7; // 1-7
+            const weekStart = new Date(today); weekStart.setDate(today.getDate() - dayOfWeek + 1);
+            const lastWeekStart = new Date(weekStart); lastWeekStart.setDate(weekStart.getDate() - 7);
+            const days = ['一','二','三','四','五','六','日'];
+            const daily = [];
+            let thisWeekTotal = 0, lastWeekTotal = 0;
+            for (let i = 0; i < 7; i++) {
+                const d1 = new Date(weekStart); d1.setDate(weekStart.getDate() + i);
+                const d2 = new Date(lastWeekStart); d2.setDate(lastWeekStart.getDate() + i);
+                const s1 = d1.toISOString().split('T')[0];
+                const s2 = d2.toISOString().split('T')[0];
+                const c1 = tasks.filter(t => t.completedDate === s1).length;
+                const c2 = tasks.filter(t => t.completedDate === s2).length;
+                thisWeekTotal += c1;
+                lastWeekTotal += c2;
+                daily.push({ day: days[i], thisWeek: c1, lastWeek: c2 });
+            }
+            const change = lastWeekTotal > 0 ? Math.round((thisWeekTotal - lastWeekTotal) / lastWeekTotal * 100) : (thisWeekTotal > 0 ? 100 : 0);
+            return { thisWeek: thisWeekTotal, lastWeek: lastWeekTotal, change, daily };
         }
 
         function renderQuadrant(cls, title, items) {
@@ -3753,6 +3951,15 @@
 
         let analyticsCollapsed = false;
 
+        const CATEGORIES = [
+            { key: '文化活动', icon: '🎯', color: '#4285f4' },
+            { key: '员工关怀', icon: '💝', color: '#34a853' },
+            { key: '品牌传播', icon: '📢', color: '#fbbc04' },
+            { key: '视觉设计', icon: '🎨', color: '#ea4335' },
+            { key: '培训发展', icon: '📚', color: '#8ab4f8' },
+            { key: '荣誉激励', icon: '🏆', color: '#f28b82' }
+        ];
+
         function toggleAnalytics() {
             analyticsCollapsed = !analyticsCollapsed;
             const content = document.getElementById('analyticsContent');
@@ -3775,103 +3982,185 @@
             const active = tasks.filter(t => t.status !== 'archived');
             const total = active.length;
 
-            // KPI 计算
-            const doneCount = active.filter(t => t.status === 'done').length;
-            const ipCount = active.filter(t => t.status === 'in-progress').length;
-            const todoCount = active.filter(t => t.status === 'todo').length;
-            const overdueCount = active.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < today).length;
-            const todayDone = active.filter(t => t.completedDate === today).length;
-            const closeRate = total > 0 ? Math.round(doneCount / total * 100) : 0;
+            // 6模块KPI卡片：每个模块显示 任务数/完成率/超期数
+            const catKPIs = CATEGORIES.map(cat => {
+                const catTasks = active.filter(t => t.category === cat.key);
+                const catTotal = catTasks.length;
+                const catDone = catTasks.filter(t => t.status === 'done').length;
+                const catOverdue = catTasks.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < today).length;
+                const catRate = catTotal > 0 ? Math.round(catDone / catTotal * 100) : 0;
+                // 健康度：绿=正常(完成率>=70且超期<=1)、黄=关注(完成率>=50或超期<=2)、红=告警
+                let health = 'green';
+                if (catTotal === 0) health = 'gray';
+                else if (catRate >= 70 && catOverdue <= 1) health = 'green';
+                else if (catRate >= 50 || catOverdue <= 2) health = 'yellow';
+                else health = 'red';
+                const healthColors = { green: '#34a853', yellow: '#fbbc04', red: '#ea4335', gray: '#5f6368' };
+                return { ...cat, catTotal, catDone, catOverdue, catRate, healthColor: healthColors[health] };
+            });
 
-            // 分类统计
-            const categories = ['活动策划', '媒体运营', '视觉设计', '员工关怀'];
-            const catColors = ['#6366f1', '#f59e0b', '#10b981', '#ec4899'];
-            const catCounts = categories.map(cat => active.filter(t => t.category === cat).length);
-            const maxCat = Math.max(...catCounts, 1);
+            // 问题诊断矩阵：横轴=6模块，纵轴=状态，用热力图展示
+            const statuses = ['todo', 'in-progress', 'done', 'blocked'];
+            const statusNames = { 'todo': '待开始', 'in-progress': '进行中', 'done': '已完成', 'blocked': '阻塞' };
+            const matrixData = statuses.map(st => {
+                return CATEGORIES.map(cat => active.filter(t => t.category === cat.key && t.status === st).length);
+            });
+            const maxMatrix = Math.max(...matrixData.flat(), 1);
 
-            // 优先级统计
-            const highCount = active.filter(t => t.priority === 'high').length;
-            const medCount = active.filter(t => t.priority === 'medium').length;
-            const lowCount = active.filter(t => t.priority === 'low').length;
+            // 延期风险雷达：即将到期（3天内）和已超期的任务，按模块分组
+            const soonTasks = active.filter(t => {
+                if (t.status === 'done' || !t.dueDate) return false;
+                const due = new Date(t.dueDate);
+                const now = new Date();
+                const diff = Math.ceil((due - now) / 86400000);
+                return diff >= 0 && diff <= 3;
+            });
+            const overdueTasks = active.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < today);
 
-            // 最近5条任务
-            const recent5 = [...active]
-                .sort((a, b) => b.id.localeCompare(a.id))
-                .slice(0, 5);
+            // 工作负载分布：每个模块的待办/进行中/已完成 堆叠柱状图
+            const workloadData = CATEGORIES.map(cat => {
+                const catTasks = active.filter(t => t.category === cat.key);
+                return {
+                    cat: cat.key,
+                    todo: catTasks.filter(t => t.status === 'todo').length,
+                    inProgress: catTasks.filter(t => t.status === 'in-progress').length,
+                    done: catTasks.filter(t => t.status === 'done').length,
+                    blocked: catTasks.filter(t => t.status === 'blocked').length
+                };
+            });
+            const maxWorkload = Math.max(...workloadData.map(d => d.todo + d.inProgress + d.done + d.blocked), 1);
 
-            // KPI 行
-            kpiEl.innerHTML = `
-                <div class="analytics-kpi">
-                    <div class="analytics-kpi-icon">📋</div>
-                    <div class="analytics-kpi-num" style="color:var(--accent)">${total}</div>
-                    <div class="analytics-kpi-label">任务总数</div>
-                    <div class="analytics-kpi-trend up">+${todayDone} 今日完成</div>
+            // 趋势折线图：最近7天的新增/完成/超期趋势（SVG手绘）
+            const trendDays = 7;
+            const trendData = [];
+            for (let i = trendDays - 1; i >= 0; i--) {
+                const d = new Date(); d.setDate(d.getDate() - i);
+                const ds = d.toISOString().split('T')[0];
+                // 新增：按id中的时间戳或简单按日期（这里用dueDate近似）
+                const added = active.filter(t => t.dueDate === ds).length;
+                const completed = active.filter(t => t.completedDate === ds).length;
+                const overdueDay = active.filter(t => t.dueDate === ds && t.status !== 'done').length;
+                trendData.push({ date: `${d.getMonth()+1}/${d.getDate()}`, added, completed, overdueDay });
+            }
+
+            // 渲染6模块KPI卡片
+            kpiEl.innerHTML = catKPIs.map(k => `
+                <div class="analytics-kpi" style="border-top:3px solid ${k.healthColor}">
+                    <div class="analytics-kpi-icon">${k.icon}</div>
+                    <div class="analytics-kpi-num" style="color:${k.color}">${k.catTotal}</div>
+                    <div class="analytics-kpi-label">${k.key}</div>
+                    <div class="analytics-kpi-trend" style="font-size:11px;margin-top:6px">
+                        <span style="color:var(--success)">${k.catRate}%完成</span> · 
+                        <span style="color:${k.catOverdue > 0 ? 'var(--danger)' : 'var(--text-muted)'}">${k.catOverdue}超期</span>
+                    </div>
                 </div>
-                <div class="analytics-kpi">
-                    <div class="analytics-kpi-icon">✅</div>
-                    <div class="analytics-kpi-num" style="color:var(--success)">${closeRate}%</div>
-                    <div class="analytics-kpi-label">完成率</div>
-                    <div class="analytics-kpi-trend">${doneCount} 已完成</div>
-                </div>
-                <div class="analytics-kpi">
-                    <div class="analytics-kpi-icon">⚡</div>
-                    <div class="analytics-kpi-num" style="color:var(--warning)">${ipCount}</div>
-                    <div class="analytics-kpi-label">进行中</div>
-                    <div class="analytics-kpi-trend">${todoCount} 待开始</div>
-                </div>
-                <div class="analytics-kpi">
-                    <div class="analytics-kpi-icon">⚠️</div>
-                    <div class="analytics-kpi-num" style="color:var(--danger)">${overdueCount}</div>
-                    <div class="analytics-kpi-label">已超期</div>
-                    <div class="analytics-kpi-trend ${overdueCount > 0 ? 'down' : 'up'}">${overdueCount > 0 ? '需关注' : '正常'}</div>
-                </div>`;
+            `).join('');
 
-            // 图表行：分类柱状图 + 优先级环形图 + 最近任务表
+            // 渲染图表行
             chartEl.innerHTML = `
-                <div class="analytics-card">
-                    <div class="analytics-card-title">📁 分类分布</div>
-                    <div class="bar-chart">
-                        ${categories.map((cat, i) => `
-                        <div class="bar-chart-row">
-                            <span class="bar-chart-label">${cat}</span>
-                            <div class="bar-chart-track">
-                                <div class="bar-chart-fill" style="width:${Math.max(catCounts[i] / maxCat * 100, catCounts[i] > 0 ? 10 : 0)}%;background:${catColors[i]}">${catCounts[i]}</div>
-                            </div>
+                <div class="analytics-card" style="grid-column:1/-1">
+                    <div class="analytics-card-title">🔥 问题诊断矩阵（模块 × 状态）</div>
+                    <div style="display:flex;gap:4px;flex-direction:column">
+                        <div style="display:flex;gap:4px;margin-bottom:4px">
+                            <div style="width:60px"></div>
+                            ${CATEGORIES.map(c => `<div style="flex:1;text-align:center;font-size:11px;color:var(--text-muted)">${c.icon}</div>`).join('')}
+                        </div>
+                        ${statuses.map((st, si) => `
+                        <div style="display:flex;gap:4px;align-items:center">
+                            <div style="width:60px;font-size:11px;color:var(--text-secondary)">${statusNames[st]}</div>
+                            ${CATEGORIES.map((c, ci) => {
+                                const val = matrixData[si][ci];
+                                const intensity = val / maxMatrix;
+                                const bg = val > 0 ? `rgba(234,67,53,${0.15 + intensity * 0.6})` : 'rgba(255,255,255,0.03)';
+                                return `<div style="flex:1;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:${intensity > 0.5 ? '#fff' : 'var(--text-secondary)'};background:${bg}">${val || ''}</div>`;
+                            }).join('')}
                         </div>`).join('')}
                     </div>
                 </div>
 
                 <div class="analytics-card">
-                    <div class="analytics-card-title">🎯 优先级占比</div>
-                    <div style="display:flex;justify-content:center;padding:10px 0">
-                        ${ringChart(total > 0 ? Math.round(highCount/total*100) : 0, '#ef4444', '高优先级')}
+                    <div class="analytics-card-title">🚨 延期风险雷达</div>
+                    <div style="margin-bottom:12px">
+                        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">即将到期（3天内）· ${soonTasks.length}项</div>
+                        ${soonTasks.length === 0 ? '<div style="font-size:12px;color:var(--text-muted);padding:8px 0">暂无</div>' : soonTasks.slice(0, 5).map(t => {
+                            const cat = CATEGORIES.find(c => c.key === t.category) || CATEGORIES[0];
+                            return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(255,255,255,0.03);border-radius:6px;margin-bottom:4px;font-size:12px">
+                                <span style="color:var(--text-primary)">${t.name}</span>
+                                <span style="color:${cat.color};font-size:11px">${cat.icon} ${t.dueDate}</span>
+                            </div>`;
+                        }).join('')}
                     </div>
-                    <div style="display:flex;justify-content:center;gap:12px;margin-top:8px">
-                        <span style="font-size:11px;color:var(--text-muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:4px"></span>高 ${highCount}</span>
-                        <span style="font-size:11px;color:var(--text-muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f59e0b;margin-right:4px"></span>中 ${medCount}</span>
-                        <span style="font-size:11px;color:var(--text-muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#6366f1;margin-right:4px"></span>低 ${lowCount}</span>
+                    <div>
+                        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">已超期 · ${overdueTasks.length}项</div>
+                        ${overdueTasks.length === 0 ? '<div style="font-size:12px;color:var(--text-muted);padding:8px 0">暂无</div>' : overdueTasks.slice(0, 5).map(t => {
+                            const cat = CATEGORIES.find(c => c.key === t.category) || CATEGORIES[0];
+                            return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(234,67,53,0.08);border-radius:6px;margin-bottom:4px;font-size:12px">
+                                <span style="color:var(--text-primary)">${t.name}</span>
+                                <span style="color:var(--danger);font-size:11px">${cat.icon} ${t.dueDate}</span>
+                            </div>`;
+                        }).join('')}
                     </div>
                 </div>
 
                 <div class="analytics-card">
-                    <div class="analytics-card-title">📝 最近任务</div>
-                    <table class="analytics-table">
-                        <thead><tr><th>任务</th><th>状态</th><th>分类</th></tr></thead>
-                        <tbody>
-                            ${recent5.map(t => {
-                                let tagClass = 'todo';
-                                if (t.status === 'done') tagClass = 'done';
-                                else if (t.status === 'in-progress') tagClass = 'progress';
-                                else if (t.dueDate && t.dueDate < today) tagClass = 'overdue';
-                                return `<tr onclick="openTaskDetail('${t.id}')" style="cursor:pointer">
-                                    <td>${t.name}</td>
-                                    <td><span class="analytics-tag ${tagClass}">${statusLabel(t.status)}</span></td>
-                                    <td>${t.category}</td>
-                                </tr>`;
-                            }).join('')}
-                        </tbody>
-                    </table>
+                    <div class="analytics-card-title">📊 工作负载分布</div>
+                    <div style="display:flex;flex-direction:column;gap:8px">
+                        ${workloadData.map(d => {
+                            const totalBar = d.todo + d.inProgress + d.done + d.blocked;
+                            const todoW = totalBar > 0 ? (d.todo / maxWorkload * 100) : 0;
+                            const ipW = totalBar > 0 ? (d.inProgress / maxWorkload * 100) : 0;
+                            const doneW = totalBar > 0 ? (d.done / maxWorkload * 100) : 0;
+                            const blockW = totalBar > 0 ? (d.blocked / maxWorkload * 100) : 0;
+                            return `<div style="display:flex;align-items:center;gap:8px">
+                                <div style="width:70px;font-size:11px;color:var(--text-secondary);text-align:right">${d.cat.slice(0,4)}</div>
+                                <div style="flex:1;height:20px;background:rgba(255,255,255,0.05);border-radius:10px;overflow:hidden;display:flex">
+                                    <div style="width:${todoW}%;background:#5f6368"></div>
+                                    <div style="width:${ipW}%;background:#4285f4"></div>
+                                    <div style="width:${doneW}%;background:#34a853"></div>
+                                    <div style="width:${blockW}%;background:#ea4335"></div>
+                                </div>
+                                <div style="width:28px;font-size:11px;color:var(--text-muted);text-align:right">${totalBar}</div>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                    <div style="display:flex;gap:12px;justify-content:center;margin-top:10px;font-size:10px">
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#5f6368;margin-right:4px"></span>待办</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#4285f4;margin-right:4px"></span>进行中</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#34a853;margin-right:4px"></span>已完成</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#ea4335;margin-right:4px"></span>阻塞</span>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="analytics-card-title">📈 7天趋势</div>
+                    <svg width="100%" height="140" viewBox="0 0 280 140" style="overflow:visible">
+                        ${renderTrendLine(trendData, 'added', '#4285f4', 280, 140)}
+                        ${renderTrendLine(trendData, 'completed', '#34a853', 280, 140)}
+                        ${renderTrendLine(trendData, 'overdueDay', '#ea4335', 280, 140)}
+                        ${trendData.map((d, i) => `<text x="${20 + i * (240 / (trendData.length - 1))}" y="135" font-size="9" fill="#6b7280" text-anchor="middle">${d.date}</text>`).join('')}
+                    </svg>
+                    <div style="display:flex;gap:12px;justify-content:center;margin-top:4px;font-size:10px">
+                        <span><span style="display:inline-block;width:12px;height:2px;background:#4285f4;margin-right:4px;vertical-align:middle"></span>新增</span>
+                        <span><span style="display:inline-block;width:12px;height:2px;background:#34a853;margin-right:4px;vertical-align:middle"></span>完成</span>
+                        <span><span style="display:inline-block;width:12px;height:2px;background:#ea4335;margin-right:4px;vertical-align:middle"></span>超期</span>
+                    </div>
                 </div>`;
+        }
+
+        function renderTrendLine(data, key, color, w, h) {
+            if (data.length < 2) return '';
+            const maxVal = Math.max(...data.map(d => d[key]), 1);
+            const points = data.map((d, i) => {
+                const x = 20 + i * ((w - 40) / (data.length - 1));
+                const y = h - 20 - (d[key] / maxVal) * (h - 40);
+                return `${x},${y}`;
+            }).join(' ');
+            return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+                ${data.map((d, i) => {
+                    const x = 20 + i * ((w - 40) / (data.length - 1));
+                    const y = h - 20 - (d[key] / maxVal) * (h - 40);
+                    return `<circle cx="${x}" cy="${y}" r="3" fill="${color}"/>`;
+                }).join('')}`;
         }
 
         // ==================== 初始化 ====================
