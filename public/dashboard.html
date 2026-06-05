@@ -1187,6 +1187,226 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
+        /* ========== 可视化分析面板 ========== */
+        .analytics-panel {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .analytics-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .analytics-toggle {
+            font-size: 12px;
+            color: var(--accent);
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 8px;
+            background: var(--accent-light);
+            border: none;
+        }
+
+        .analytics-kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .analytics-kpi {
+            background: linear-gradient(135deg, #f8f9fc, #ffffff);
+            border-radius: 14px;
+            padding: 18px 14px;
+            text-align: center;
+            border: 1px solid #eef2f7;
+            transition: transform 0.2s;
+        }
+
+        .analytics-kpi:hover {
+            transform: translateY(-2px);
+        }
+
+        .analytics-kpi-icon {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .analytics-kpi-num {
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .analytics-kpi-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .analytics-kpi-trend {
+            font-size: 10px;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .analytics-kpi-trend.up { color: var(--success); }
+        .analytics-kpi-trend.down { color: var(--danger); }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .analytics-card {
+            background: #fafbfc;
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid #eef2f7;
+        }
+
+        .analytics-card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 柱状图 */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bar-chart-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bar-chart-label {
+            width: 70px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .bar-chart-track {
+            flex: 1;
+            height: 22px;
+            background: #eef2f7;
+            border-radius: 11px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-chart-fill {
+            height: 100%;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #fff;
+            transition: width 0.6s ease;
+            min-width: fit-content;
+        }
+
+        /* 迷你折线图 */
+        .sparkline-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sparkline-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sparkline-label {
+            width: 60px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .sparkline-svg {
+            flex: 1;
+            height: 30px;
+        }
+
+        .sparkline-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex-shrink: 0;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        /* 数据表格 */
+        .analytics-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .analytics-table th {
+            text-align: left;
+            padding: 8px 6px;
+            color: var(--text-muted);
+            font-weight: 500;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .analytics-table td {
+            padding: 8px 6px;
+            border-bottom: 1px solid #f5f6f8;
+            color: var(--text-secondary);
+        }
+
+        .analytics-table tr:hover td {
+            background: #f0f4ff;
+        }
+
+        .analytics-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .analytics-tag.done { background: #d1fae5; color: #065f46; }
+        .analytics-tag.progress { background: #dbeafe; color: #1e40af; }
+        .analytics-tag.todo { background: #f3f4f6; color: #4b5563; }
+        .analytics-tag.overdue { background: #fee2e2; color: #991b1b; }
+
         /* ========== 运营仪表盘 ========== */
         .dash-grid {
             display: grid;
@@ -1811,6 +2031,18 @@
                     <div class="kpi-value" id="kpiOverdue">0%</div>
                     <div class="kpi-bar-wrap"><div class="kpi-bar-fill" id="kpiOverdueBar" style="width:0%"></div></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- 可视化分析面板 -->
+        <div class="analytics-panel" id="analyticsPanel">
+            <div class="analytics-header">
+                <span class="analytics-title">📊 工作可视化分析看板</span>
+                <button class="analytics-toggle" onclick="toggleAnalytics()">收起 ▲</button>
+            </div>
+            <div id="analyticsContent">
+                <div class="analytics-kpi-row" id="analyticsKPIs"></div>
+                <div class="analytics-grid" id="analyticsCharts"></div>
             </div>
         </div>
 
@@ -3517,6 +3749,131 @@
             renderGantt();
         }
 
+        // ==================== 可视化分析面板 ====================
+
+        let analyticsCollapsed = false;
+
+        function toggleAnalytics() {
+            analyticsCollapsed = !analyticsCollapsed;
+            const content = document.getElementById('analyticsContent');
+            const btn = document.querySelector('.analytics-toggle');
+            if (analyticsCollapsed) {
+                content.style.display = 'none';
+                btn.textContent = '展开 ▼';
+            } else {
+                content.style.display = 'block';
+                btn.textContent = '收起 ▲';
+            }
+        }
+
+        function renderAnalyticsPanel() {
+            const kpiEl = document.getElementById('analyticsKPIs');
+            const chartEl = document.getElementById('analyticsCharts');
+            if (!kpiEl || !chartEl) return;
+
+            const today = new Date().toISOString().split('T')[0];
+            const active = tasks.filter(t => t.status !== 'archived');
+            const total = active.length;
+
+            // KPI 计算
+            const doneCount = active.filter(t => t.status === 'done').length;
+            const ipCount = active.filter(t => t.status === 'in-progress').length;
+            const todoCount = active.filter(t => t.status === 'todo').length;
+            const overdueCount = active.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < today).length;
+            const todayDone = active.filter(t => t.completedDate === today).length;
+            const closeRate = total > 0 ? Math.round(doneCount / total * 100) : 0;
+
+            // 分类统计
+            const categories = ['活动策划', '媒体运营', '视觉设计', '员工关怀'];
+            const catColors = ['#6366f1', '#f59e0b', '#10b981', '#ec4899'];
+            const catCounts = categories.map(cat => active.filter(t => t.category === cat).length);
+            const maxCat = Math.max(...catCounts, 1);
+
+            // 优先级统计
+            const highCount = active.filter(t => t.priority === 'high').length;
+            const medCount = active.filter(t => t.priority === 'medium').length;
+            const lowCount = active.filter(t => t.priority === 'low').length;
+
+            // 最近5条任务
+            const recent5 = [...active]
+                .sort((a, b) => b.id.localeCompare(a.id))
+                .slice(0, 5);
+
+            // KPI 行
+            kpiEl.innerHTML = `
+                <div class="analytics-kpi">
+                    <div class="analytics-kpi-icon">📋</div>
+                    <div class="analytics-kpi-num" style="color:var(--accent)">${total}</div>
+                    <div class="analytics-kpi-label">任务总数</div>
+                    <div class="analytics-kpi-trend up">+${todayDone} 今日完成</div>
+                </div>
+                <div class="analytics-kpi">
+                    <div class="analytics-kpi-icon">✅</div>
+                    <div class="analytics-kpi-num" style="color:var(--success)">${closeRate}%</div>
+                    <div class="analytics-kpi-label">完成率</div>
+                    <div class="analytics-kpi-trend">${doneCount} 已完成</div>
+                </div>
+                <div class="analytics-kpi">
+                    <div class="analytics-kpi-icon">⚡</div>
+                    <div class="analytics-kpi-num" style="color:var(--warning)">${ipCount}</div>
+                    <div class="analytics-kpi-label">进行中</div>
+                    <div class="analytics-kpi-trend">${todoCount} 待开始</div>
+                </div>
+                <div class="analytics-kpi">
+                    <div class="analytics-kpi-icon">⚠️</div>
+                    <div class="analytics-kpi-num" style="color:var(--danger)">${overdueCount}</div>
+                    <div class="analytics-kpi-label">已超期</div>
+                    <div class="analytics-kpi-trend ${overdueCount > 0 ? 'down' : 'up'}">${overdueCount > 0 ? '需关注' : '正常'}</div>
+                </div>`;
+
+            // 图表行：分类柱状图 + 优先级环形图 + 最近任务表
+            chartEl.innerHTML = `
+                <div class="analytics-card">
+                    <div class="analytics-card-title">📁 分类分布</div>
+                    <div class="bar-chart">
+                        ${categories.map((cat, i) => `
+                        <div class="bar-chart-row">
+                            <span class="bar-chart-label">${cat}</span>
+                            <div class="bar-chart-track">
+                                <div class="bar-chart-fill" style="width:${Math.max(catCounts[i] / maxCat * 100, catCounts[i] > 0 ? 10 : 0)}%;background:${catColors[i]}">${catCounts[i]}</div>
+                            </div>
+                        </div>`).join('')}
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="analytics-card-title">🎯 优先级占比</div>
+                    <div style="display:flex;justify-content:center;padding:10px 0">
+                        ${ringChart(total > 0 ? Math.round(highCount/total*100) : 0, '#ef4444', '高优先级')}
+                    </div>
+                    <div style="display:flex;justify-content:center;gap:12px;margin-top:8px">
+                        <span style="font-size:11px;color:var(--text-muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:4px"></span>高 ${highCount}</span>
+                        <span style="font-size:11px;color:var(--text-muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f59e0b;margin-right:4px"></span>中 ${medCount}</span>
+                        <span style="font-size:11px;color:var(--text-muted)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#6366f1;margin-right:4px"></span>低 ${lowCount}</span>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <div class="analytics-card-title">📝 最近任务</div>
+                    <table class="analytics-table">
+                        <thead><tr><th>任务</th><th>状态</th><th>分类</th></tr></thead>
+                        <tbody>
+                            ${recent5.map(t => {
+                                let tagClass = 'todo';
+                                if (t.status === 'done') tagClass = 'done';
+                                else if (t.status === 'in-progress') tagClass = 'progress';
+                                else if (t.dueDate && t.dueDate < today) tagClass = 'overdue';
+                                return `<tr onclick="openTaskDetail('${t.id}')" style="cursor:pointer">
+                                    <td>${t.name}</td>
+                                    <td><span class="analytics-tag ${tagClass}">${statusLabel(t.status)}</span></td>
+                                    <td>${t.category}</td>
+                                </tr>`;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>`;
+        }
+
         // ==================== 初始化 ====================
         loadTasks();
         updateKPI();
@@ -3527,6 +3884,7 @@
         renderKanban();
         renderDashboard();
         renderGantt();
+        renderAnalyticsPanel();
         bindFilters();
         bindTodoFilters();
     </script>
