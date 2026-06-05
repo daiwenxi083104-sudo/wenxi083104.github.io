@@ -8,46 +8,68 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #0a0e14;
-            --card-bg: #1e2330;
-            --text-primary: #e8eaed;
-            --text-secondary: #9aa0a6;
-            --text-muted: #6b7280;
-            --border: rgba(255,255,255,0.12);
-            --accent: #4285f4;
-            --accent-light: rgba(66,133,244,0.12);
-            --success: #34a853;
-            --warning: #fbbc04;
-            --danger: #ea4335;
-            --shadow: 0 2px 8px rgba(0,0,0,0.4);
-            --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
+            --bg: #f8f9fc;
+            --bg-gradient: linear-gradient(135deg, #f0f2f8 0%, #e8ecf4 100%);
+            --card-bg: #ffffff;
+            --card-bg-hover: #fafbff;
+            --text-primary: #1a1d2e;
+            --text-secondary: #5a6072;
+            --text-muted: #9ca3af;
+            --border: #e5e7f0;
+            --border-light: #f0f1f5;
+            --accent: #4f46e5;
+            --accent-hover: #4338ca;
+            --accent-light: #eef2ff;
+            --accent-bg: rgba(79,70,229,0.06);
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --info: #2563eb;
+            --info-light: #dbeafe;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.06), 0 2px 4px -2px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.06), 0 4px 6px -4px rgba(0,0,0,0.04);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background: var(--bg);
             color: var(--text-primary);
             min-width: 1200px;
-            line-height: 1.45;
-            font-size: 14px;
-            letter-spacing: -0.01em;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* ========== 顶部导航 ========== */
         .top-nav {
             background: var(--card-bg);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
             padding: 0 32px;
             height: 56px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: var(--shadow-sm);
         }
 
         .nav-brand {
             font-size: 17px;
             font-weight: 700;
-            color: var(--text-primary);
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing: 0.3px;
         }
 
@@ -69,11 +91,12 @@
 
         /* 导出下拉菜单 */
         .export-dropdown { position: relative; }
-        .export-btn { padding: 6px 14px; border-radius: 8px; background: var(--accent); color: #fff; border: none; font-size: 13px; cursor: pointer; }
-        .export-menu { display: none; position: absolute; right: 0; top: 36px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 6px; min-width: 140px; z-index: 100; }
+        .export-btn { padding: 6px 14px; border-radius: 10px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; border: none; font-size: 13px; cursor: pointer; transition: var(--transition); font-weight: 500; }
+        .export-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .export-menu { display: none; position: absolute; right: 0; top: 36px; background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 12px; padding: 6px; min-width: 140px; z-index: 100; box-shadow: var(--shadow-lg); }
         .export-menu.show { display: block; }
-        .export-item { padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; color: var(--text-secondary); }
-        .export-item:hover { background: var(--accent-light); color: var(--accent); }
+        .export-item { padding: 8px 12px; border-radius: 8px; font-size: 13px; cursor: pointer; color: var(--text-secondary); transition: var(--transition); }
+        .export-item:hover { background: var(--accent-bg); color: var(--accent); }
 
         /* ========== 主容器 ========== */
         .main-container {
@@ -92,14 +115,19 @@
 
         .goal-card {
             background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
             padding: 20px 24px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
             flex: 0 0 320px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            transition: var(--transition);
+        }
+
+        .goal-card:hover {
+            box-shadow: var(--shadow-md);
         }
 
         .goal-label {
@@ -139,19 +167,26 @@
 
         .kpi-card {
             background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
             padding: 20px 24px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            transition: box-shadow 0.2s;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
         }
 
+        .kpi-card:nth-child(1) { border-left-color: var(--accent); }
+        .kpi-card:nth-child(2) { border-left-color: var(--success); }
+        .kpi-card:nth-child(3) { border-left-color: var(--warning); }
+        .kpi-card:nth-child(4) { border-left-color: var(--danger); }
+
         .kpi-card:hover {
-            box-shadow: var(--shadow-hover);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
         }
 
         .kpi-label {
@@ -176,7 +211,7 @@
         .kpi-bar-wrap {
             margin-top: 10px;
             height: 6px;
-            background: var(--bg);
+            background: var(--border-light);
             border-radius: 3px;
             overflow: hidden;
         }
@@ -209,16 +244,17 @@
             width: 100%;
             padding: 10px 16px 10px 40px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 13px;
             background: var(--card-bg);
             color: var(--text-primary);
             outline: none;
-            transition: border-color 0.2s;
+            transition: var(--transition);
         }
 
         .search-box input:focus {
             border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
         }
 
         .search-box input::placeholder {
@@ -238,7 +274,7 @@
         .filter-select {
             padding: 10px 32px 10px 14px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 13px;
             background: var(--card-bg);
             color: var(--text-secondary);
@@ -246,32 +282,34 @@
             outline: none;
             min-width: 140px;
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
+            transition: var(--transition);
         }
 
         .filter-select:focus {
             border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
         }
 
         .btn-add-task {
             padding: 8px 18px;
             border: none;
-            border-radius: 8px;
-            background: var(--accent);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
             color: #fff;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             white-space: nowrap;
             flex-shrink: 0;
         }
 
         .btn-add-task:hover {
-            opacity: 0.85;
             transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
         /* ========== Tab 切换栏 ========== */
@@ -279,11 +317,10 @@
             display: flex;
             gap: 4px;
             margin-bottom: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
+            background: var(--border-light);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
             padding: 4px;
-            box-shadow: var(--shadow);
         }
 
         .tab-btn {
@@ -294,30 +331,31 @@
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.2s;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
             white-space: nowrap;
         }
 
         .tab-btn:hover {
-            background: var(--bg);
+            background: var(--card-bg);
             color: var(--text-primary);
         }
 
         .tab-btn.active {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+            background: var(--card-bg);
+            color: var(--accent);
+            box-shadow: var(--shadow-sm);
+            font-weight: 600;
         }
 
         /* ========== 内容容器 ========== */
         .content-area {
             background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
             padding: 40px;
             min-height: 400px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
             margin-bottom: 20px;
         }
 
@@ -345,10 +383,15 @@
 
         .risk-card {
             background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
             padding: 20px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .risk-card:hover {
+            box-shadow: var(--shadow-md);
         }
 
         .risk-card.danger { border-left: 4px solid var(--danger); }
@@ -377,7 +420,7 @@
             font-size: 12px;
             padding: 2px 8px;
             border-radius: 10px;
-            background: var(--bg);
+            background: var(--border-light);
             color: var(--text-muted);
         }
 
@@ -389,8 +432,8 @@
 
         .risk-item {
             padding: 8px 12px;
-            background: var(--bg);
-            border-radius: 6px;
+            background: var(--border-light);
+            border-radius: 8px;
             margin-bottom: 8px;
             font-size: 13px;
             color: var(--text-secondary);
@@ -403,7 +446,7 @@
         }
 
         .risk-item:hover {
-            background: #e0e7ff;
+            background: var(--accent-bg);
         }
 
         .risk-item-link {
@@ -447,7 +490,7 @@
         }
 
         .task-table thead {
-            background: var(--bg);
+            background: #f8f9fc;
         }
 
         .task-table th {
@@ -455,7 +498,7 @@
             text-align: left;
             font-weight: 600;
             color: var(--text-secondary);
-            border-bottom: 2px solid var(--border);
+            border-bottom: 2px solid var(--border-light);
             cursor: pointer;
             user-select: none;
             white-space: nowrap;
@@ -463,7 +506,7 @@
         }
 
         .task-table th:hover {
-            background: rgba(66,133,244,0.08);
+            background: var(--accent-bg);
         }
 
         .task-table th .sort-indicator {
@@ -486,13 +529,13 @@
 
         .task-table td {
             padding: 12px 16px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
             color: var(--text-primary);
             vertical-align: middle;
         }
 
         .task-table tbody tr:hover {
-            background: rgba(66,133,244,0.06);
+            background: var(--accent-bg);
         }
 
         .task-table tbody tr:hover td {
@@ -509,18 +552,18 @@
         }
 
         .priority-high {
-            background: rgba(234,67,53,0.15);
-            color: #ff6b6b;
+            background: var(--danger-light);
+            color: var(--danger);
         }
 
         .priority-medium {
-            background: rgba(251,188,4,0.15);
-            color: #fbbc04;
+            background: var(--warning-light);
+            color: var(--warning);
         }
 
         .priority-low {
-            background: rgba(66,133,244,0.15);
-            color: #4285f4;
+            background: var(--info-light);
+            color: var(--info);
         }
 
         /* 状态标签 */
@@ -533,28 +576,28 @@
         }
 
         .status-todo {
-            background: rgba(255,255,255,0.06);
-            color: #9aa0a6;
+            background: var(--border-light);
+            color: var(--text-muted);
         }
 
         .status-in-progress {
-            background: rgba(66,133,244,0.15);
-            color: #4285f4;
+            background: var(--info-light);
+            color: var(--info);
         }
 
         .status-done {
-            background: rgba(52,168,83,0.15);
-            color: #34a853;
+            background: var(--success-light);
+            color: var(--success);
         }
 
         .status-blocked {
-            background: rgba(234,67,53,0.15);
-            color: #ea4335;
+            background: var(--danger-light);
+            color: var(--danger);
         }
 
         .status-archived {
-            background: rgba(255,255,255,0.04);
-            color: #6b7280;
+            background: var(--border-light);
+            color: var(--text-muted);
         }
 
         /* 紧急度标签 */
@@ -567,28 +610,28 @@
         }
 
         .urgency-urgent {
-            background: rgba(234,67,53,0.15);
-            color: #ff6b6b;
+            background: var(--danger-light);
+            color: var(--danger);
         }
 
         .urgency-normal {
-            background: rgba(255,255,255,0.06);
-            color: #9aa0a6;
+            background: var(--border-light);
+            color: var(--text-muted);
         }
 
         /* 阻塞标记 */
         .blocked-yes {
-            color: #ea4335;
+            color: var(--danger);
             font-weight: 600;
         }
 
         .blocked-no {
-            color: #6b7280;
+            color: var(--text-muted);
         }
 
         /* 内联编辑样式 */
         .cell-editing {
-            background: rgba(66,133,244,0.08) !important;
+            background: var(--accent-bg) !important;
             box-shadow: inset 0 0 0 2px var(--accent);
         }
 
@@ -600,12 +643,12 @@
             font-size: 14px;
             font-family: inherit;
             outline: none;
-            background: #0f1419;
+            background: var(--card-bg);
             color: var(--text-primary);
         }
 
         .cell-editor:focus {
-            box-shadow: 0 0 0 3px rgba(66,133,244,0.15);
+            box-shadow: 0 0 0 3px var(--accent-light);
         }
 
         .cell-editor-select {
@@ -616,7 +659,7 @@
             font-size: 14px;
             font-family: inherit;
             outline: none;
-            background: #0f1419;
+            background: var(--card-bg);
             color: var(--text-primary);
             cursor: pointer;
         }
@@ -629,7 +672,7 @@
             font-size: 14px;
             font-family: inherit;
             outline: none;
-            background: #0f1419;
+            background: var(--card-bg);
             color: var(--text-primary);
         }
 
@@ -651,7 +694,7 @@
         }
 
         .todo-stats span {
-            background: var(--bg);
+            background: var(--border-light);
             padding: 4px 12px;
             border-radius: 12px;
         }
@@ -674,7 +717,7 @@
             color: var(--text-secondary);
             font-size: 13px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
         }
 
         .todo-filter-btn:hover {
@@ -697,7 +740,7 @@
             align-items: center;
             gap: 12px;
             padding: 14px 16px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
             transition: background 0.15s;
         }
 
@@ -706,7 +749,7 @@
         }
 
         .todo-item:hover {
-            background: rgba(66,133,244,0.06);
+            background: var(--accent-bg);
         }
 
         .todo-checkbox {
@@ -754,8 +797,8 @@
         }
 
         .todo-tag-category {
-            background: rgba(66,133,244,0.12);
-            color: #4285f4;
+            background: var(--accent-light);
+            color: var(--accent);
         }
 
         .todo-due {
@@ -786,7 +829,9 @@
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.45);
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             z-index: 1000;
             justify-content: center;
             align-items: flex-start;
@@ -800,10 +845,10 @@
 
         .modal-box {
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: var(--radius-xl);
             width: 100%;
             max-width: 680px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-xl);
             animation: modalIn 0.25s ease;
         }
 
@@ -817,7 +862,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
         }
 
         .modal-title {
@@ -829,7 +874,7 @@
         .modal-close {
             width: 32px; height: 32px;
             border: none;
-            background: var(--bg);
+            background: var(--border-light);
             border-radius: 8px;
             font-size: 18px;
             cursor: pointer;
@@ -838,7 +883,7 @@
         }
 
         .modal-close:hover {
-            background: rgba(234,67,53,0.15);
+            background: var(--danger-light);
             color: var(--danger);
         }
 
@@ -864,18 +909,18 @@
             width: 100%;
             padding: 10px 14px;
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 14px;
             font-family: inherit;
             color: var(--text-primary);
             background: var(--card-bg);
             outline: none;
-            transition: border-color 0.2s;
+            transition: var(--transition);
         }
 
         .form-input:focus, .form-select:focus, .form-textarea:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(66,133,244,0.12);
+            box-shadow: 0 0 0 3px var(--accent-light);
         }
 
         .form-textarea {
@@ -911,7 +956,7 @@
         .detail-section {
             margin-top: 20px;
             padding-top: 16px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--border-light);
         }
 
         .detail-section-title {
@@ -946,8 +991,8 @@
 
         .detail-list-item {
             padding: 8px 12px;
-            background: var(--bg);
-            border-radius: 6px;
+            background: var(--border-light);
+            border-radius: 8px;
             margin-bottom: 6px;
             font-size: 13px;
             color: var(--text-secondary);
@@ -984,44 +1029,45 @@
             justify-content: flex-end;
             gap: 10px;
             padding: 16px 24px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid var(--border-light);
         }
 
         .btn {
             padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: var(--transition);
         }
 
         .btn-primary {
-            background: var(--accent);
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
             color: #fff;
         }
 
         .btn-primary:hover {
-            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
 
         .btn-danger {
-            background: rgba(234,67,53,0.12);
+            background: var(--danger-light);
             color: var(--danger);
         }
 
         .btn-danger:hover {
-            background: rgba(234,67,53,0.2);
+            background: #fecaca;
         }
 
         .btn-ghost {
-            background: rgba(255,255,255,0.04);
+            background: var(--border-light);
             color: var(--text-secondary);
         }
 
         .btn-ghost:hover {
-            background: rgba(255,255,255,0.08);
+            background: var(--border);
         }
 
         .inline-add-row {
@@ -1071,14 +1117,19 @@
         .kanban-lane {
             flex-shrink: 0;
             width: 320px;
-            background: var(--bg);
-            border-radius: 12px;
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
             padding: 16px;
             display: flex;
             flex-direction: column;
             max-height: 70vh;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .kanban-lane:hover {
+            box-shadow: var(--shadow-md);
         }
 
         .kanban-lane-header {
@@ -1087,7 +1138,7 @@
             align-items: center;
             margin-bottom: 12px;
             padding-bottom: 10px;
-            border-bottom: 2px solid var(--border);
+            border-bottom: 2px solid var(--border-light);
         }
 
         .kanban-lane-title {
@@ -1098,7 +1149,7 @@
 
         .kanban-lane-count {
             font-size: 12px;
-            background: var(--card-bg);
+            background: var(--border-light);
             padding: 2px 10px;
             border-radius: 10px;
             color: var(--text-secondary);
@@ -1112,16 +1163,17 @@
 
         .kanban-card {
             background: var(--card-bg);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-light);
             border-radius: 10px;
             padding: 14px;
             margin-bottom: 10px;
             cursor: grab;
             transition: box-shadow 0.2s, transform 0.15s;
+            border-left: 3px solid var(--accent);
         }
 
         .kanban-card:hover {
-            box-shadow: var(--shadow-hover);
+            box-shadow: var(--shadow-md);
             transform: translateY(-2px);
         }
 
@@ -1166,7 +1218,7 @@
         .kanban-progress-bar {
             flex: 1;
             height: 6px;
-            background: var(--bg);
+            background: var(--border-light);
             border-radius: 3px;
             overflow: hidden;
         }
@@ -1197,24 +1249,24 @@
         /* SortableJS 拖拽样式 */
         .sortable-ghost {
             opacity: 0.4;
-            background: rgba(66,133,244,0.1);
+            background: var(--accent-bg);
             border: 2px dashed var(--accent);
         }
 
         .sortable-drag {
             opacity: 0.9;
             transform: rotate(2deg);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            box-shadow: var(--shadow-lg);
         }
 
         /* ========== 可视化分析面板 ========== */
         .analytics-panel {
             background: var(--card-bg);
-            border-radius: 20px;
+            border-radius: var(--radius-xl);
             padding: 24px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-light);
             margin-bottom: 20px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
         }
 
         .analytics-header {
@@ -1251,16 +1303,18 @@
         }
 
         .analytics-kpi {
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             border-radius: 14px;
             padding: 18px 14px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.06);
-            transition: transform 0.2s;
+            border: 1px solid var(--border-light);
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: var(--shadow-sm);
         }
 
         .analytics-kpi:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .analytics-kpi-icon {
@@ -1296,10 +1350,11 @@
         }
 
         .analytics-card {
-            background: rgba(255,255,255,0.03);
+            background: var(--card-bg);
             border-radius: 14px;
             padding: 16px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
         }
 
         .analytics-card-title {
@@ -1336,7 +1391,7 @@
         .bar-chart-track {
             flex: 1;
             height: 22px;
-            background: rgba(255,255,255,0.05);
+            background: var(--border-light);
             border-radius: 11px;
             overflow: hidden;
             position: relative;
@@ -1401,17 +1456,17 @@
             padding: 8px 6px;
             color: var(--text-muted);
             font-weight: 500;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid var(--border-light);
         }
 
         .analytics-table td {
             padding: 8px 6px;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid var(--border-light);
             color: var(--text-secondary);
         }
 
         .analytics-table tr:hover td {
-            background: rgba(66,133,244,0.06);
+            background: var(--accent-bg);
         }
 
         .analytics-tag {
@@ -1422,10 +1477,10 @@
             font-weight: 500;
         }
 
-        .analytics-tag.done { background: rgba(52,168,83,0.15); color: #34a853; }
-        .analytics-tag.progress { background: rgba(66,133,244,0.15); color: #4285f4; }
-        .analytics-tag.todo { background: rgba(255,255,255,0.06); color: #9aa0a6; }
-        .analytics-tag.overdue { background: rgba(234,67,53,0.15); color: #ea4335; }
+        .analytics-tag.done { background: var(--success-light); color: var(--success); }
+        .analytics-tag.progress { background: var(--info-light); color: var(--info); }
+        .analytics-tag.todo { background: var(--border-light); color: var(--text-muted); }
+        .analytics-tag.overdue { background: var(--danger-light); color: var(--danger); }
 
         /* ========== 运营仪表盘 ========== */
         .dash-grid {
@@ -1437,9 +1492,15 @@
 
         .dash-card {
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: var(--radius-lg);
             padding: 20px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .dash-card:hover {
+            box-shadow: var(--shadow-md);
         }
 
         .dash-card-title {
@@ -1501,7 +1562,7 @@
         .dash-bar-track {
             flex: 1;
             height: 24px;
-            background: var(--bg);
+            background: var(--border-light);
             border-radius: 12px;
             overflow: hidden;
         }
@@ -1519,12 +1580,12 @@
             min-width: fit-content;
         }
 
-        .dash-bar-fill.cat-1 { background: #4285f4; }
-        .dash-bar-fill.cat-2 { background: #fbbc04; }
-        .dash-bar-fill.cat-3 { background: #34a853; }
-        .dash-bar-fill.cat-4 { background: #ea4335; }
-        .dash-bar-fill.cat-5 { background: #8ab4f8; }
-        .dash-bar-fill.cat-6 { background: #f28b82; }
+        .dash-bar-fill.cat-1 { background: var(--info); }
+        .dash-bar-fill.cat-2 { background: var(--warning); }
+        .dash-bar-fill.cat-3 { background: var(--success); }
+        .dash-bar-fill.cat-4 { background: var(--danger); }
+        .dash-bar-fill.cat-5 { background: #818cf8; }
+        .dash-bar-fill.cat-6 { background: #f87171; }
 
         .dash-priority-pie {
             display: flex;
@@ -1609,7 +1670,7 @@
 
         .ring-chart-bg {
             fill: none;
-            stroke: var(--bg);
+            stroke: var(--border-light);
             stroke-width: 10;
         }
 
@@ -1651,14 +1712,15 @@
             background: var(--card-bg);
             border-radius: 14px;
             padding: 16px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-light);
             min-height: 180px;
+            box-shadow: var(--shadow-sm);
         }
 
-        .quadrant-card.q1 { border-left: 4px solid #ea4335; }
-        .quadrant-card.q2 { border-left: 4px solid #fbbc04; }
-        .quadrant-card.q3 { border-left: 4px solid #4285f4; }
-        .quadrant-card.q4 { border-left: 4px solid #9aa0a6; }
+        .quadrant-card.q1 { border-left: 4px solid var(--danger); }
+        .quadrant-card.q2 { border-left: 4px solid var(--warning); }
+        .quadrant-card.q3 { border-left: 4px solid var(--info); }
+        .quadrant-card.q4 { border-left: 4px solid var(--text-muted); }
 
         .quadrant-header {
             display: flex;
@@ -1672,14 +1734,14 @@
             font-weight: 700;
         }
 
-        .quadrant-title.q1 { color: #ea4335; }
-        .quadrant-title.q2 { color: #fbbc04; }
-        .quadrant-title.q3 { color: #4285f4; }
-        .quadrant-title.q4 { color: #9aa0a6; }
+        .quadrant-title.q1 { color: var(--danger); }
+        .quadrant-title.q2 { color: var(--warning); }
+        .quadrant-title.q3 { color: var(--info); }
+        .quadrant-title.q4 { color: var(--text-muted); }
 
         .quadrant-count {
             font-size: 11px;
-            background: var(--bg);
+            background: var(--border-light);
             padding: 2px 8px;
             border-radius: 10px;
             color: var(--text-secondary);
@@ -1691,7 +1753,7 @@
 
         .quadrant-item {
             padding: 8px 10px;
-            background: var(--bg);
+            background: var(--border-light);
             border-radius: 8px;
             margin-bottom: 6px;
             font-size: 12px;
@@ -1704,7 +1766,7 @@
         }
 
         .quadrant-item:hover {
-            background: rgba(66,133,244,0.1);
+            background: var(--accent-bg);
         }
 
         .quadrant-item-name {
@@ -1740,13 +1802,15 @@
             background: var(--card-bg);
             border-radius: 14px;
             padding: 18px 14px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-light);
             text-align: center;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: var(--shadow-sm);
         }
 
         .ops-stat-card:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .ops-stat-icon {
@@ -1775,11 +1839,11 @@
         /* ========== 甘特图（自定义时间轴） ========== */
         .gantt-container {
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: var(--radius-lg);
             padding: 20px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-light);
             overflow-x: auto;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
         }
 
         .gantt-toolbar {
@@ -1812,7 +1876,7 @@
             color: var(--text-secondary);
             font-size: 12px;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: var(--transition);
         }
 
         .gantt-btn:hover {
@@ -1837,7 +1901,7 @@
         .timeline-wrap {
             display: flex;
             min-width: 800px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-light);
             border-radius: 12px;
             overflow: hidden;
         }
@@ -1845,8 +1909,8 @@
         .timeline-sidebar {
             width: 260px;
             flex-shrink: 0;
-            background: #141a25;
-            border-right: 1px solid var(--border);
+            background: #f8f9fc;
+            border-right: 1px solid var(--border-light);
         }
 
         .timeline-sidebar-header {
@@ -1857,8 +1921,8 @@
             font-size: 12px;
             font-weight: 600;
             color: var(--text-secondary);
-            border-bottom: 1px solid var(--border);
-            background: #1a1f2e;
+            border-bottom: 1px solid var(--border-light);
+            background: #f0f1f5;
         }
 
         .timeline-task-row {
@@ -1866,14 +1930,14 @@
             display: flex;
             align-items: center;
             padding: 0 14px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
             gap: 8px;
             cursor: pointer;
             transition: background 0.15s;
         }
 
         .timeline-task-row:hover {
-            background: rgba(66,133,244,0.08);
+            background: var(--accent-bg);
         }
 
         .timeline-task-name {
@@ -1908,8 +1972,8 @@
         .timeline-header {
             height: 44px;
             display: flex;
-            border-bottom: 1px solid var(--border);
-            background: #1a1f2e;
+            border-bottom: 1px solid var(--border-light);
+            background: #f0f1f5;
         }
 
         .timeline-header-cell {
@@ -1919,7 +1983,7 @@
             justify-content: center;
             font-size: 11px;
             color: var(--text-secondary);
-            border-right: 1px solid var(--border);
+            border-right: 1px solid var(--border-light);
             font-weight: 500;
         }
 
@@ -1929,7 +1993,7 @@
 
         .timeline-grid-row {
             height: 48px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
             position: relative;
         }
 
@@ -1937,11 +2001,11 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            border-right: 1px dashed rgba(255,255,255,0.06);
+            border-right: 1px dashed var(--border-light);
         }
 
         .timeline-grid-cell.weekend {
-            background: rgba(255,255,255,0.02);
+            background: #f8f9fc;
         }
 
         .timeline-today-line {
@@ -1949,7 +2013,7 @@
             top: 0;
             bottom: 0;
             width: 2px;
-            background: #ea4335;
+            background: var(--accent);
             z-index: 5;
             pointer-events: none;
         }
@@ -1959,7 +2023,7 @@
             top: -20px;
             left: -16px;
             font-size: 10px;
-            color: #ea4335;
+            color: var(--accent);
             font-weight: 600;
             white-space: nowrap;
         }
@@ -1986,17 +2050,17 @@
 
         .timeline-bar:hover {
             transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+            box-shadow: var(--shadow-md);
             z-index: 3;
         }
 
-        .timeline-bar.done { background: #34a853; }
-        .timeline-bar.in-progress { background: #4285f4; }
-        .timeline-bar.todo { background: #5f6368; }
-        .timeline-bar.blocked { background: #ea4335; }
+        .timeline-bar.done { background: var(--success); }
+        .timeline-bar.in-progress { background: var(--info); }
+        .timeline-bar.todo { background: #9ca3af; }
+        .timeline-bar.blocked { background: var(--danger); }
         .timeline-bar.overdue {
-            background: #fbbc04;
-            border: 2px solid #ea4335;
+            background: var(--warning);
+            border: 2px solid var(--danger);
         }
 
         /* ========== 空状态 ========== */
@@ -2641,7 +2705,7 @@
 
         // 渲染日期
         function renderDate(date) {
-            return date || '<span style="color:#94a3b8">-</span>';
+            return date || '<span style="color:var(--text-muted)">-</span>';
         }
 
         // 主渲染函数
@@ -3623,19 +3687,19 @@
                 <div class="dash-card">
                     <div class="dash-card-title">🎯 优先级-紧急度矩阵</div>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
-                        <div style="padding:12px;border-radius:10px;background:rgba(234,67,53,${0.1 + matrix['high-urgent']/maxMatrixVal*0.3});border:1px solid rgba(234,67,53,0.2)">
-                            <div style="font-size:11px;color:#ea4335;font-weight:600">高优+紧急</div>
+                        <div style="padding:12px;border-radius:10px;background:rgba(220,38,38,${0.08 + matrix['high-urgent']/maxMatrixVal*0.15});border:1px solid rgba(220,38,38,0.15)">
+                            <div style="font-size:11px;color:var(--danger);font-weight:600">高优+紧急</div>
                             <div style="font-size:22px;font-weight:700;color:var(--text-primary);margin-top:4px">${matrix['high-urgent']}</div>
                         </div>
-                        <div style="padding:12px;border-radius:10px;background:rgba(251,188,4,${0.1 + matrix['high-normal']/maxMatrixVal*0.3});border:1px solid rgba(251,188,4,0.2)">
-                            <div style="font-size:11px;color:#fbbc04;font-weight:600">高优+常规</div>
+                        <div style="padding:12px;border-radius:10px;background:rgba(217,119,6,${0.08 + matrix['high-normal']/maxMatrixVal*0.15});border:1px solid rgba(217,119,6,0.15)">
+                            <div style="font-size:11px;color:var(--warning);font-weight:600">高优+常规</div>
                             <div style="font-size:22px;font-weight:700;color:var(--text-primary);margin-top:4px">${matrix['high-normal']}</div>
                         </div>
-                        <div style="padding:12px;border-radius:10px;background:rgba(66,133,244,${0.1 + matrix['low-urgent']/maxMatrixVal*0.3});border:1px solid rgba(66,133,244,0.2)">
-                            <div style="font-size:11px;color:#4285f4;font-weight:600">普通+紧急</div>
+                        <div style="padding:12px;border-radius:10px;background:rgba(37,99,235,${0.08 + matrix['low-urgent']/maxMatrixVal*0.15});border:1px solid rgba(37,99,235,0.15)">
+                            <div style="font-size:11px;color:var(--info);font-weight:600">普通+紧急</div>
                             <div style="font-size:22px;font-weight:700;color:var(--text-primary);margin-top:4px">${matrix['low-urgent']}</div>
                         </div>
-                        <div style="padding:12px;border-radius:10px;background:rgba(255,255,255,${0.03 + matrix['low-normal']/maxMatrixVal*0.06});border:1px solid rgba(255,255,255,0.08)">
+                        <div style="padding:12px;border-radius:10px;background:var(--border-light);border:1px solid var(--border)">
                             <div style="font-size:11px;color:var(--text-muted);font-weight:600">普通+常规</div>
                             <div style="font-size:22px;font-weight:700;color:var(--text-primary);margin-top:4px">${matrix['low-normal']}</div>
                         </div>
@@ -3646,15 +3710,15 @@
                 <div class="dash-card">
                     <div class="dash-card-title">📈 本周 vs 上周完成趋势</div>
                     <div style="display:flex;gap:12px;margin-top:8px">
-                        <div style="flex:1;text-align:center;padding:14px;background:rgba(255,255,255,0.03);border-radius:12px">
+                        <div style="flex:1;text-align:center;padding:14px;background:var(--border-light);border-radius:12px">
                             <div style="font-size:11px;color:var(--text-muted)">本周完成</div>
                             <div style="font-size:28px;font-weight:700;color:var(--success);margin-top:4px">${weekData.thisWeek}</div>
                         </div>
-                        <div style="flex:1;text-align:center;padding:14px;background:rgba(255,255,255,0.03);border-radius:12px">
+                        <div style="flex:1;text-align:center;padding:14px;background:var(--border-light);border-radius:12px">
                             <div style="font-size:11px;color:var(--text-muted)">上周完成</div>
                             <div style="font-size:28px;font-weight:700;color:var(--accent);margin-top:4px">${weekData.lastWeek}</div>
                         </div>
-                        <div style="flex:1;text-align:center;padding:14px;background:rgba(255,255,255,0.03);border-radius:12px">
+                        <div style="flex:1;text-align:center;padding:14px;background:var(--border-light);border-radius:12px">
                             <div style="font-size:11px;color:var(--text-muted)">环比</div>
                             <div style="font-size:28px;font-weight:700;color:${weekData.change >= 0 ? 'var(--success)' : 'var(--danger)'};margin-top:4px">${weekData.change >= 0 ? '+' : ''}${weekData.change}%</div>
                         </div>
@@ -3667,7 +3731,7 @@
                             return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
                                 <div style="display:flex;gap:2px;align-items:flex-end;height:60px">
                                     <div style="width:8px;height:${h1}px;background:var(--success);border-radius:2px;opacity:0.9"></div>
-                                    <div style="width:8px;height:${h2}px;background:rgba(255,255,255,0.15);border-radius:2px"></div>
+                                    <div style="width:8px;height:${h2}px;background:var(--border);border-radius:2px"></div>
                                 </div>
                                 <div style="font-size:9px;color:var(--text-muted)">${d.day}</div>
                             </div>`;
@@ -3675,7 +3739,7 @@
                     </div>
                     <div style="display:flex;gap:12px;justify-content:center;margin-top:4px;font-size:10px">
                         <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--success);margin-right:4px"></span>本周</span>
-                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:rgba(255,255,255,0.15);margin-right:4px"></span>上周</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--border);margin-right:4px"></span>上周</span>
                     </div>
                 </div>
 
@@ -3686,8 +3750,8 @@
                         ${healthScores.map(h => `
                         <div style="display:flex;align-items:center;gap:10px">
                             <div style="width:70px;font-size:12px;color:var(--text-secondary)">${h.icon} ${h.key.slice(0,4)}</div>
-                            <div style="flex:1;height:10px;background:rgba(255,255,255,0.05);border-radius:5px;overflow:hidden">
-                                <div style="width:${h.score}%;height:100%;background:${h.score >= 80 ? '#34a853' : h.score >= 60 ? '#fbbc04' : '#ea4335'};border-radius:5px;transition:width 0.6s"></div>
+                            <div style="flex:1;height:10px;background:var(--border-light);border-radius:5px;overflow:hidden">
+                                <div style="width:${h.score}%;height:100%;background:${h.score >= 80 ? 'var(--success)' : h.score >= 60 ? 'var(--warning)' : 'var(--danger)'};border-radius:5px;transition:width 0.6s"></div>
                             </div>
                             <div style="width:50px;text-align:right">
                                 <span style="font-size:14px;font-weight:700;color:var(--text-primary)">${h.score}</span>
@@ -3833,35 +3897,35 @@
             // 生成任务行
             let sidebarRows = '';
             let gridRows = '';
-            const priorityColor = { high: '#fee2e2', medium: '#fef3c7', low: '#e0e7ff' };
+            const priorityColor = { high: '#fee2e2', medium: '#fef3c7', low: '#eef2ff' };
             const priorityText = { high: '高', medium: '中', low: '低' };
 
             ganttTasks.forEach(t => {
                 const statusColors = {
-                    done: 'rgba(52,168,83,0.15)',
-                    'in-progress': 'rgba(66,133,244,0.15)',
-                    todo: 'rgba(255,255,255,0.06)',
-                    blocked: 'rgba(234,67,53,0.15)'
+                    done: 'var(--success-light)',
+                    'in-progress': 'var(--info-light)',
+                    todo: 'var(--border-light)',
+                    blocked: 'var(--danger-light)'
                 };
                 const statusLabels = {
-                    done: '✅ 已完成',
-                    'in-progress': '🔵 进行中',
-                    todo: '⚪ 待开始',
-                    blocked: '🔴 阻塞'
+                    done: '已完成',
+                    'in-progress': '进行中',
+                    todo: '待开始',
+                    blocked: '阻塞'
                 };
                 const statusTextColors = {
-                    done: '#34a853',
-                    'in-progress': '#4285f4',
-                    todo: '#9aa0a6',
-                    blocked: '#ea4335'
+                    done: 'var(--success)',
+                    'in-progress': 'var(--info)',
+                    todo: 'var(--text-muted)',
+                    blocked: 'var(--danger)'
                 };
 
                 sidebarRows += `
                 <div class="timeline-task-row" onclick="openTaskDetail('${t.id}')">
                     <span class="timeline-task-name" title="${t.name}">${t.name}</span>
                     <div class="timeline-task-meta">
-                        <span class="timeline-task-tag" style="background:${statusColors[t.status]||'rgba(255,255,255,0.06)'};color:${statusTextColors[t.status]||'#9aa0a6'}">${statusLabels[t.status]||t.status}</span>
-                        <span class="timeline-task-tag" style="background:${priorityColor[t.priority]||'rgba(255,255,255,0.06)'};color:${t.priority==='high'?'#ff6b6b':t.priority==='medium'?'#fbbc04':'#4285f4'}">${priorityText[t.priority]||t.priority}</span>
+                        <span class="timeline-task-tag" style="background:${statusColors[t.status]||'var(--border-light)'};color:${statusTextColors[t.status]||'var(--text-muted)'}">${statusLabels[t.status]||t.status}</span>
+                        <span class="timeline-task-tag" style="background:${priorityColor[t.priority]||'var(--border-light)'};color:${t.priority==='high'?'var(--danger)':t.priority==='medium'?'var(--warning)':'var(--info)'}">${priorityText[t.priority]||t.priority}</span>
                     </div>
                 </div>`;
 
@@ -4118,12 +4182,12 @@
         let analyticsCollapsed = false;
 
         const CATEGORIES = [
-            { key: '文化活动', icon: '🎯', color: '#4285f4' },
-            { key: '员工关怀', icon: '💝', color: '#34a853' },
-            { key: '品牌传播', icon: '📢', color: '#fbbc04' },
-            { key: '视觉设计', icon: '🎨', color: '#ea4335' },
-            { key: '培训发展', icon: '📚', color: '#8ab4f8' },
-            { key: '荣誉激励', icon: '🏆', color: '#f28b82' }
+            { key: '文化活动', icon: '🎯', color: '#4f46e5' },
+            { key: '员工关怀', icon: '💝', color: '#059669' },
+            { key: '品牌传播', icon: '📢', color: '#d97706' },
+            { key: '视觉设计', icon: '🎨', color: '#dc2626' },
+            { key: '培训发展', icon: '📚', color: '#6366f1' },
+            { key: '荣誉激励', icon: '🏆', color: '#e11d48' }
         ];
 
         function toggleAnalytics() {
@@ -4161,7 +4225,7 @@
                 else if (catRate >= 70 && catOverdue <= 1) health = 'green';
                 else if (catRate >= 50 || catOverdue <= 2) health = 'yellow';
                 else health = 'red';
-                const healthColors = { green: '#34a853', yellow: '#fbbc04', red: '#ea4335', gray: '#5f6368' };
+                const healthColors = { green: '#059669', yellow: '#d97706', red: '#dc2626', gray: '#9ca3af' };
                 return { ...cat, catTotal, catDone, catOverdue, catRate, healthColor: healthColors[health] };
             });
 
@@ -4237,7 +4301,7 @@
                             ${CATEGORIES.map((c, ci) => {
                                 const val = matrixData[si][ci];
                                 const intensity = val / maxMatrix;
-                                const bg = val > 0 ? `rgba(234,67,53,${0.15 + intensity * 0.6})` : 'rgba(255,255,255,0.03)';
+                                const bg = val > 0 ? `rgba(220,38,38,${0.1 + intensity * 0.4})` : 'var(--border-light)';
                                 return `<div style="flex:1;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:${intensity > 0.5 ? '#fff' : 'var(--text-secondary)'};background:${bg}">${val || ''}</div>`;
                             }).join('')}
                         </div>`).join('')}
@@ -4250,7 +4314,7 @@
                         <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">即将到期（3天内）· ${soonTasks.length}项</div>
                         ${soonTasks.length === 0 ? '<div style="font-size:12px;color:var(--text-muted);padding:8px 0">暂无</div>' : soonTasks.slice(0, 5).map(t => {
                             const cat = CATEGORIES.find(c => c.key === t.category) || CATEGORIES[0];
-                            return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(255,255,255,0.03);border-radius:6px;margin-bottom:4px;font-size:12px">
+                            return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:var(--border-light);border-radius:6px;margin-bottom:4px;font-size:12px">
                                 <span style="color:var(--text-primary)">${t.name}</span>
                                 <span style="color:${cat.color};font-size:11px">${cat.icon} ${t.dueDate}</span>
                             </div>`;
@@ -4260,7 +4324,7 @@
                         <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px">已超期 · ${overdueTasks.length}项</div>
                         ${overdueTasks.length === 0 ? '<div style="font-size:12px;color:var(--text-muted);padding:8px 0">暂无</div>' : overdueTasks.slice(0, 5).map(t => {
                             const cat = CATEGORIES.find(c => c.key === t.category) || CATEGORIES[0];
-                            return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:rgba(234,67,53,0.08);border-radius:6px;margin-bottom:4px;font-size:12px">
+                            return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:var(--danger-light);border-radius:6px;margin-bottom:4px;font-size:12px">
                                 <span style="color:var(--text-primary)">${t.name}</span>
                                 <span style="color:var(--danger);font-size:11px">${cat.icon} ${t.dueDate}</span>
                             </div>`;
@@ -4279,36 +4343,36 @@
                             const blockW = totalBar > 0 ? (d.blocked / maxWorkload * 100) : 0;
                             return `<div style="display:flex;align-items:center;gap:8px">
                                 <div style="width:70px;font-size:11px;color:var(--text-secondary);text-align:right">${d.cat.slice(0,4)}</div>
-                                <div style="flex:1;height:20px;background:rgba(255,255,255,0.05);border-radius:10px;overflow:hidden;display:flex">
-                                    <div style="width:${todoW}%;background:#5f6368"></div>
-                                    <div style="width:${ipW}%;background:#4285f4"></div>
-                                    <div style="width:${doneW}%;background:#34a853"></div>
-                                    <div style="width:${blockW}%;background:#ea4335"></div>
+                                <div style="flex:1;height:20px;background:var(--border-light);border-radius:10px;overflow:hidden;display:flex">
+                                    <div style="width:${todoW}%;background:#9ca3af"></div>
+                                    <div style="width:${ipW}%;background:var(--info)"></div>
+                                    <div style="width:${doneW}%;background:var(--success)"></div>
+                                    <div style="width:${blockW}%;background:var(--danger)"></div>
                                 </div>
                                 <div style="width:28px;font-size:11px;color:var(--text-muted);text-align:right">${totalBar}</div>
                             </div>`;
                         }).join('')}
                     </div>
                     <div style="display:flex;gap:12px;justify-content:center;margin-top:10px;font-size:10px">
-                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#5f6368;margin-right:4px"></span>待办</span>
-                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#4285f4;margin-right:4px"></span>进行中</span>
-                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#34a853;margin-right:4px"></span>已完成</span>
-                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#ea4335;margin-right:4px"></span>阻塞</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#9ca3af;margin-right:4px"></span>待办</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--info);margin-right:4px"></span>进行中</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--success);margin-right:4px"></span>已完成</span>
+                        <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--danger);margin-right:4px"></span>阻塞</span>
                     </div>
                 </div>
 
                 <div class="analytics-card">
                     <div class="analytics-card-title">📈 7天趋势</div>
                     <svg width="100%" height="140" viewBox="0 0 280 140" style="overflow:visible">
-                        ${renderTrendLine(trendData, 'added', '#4285f4', 280, 140)}
-                        ${renderTrendLine(trendData, 'completed', '#34a853', 280, 140)}
-                        ${renderTrendLine(trendData, 'overdueDay', '#ea4335', 280, 140)}
-                        ${trendData.map((d, i) => `<text x="${20 + i * (240 / (trendData.length - 1))}" y="135" font-size="9" fill="#6b7280" text-anchor="middle">${d.date}</text>`).join('')}
+                        ${renderTrendLine(trendData, 'added', '#4f46e5', 280, 140)}
+                        ${renderTrendLine(trendData, 'completed', '#059669', 280, 140)}
+                        ${renderTrendLine(trendData, 'overdueDay', '#dc2626', 280, 140)}
+                        ${trendData.map((d, i) => `<text x="${20 + i * (240 / (trendData.length - 1))}" y="135" font-size="9" fill="#9ca3af" text-anchor="middle">${d.date}</text>`).join('')}
                     </svg>
                     <div style="display:flex;gap:12px;justify-content:center;margin-top:4px;font-size:10px">
-                        <span><span style="display:inline-block;width:12px;height:2px;background:#4285f4;margin-right:4px;vertical-align:middle"></span>新增</span>
-                        <span><span style="display:inline-block;width:12px;height:2px;background:#34a853;margin-right:4px;vertical-align:middle"></span>完成</span>
-                        <span><span style="display:inline-block;width:12px;height:2px;background:#ea4335;margin-right:4px;vertical-align:middle"></span>超期</span>
+                        <span><span style="display:inline-block;width:12px;height:2px;background:#4f46e5;margin-right:4px;vertical-align:middle"></span>新增</span>
+                        <span><span style="display:inline-block;width:12px;height:2px;background:#059669;margin-right:4px;vertical-align:middle"></span>完成</span>
+                        <span><span style="display:inline-block;width:12px;height:2px;background:#dc2626;margin-right:4px;vertical-align:middle"></span>超期</span>
                     </div>
                 </div>`;
         }
