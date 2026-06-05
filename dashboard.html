@@ -8,19 +8,19 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #0f1419;
-            --card-bg: #1a1f2e;
+            --bg: #0a0e14;
+            --card-bg: #1e2330;
             --text-primary: #e8eaed;
             --text-secondary: #9aa0a6;
             --text-muted: #6b7280;
-            --border: rgba(255,255,255,0.08);
+            --border: rgba(255,255,255,0.12);
             --accent: #4285f4;
             --accent-light: rgba(66,133,244,0.12);
             --success: #34a853;
             --warning: #fbbc04;
             --danger: #ea4335;
-            --shadow: 0 1px 3px rgba(0,0,0,0.25);
-            --shadow-hover: 0 4px 12px rgba(0,0,0,0.35);
+            --shadow: 0 2px 8px rgba(0,0,0,0.4);
+            --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
         }
 
         body {
@@ -66,6 +66,14 @@
         .nav-links a:hover {
             color: var(--accent);
         }
+
+        /* 导出下拉菜单 */
+        .export-dropdown { position: relative; }
+        .export-btn { padding: 6px 14px; border-radius: 8px; background: var(--accent); color: #fff; border: none; font-size: 13px; cursor: pointer; }
+        .export-menu { display: none; position: absolute; right: 0; top: 36px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 6px; min-width: 140px; z-index: 100; }
+        .export-menu.show { display: block; }
+        .export-item { padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; color: var(--text-secondary); }
+        .export-item:hover { background: var(--accent-light); color: var(--accent); }
 
         /* ========== 主容器 ========== */
         .main-container {
@@ -1069,6 +1077,8 @@
             display: flex;
             flex-direction: column;
             max-height: 70vh;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
 
         .kanban-lane-header {
@@ -1111,7 +1121,7 @@
         }
 
         .kanban-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-hover);
             transform: translateY(-2px);
         }
 
@@ -1204,7 +1214,7 @@
             padding: 24px;
             border: 1px solid var(--border);
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            box-shadow: var(--shadow);
         }
 
         .analytics-header {
@@ -1769,6 +1779,7 @@
             padding: 20px;
             border: 1px solid var(--border);
             overflow-x: auto;
+            box-shadow: var(--shadow);
         }
 
         .gantt-toolbar {
@@ -1938,7 +1949,7 @@
             top: 0;
             bottom: 0;
             width: 2px;
-            background: var(--danger);
+            background: #ea4335;
             z-index: 5;
             pointer-events: none;
         }
@@ -1948,7 +1959,7 @@
             top: -20px;
             left: -16px;
             font-size: 10px;
-            color: var(--danger);
+            color: #ea4335;
             font-weight: 600;
             white-space: nowrap;
         }
@@ -1979,12 +1990,12 @@
             z-index: 3;
         }
 
-        .timeline-bar.done { background: var(--success); }
-        .timeline-bar.in-progress { background: var(--accent); }
+        .timeline-bar.done { background: #34a853; }
+        .timeline-bar.in-progress { background: #4285f4; }
         .timeline-bar.todo { background: #5f6368; }
-        .timeline-bar.blocked { background: var(--danger); }
+        .timeline-bar.blocked { background: #ea4335; }
         .timeline-bar.overdue {
-            background: #f28b82;
+            background: #fbbc04;
             border: 2px solid #ea4335;
         }
 
@@ -2007,6 +2018,14 @@
     <nav class="top-nav">
         <div class="nav-brand">🏢 企业文化工作看板</div>
         <div class="nav-links">
+            <div class="export-dropdown">
+                <button class="export-btn" onclick="toggleExportMenu()">📥 导出</button>
+                <div class="export-menu" id="exportMenu">
+                    <div class="export-item" onclick="exportCSV()">导出 CSV</div>
+                    <div class="export-item" onclick="exportJSON()">导出 JSON</div>
+                    <div class="export-item" onclick="exportWeeklyReport()">生成周报</div>
+                </div>
+            </div>
             <a href="../index.html">返回作品集</a>
             <a href="../wheel.html">🎡 转盘</a>
             <a href="../draw.html">🎲 抽签</a>
@@ -3819,24 +3838,30 @@
 
             ganttTasks.forEach(t => {
                 const statusColors = {
-                    done: '#dcfce7',
-                    'in-progress': '#dbeafe',
-                    todo: '#f3f4f6',
-                    blocked: '#fee2e2'
+                    done: 'rgba(52,168,83,0.15)',
+                    'in-progress': 'rgba(66,133,244,0.15)',
+                    todo: 'rgba(255,255,255,0.06)',
+                    blocked: 'rgba(234,67,53,0.15)'
                 };
                 const statusLabels = {
-                    done: '已完成',
-                    'in-progress': '进行中',
-                    todo: '待开始',
-                    blocked: '阻塞'
+                    done: '✅ 已完成',
+                    'in-progress': '🔵 进行中',
+                    todo: '⚪ 待开始',
+                    blocked: '🔴 阻塞'
+                };
+                const statusTextColors = {
+                    done: '#34a853',
+                    'in-progress': '#4285f4',
+                    todo: '#9aa0a6',
+                    blocked: '#ea4335'
                 };
 
                 sidebarRows += `
                 <div class="timeline-task-row" onclick="openTaskDetail('${t.id}')">
                     <span class="timeline-task-name" title="${t.name}">${t.name}</span>
                     <div class="timeline-task-meta">
-                        <span class="timeline-task-tag" style="background:${statusColors[t.status]||'#f3f4f6'};color:${t.status==='done'?'#166534':t.status==='in-progress'?'#1e40af':t.status==='blocked'?'#991b1b':'#4b5563'}">${statusLabels[t.status]||t.status}</span>
-                        <span class="timeline-task-tag" style="background:${priorityColor[t.priority]||'#f3f4f6'};color:#374151">${priorityText[t.priority]||t.priority}</span>
+                        <span class="timeline-task-tag" style="background:${statusColors[t.status]||'rgba(255,255,255,0.06)'};color:${statusTextColors[t.status]||'#9aa0a6'}">${statusLabels[t.status]||t.status}</span>
+                        <span class="timeline-task-tag" style="background:${priorityColor[t.priority]||'rgba(255,255,255,0.06)'};color:${t.priority==='high'?'#ff6b6b':t.priority==='medium'?'#fbbc04':'#4285f4'}">${priorityText[t.priority]||t.priority}</span>
                     </div>
                 </div>`;
 
@@ -3863,9 +3888,17 @@
                 const isOverdue = t.status !== 'done' && t.dueDate < formatDate(today);
                 const barClass = isOverdue ? 'overdue' : t.status;
 
+                const statusIcons = {
+                    done: '✅',
+                    'in-progress': '🔵',
+                    todo: '⚪',
+                    blocked: '🔴'
+                };
+                const barIcon = statusIcons[t.status] || '⚪';
+
                 let barsHtml = '';
                 if (endOffset >= 0 && startOffset < days) {
-                    barsHtml = `<div class="timeline-bar ${barClass}" style="left:${barLeft}px;width:${barWidth}px;" onclick="openTaskDetail('${t.id}')">${progress}%</div>`;
+                    barsHtml = `<div class="timeline-bar ${barClass}" style="left:${barLeft}px;width:${barWidth}px;" onclick="openTaskDetail('${t.id}')">${barIcon} ${progress}%</div>`;
                 }
 
                 // 网格背景列
@@ -3877,11 +3910,12 @@
                     cellsHtml += `<div class="timeline-grid-cell ${isWeekend?'weekend':''}" style="left:${i*dayWidth}px;width:${dayWidth}px;"></div>`;
                 }
 
-                // 今天竖线
+                // 今天竖线（每行都显示，但只在第一行显示标签）
                 const todayOffset = Math.round((today - range.start) / (1000*60*60*24));
                 let todayLine = '';
                 if (todayOffset >= 0 && todayOffset < days) {
-                    todayLine = `<div class="timeline-today-line" style="left:${todayOffset * dayWidth + dayWidth/2}px;"><span class="timeline-today-label">今天</span></div>`;
+                    const showLabel = gridRows === '' ? '<span class="timeline-today-label">今天</span>' : '';
+                    todayLine = `<div class="timeline-today-line" style="left:${todayOffset * dayWidth + dayWidth/2}px;">${showLabel}</div>`;
                 }
 
                 gridRows += `
@@ -3945,6 +3979,138 @@
         function ganttViewChange(mode) {
             ganttViewMode = mode;
             renderGantt();
+        }
+
+        // ==================== 数据导出功能 ====================
+
+        function toggleExportMenu() {
+            const menu = document.getElementById('exportMenu');
+            menu.classList.toggle('show');
+        }
+
+        // 点击外部自动关闭导出菜单
+        document.addEventListener('click', function(e) {
+            const dropdown = document.querySelector('.export-dropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                const menu = document.getElementById('exportMenu');
+                if (menu) menu.classList.remove('show');
+            }
+        });
+
+        function downloadBlob(content, filename, type) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportCSV() {
+            const headers = ['ID', '名称', '分类', '优先级', '紧急度', '状态', '截止日期', '完成日期', '阻塞', '标签'];
+            const rows = tasks.map(t => [
+                t.id,
+                t.name,
+                t.category,
+                t.priority,
+                t.urgency,
+                t.status,
+                t.dueDate || '',
+                t.completedDate || '',
+                t.blocked ? '是' : '否',
+                (t.tags || []).join(';')
+            ]);
+            const csv = [headers.join(','), ...rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))].join('\n');
+            downloadBlob('\ufeff' + csv, `任务台账_${new Date().toISOString().split('T')[0]}.csv`, 'text/csv;charset=utf-8;');
+        }
+
+        function exportJSON() {
+            const data = JSON.stringify(tasks, null, 2);
+            downloadBlob(data, `任务数据_${new Date().toISOString().split('T')[0]}.json`, 'application/json');
+        }
+
+        function exportWeeklyReport() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayObj = new Date();
+            const dayOfWeek = todayObj.getDay() || 7;
+            const weekStart = new Date(todayObj); weekStart.setDate(todayObj.getDate() - dayOfWeek + 1);
+            const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
+            const weekStartStr = weekStart.toISOString().split('T')[0];
+            const weekEndStr = weekEnd.toISOString().split('T')[0];
+
+            const active = tasks.filter(t => t.status !== 'archived');
+
+            // 本周新增（dueDate 在本周内）
+            const thisWeekAdded = active.filter(t => t.dueDate >= weekStartStr && t.dueDate <= weekEndStr);
+            // 本周完成
+            const thisWeekDone = active.filter(t => t.completedDate >= weekStartStr && t.completedDate <= weekEndStr);
+            // 本周超期
+            const thisWeekOverdue = active.filter(t => t.status !== 'done' && t.dueDate && t.dueDate >= weekStartStr && t.dueDate <= weekEndStr && t.dueDate < today);
+
+            // 各模块完成情况
+            const catStats = CATEGORIES.map(cat => {
+                const catTasks = active.filter(t => t.category === cat.key);
+                const total = catTasks.length;
+                const done = catTasks.filter(t => t.status === 'done').length;
+                const overdue = catTasks.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < today).length;
+                return { ...cat, total, done, overdue, rate: total > 0 ? Math.round(done / total * 100) : 0 };
+            });
+
+            // 延期风险任务
+            const riskTasks = active.filter(t => t.status !== 'done' && t.dueDate && t.dueDate < today);
+
+            // 下周计划（待开始 + 进行中）
+            const nextWeekPlan = active.filter(t => t.status === 'todo' || t.status === 'in-progress');
+
+            let md = `# 📊 企业文化工作周报\n\n`;
+            md += `> 生成时间：${today}\n`;
+            md += `> 统计周期：${weekStartStr} 至 ${weekEndStr}\n\n`;
+
+            md += `## 一、本周工作总结\n\n`;
+            md += `- **本周新增任务**：${thisWeekAdded.length} 项\n`;
+            md += `- **本周完成任务**：${thisWeekDone.length} 项\n`;
+            md += `- **本周超期任务**：${thisWeekOverdue.length} 项\n\n`;
+
+            md += `## 二、各模块完成情况\n\n`;
+            md += `| 模块 | 总数 | 已完成 | 完成率 | 超期数 |\n`;
+            md += `|------|------|--------|--------|--------|\n`;
+            catStats.forEach(c => {
+                md += `| ${c.icon} ${c.key} | ${c.total} | ${c.done} | ${c.rate}% | ${c.overdue} |\n`;
+            });
+            md += `\n`;
+
+            md += `## 三、延期风险任务列表\n\n`;
+            if (riskTasks.length === 0) {
+                md += `✅ 暂无延期风险任务\n\n`;
+            } else {
+                md += `| 任务名称 | 分类 | 截止日期 | 延迟天数 |\n`;
+                md += `|----------|------|----------|----------|\n`;
+                riskTasks.forEach(t => {
+                    const days = Math.ceil((todayObj - new Date(t.dueDate)) / 86400000);
+                    md += `| ${t.name} | ${t.category} | ${t.dueDate} | ${days}天 |\n`;
+                });
+                md += `\n`;
+            }
+
+            md += `## 四、下周工作计划\n\n`;
+            if (nextWeekPlan.length === 0) {
+                md += `暂无待执行的任务\n\n`;
+            } else {
+                md += `| 任务名称 | 分类 | 状态 | 截止日期 |\n`;
+                md += `|----------|------|------|----------|\n`;
+                nextWeekPlan.forEach(t => {
+                    md += `| ${t.name} | ${t.category} | ${statusLabel(t.status)} | ${t.dueDate || '-'} |\n`;
+                });
+                md += `\n`;
+            }
+
+            md += `---\n`;
+            md += `*本报告由企业文化工作看板自动生成*\n`;
+
+            downloadBlob(md, `工作周报_${weekStartStr}.md`, 'text/markdown');
         }
 
         // ==================== 可视化分析面板 ====================
