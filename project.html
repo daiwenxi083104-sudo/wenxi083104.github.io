@@ -400,6 +400,97 @@
             .hero h1 { font-size: 28px; }
             .container { padding: 40px 20px; }
         }
+        /* 交互式署名气泡 */
+        .credit-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        .bubble-message {
+            background: rgba(255,255,255,0.97);
+            color: #333;
+            padding: 16px 20px;
+            border-radius: 16px 16px 4px 16px;
+            font-size: 13px;
+            line-height: 1.7;
+            max-width: 240px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            animation: bubbleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+        .bubble-message::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: rgba(255,255,255,0.97);
+            transform: rotate(45deg);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.06);
+        }
+        .bubble-message .close-btn {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            cursor: pointer;
+            opacity: 0.3;
+            font-size: 18px;
+            line-height: 1;
+            transition: opacity 0.2s;
+        }
+        .bubble-message .close-btn:hover { opacity: 0.7; }
+        .bubble-message .author {
+            font-weight: 700;
+            color: #4f46e5;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        .bubble-message .desc {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .bubble-message .links {
+            display: flex;
+            gap: 12px;
+        }
+        .bubble-message .links a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+        .bubble-message .links a:hover { opacity: 0.7; }
+        .bubble-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 3px solid rgba(255,255,255,0.9);
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.35);
+            transition: all 0.3s ease;
+            animation: avatarPulse 3s infinite;
+        }
+        .bubble-avatar:hover {
+            transform: scale(1.12);
+            box-shadow: 0 6px 30px rgba(79, 70, 229, 0.5);
+        }
+        @keyframes bubbleIn {
+            from { opacity: 0; transform: translateY(12px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes avatarPulse {
+            0%, 100% { box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3); }
+            50% { box-shadow: 0 4px 30px rgba(79, 70, 229, 0.55); }
+        }
+        .bubble-hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -623,5 +714,40 @@
     <footer class="footer">
         <p>© 2025 wenxi · 企业文化工作管理系统 · <a href="https://github.com/wenxi083104/wenxi083104.github.io" target="_blank">GitHub</a></p>
     </footer>
+
+    <!-- 交互式署名气泡 -->
+    <div class="credit-bubble" id="creditBubble">
+        <div class="bubble-message" id="bubbleMsg">
+            <span class="close-btn" onclick="minimizeBubble()">×</span>
+            <div class="author">👋 嗨，我是戴雯晞</div>
+            <div class="desc">这是我在准备企业文化岗位求职过程中独立开发的作品，欢迎体验！</div>
+            <div class="links">
+                <a href="https://github.com/wenxi083104" target="_blank">GitHub →</a>
+                <a href="https://wenxi083104.github.io/" target="_blank">作品集 →</a>
+            </div>
+        </div>
+        <img class="bubble-avatar bubble-hidden" id="bubbleAvatar" onclick="expandBubble()" title="关于作者" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCADIAMgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD6Ys4laUqRkEc1dutNj8hAvUA81Z0yGOEmR+frQ4lmbgEoDxXU5u+hwRgramUtpDFy/IqG8BVcxn5TWy1urEhk+lQXdqpjUHp2xTVTUTp6aHPOxqM8jmrstnKGPycVCbYg/M6L+NdSkjmadyoRzShcnFWxBHnmTP0FKVhU8B2x68VXMTYpmMijyz6Vf3xluIRj61meJ/Emm+HdFfVLwfICVSJFy8jAkYA/A80Oooq7GoOWiJRA56KT+FSwQuZMY5HUZ6VyaePhqulahNpytbPbXEUIkYbgd5OGAHXp+AOe1XPA0V3aNc3t9M0sU7RwB3bmM7iFU/Xdkn3FQq6k7Iv2Dirs6LUnt9PsJr++uI4LeJdzuzYx/wDXrjPDXxG0bWfEk2lw28scMay/vXOHbYhYkDpjAPes34w6smqaIkOmO7RW955dwRjBOMDj0yCM153JCy39vPpVtcK9uk0csin+/EFYE55H3xn1Arhq4ySqWi9F+J10sIpQu1qyv4rvYJtVuoxOxgZFERkPzFd2FHvxj8q5bULJ0t2ijeaS+u0ZkAx8oUYC49MDk+9bN/pkq2EZa8hj1C32MjIRJJ8rMc4XOMLt5PpSHTLvW52ltQ8On5ADsdoK+gB5PTPNeRTgrtyZ6c5SStGJneDdPgj16N9QggncxHbaqu/y+Dguemckccn6V6npFnpOkWqSQzoblESOWRG3yOV4ALdFGcjCjuKwNK0Wz06Jrm4mWQW8jF33eVHngkA/xnaSQB1ww7VR8QeKNM0y2ktruZJnON1vGu1eAu4BepUlFYFiMFjxWVeam0ol0qdSKd5Wv2enzZ0N5qjxREWyqFzyobAX743M3qGUKQP7wNWfhRerN40lEl0jv/Z87gJwCR5at1OWA6g46N7V4b4j8danqbEWWU2IQHXkgkYLZ6LkKAdo5x711P7MZuW+JryXUzSyS6VOTx1JZOSTzXPiMPJUJSen5nRQlBVFFf8AAPopVbzFyuSQp68Lyf8AP4VWmQIrsSwZgQ3c5x149SB/3zWgV33YwzbOc/L3GD+n9RVWeIvcSxhgCMmNeOSc8/p+ea8FHskcsJ84KzY3jYMDOPQ+5/8Ar1FcKphykp3fMigD5iuOntyasSyk3rbHXEIXBx1b73Pv0[... 18879 chars omitted ...]" alt="戴雯晞">
+    </div>
+
+    <script>
+        const bubbleMsg = document.getElementById('bubbleMsg');
+        const bubbleAvatar = document.getElementById('bubbleAvatar');
+        let bubbleTimer;
+
+        // 5秒后自动收缩为头像
+        bubbleTimer = setTimeout(minimizeBubble, 5000);
+
+        function minimizeBubble() {
+            bubbleMsg.classList.add('bubble-hidden');
+            bubbleAvatar.classList.remove('bubble-hidden');
+        }
+
+        function expandBubble() {
+            bubbleAvatar.classList.add('bubble-hidden');
+            bubbleMsg.classList.remove('bubble-hidden');
+            clearTimeout(bubbleTimer);
+            bubbleTimer = setTimeout(minimizeBubble, 8000);
+        }
+    </script>
 </body>
 </html>
