@@ -2705,14 +2705,106 @@
     </div>
 
     <script>
-        // ========== V0 Optimus 精确复刻：右侧圆盘粒子系统 ==========
+        // ========== V0 Optimus 精确复刻：右侧生成式纹理（Perlin Noise 拓扑图案） ==========
         (function() {
             const canvas = document.getElementById('heroCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             let width, height;
-            let particles = [];
             let time = 0;
+
+            // ---- Simplex Noise 2D/3D 实现 ----
+            // 基于 Stefan Gustavson 的简化 Simplex Noise 算法
+            const F2 = 0.5 * (Math.sqrt(3) - 1);
+            const G2 = (3 - Math.sqrt(3)) / 6;
+            const F3 = 1 / 3;
+            const G3 = 1 / 6;
+
+            const grad3 = [
+                [1,1,0],[-1,1,0],[1,-1,0],[-1,-1,0],
+                [1,0,1],[-1,0,1],[1,0,-1],[-1,0,-1],
+                [0,1,1],[0,-1,1],[0,1,-1],[0,-1,-1]
+            ];
+
+            const perm = new Uint8Array(512);
+            const permMod12 = new Uint8Array(512);
+            (function initNoise() {
+                const p = new Uint8Array(256);
+                for (let i = 0; i < 256; i++) p[i] = i;
+                // Fisher-Yates shuffle
+                for (let i = 255; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    const tmp = p[i]; p[i] = p[j]; p[j] = tmp;
+                }
+                for (let i = 0; i < 512; i++) {
+                    perm[i] = p[i & 255];
+                    permMod12[i] = perm[i] % 12;
+                }
+            })();
+
+            function dot3(g, x, y, z) { return g[0]*x + g[1]*y + g[2]*z; }
+
+            // 3D Simplex Noise
+            function noise3D(xin, yin, zin) {
+                let n0, n1, n2, n3;
+                const s = (xin + yin + zin) * F3;
+                const i = Math.floor(xin + s);
+                const j = Math.floor(yin + s);
+                const k = Math.floor(zin + s);
+                const t = (i + j + k) * G3;
+                const X0 = i - t, Y0 = j - t, Z0 = k - t;
+                const x0 = xin - X0, y0 = yin - Y0, z0 = zin - Z0;
+
+                let i1, j1, k1, i2, j2, k2;
+                if (x0 >= y0) {
+                    if (y0 >= z0) { i1=1;j1=0;k1=0;i2=1;j2=1;k2=0; }
+                    else if (x0 >= z0) { i1=1;j1=0;k1=0;i2=1;j2=0;k2=1; }
+                    else { i1=0;j1=0;k1=1;i2=1;j2=0;k2=1; }
+                } else {
+                    if (y0 < z0) { i1=0;j1=0;k1=1;i2=0;j2=1;k2=1; }
+                    else if (x0 < z0) { i1=0;j1=1;k1=0;i2=0;j2=1;k2=1; }
+                    else { i1=0;j1=1;k1=0;i2=1;j2=1;k2=0; }
+                }
+
+                const x1 = x0 - i1 + G3, y1 = y0 - j1 + G3, z1 = z0 - k1 + G3;
+                const x2 = x0 - i2 + 2*G3, y2 = y0 - j2 + 2*G3, z2 = z0 - k2 + 2*G3;
+                const x3 = x0 - 1 + 3*G3, y3 = y0 - 1 + 3*G3, z3 = z0 - 1 + 3*G3;
+
+                const ii = i & 255, jj = j & 255, kk = k & 255;
+
+                let t0 = 0.6 - x0*x0 - y0*y0 - z0*z0;
+                if (t0 < 0) n0 = 0;
+                else { t0 *= t0; n0 = t0 * t0 * dot3(grad3[permMod12[ii+perm[jj+perm[kk]]]], x0, y0, z0); }
+
+                let t1 = 0.6 - x1*x1 - y1*y1 - z1*z1;
+                if (t1 < 0) n1 = 0;
+                else { t1 *= t1; n1 = t1 * t1 * dot3(grad3[permMod12[ii+i1+perm[jj+j1+perm[kk+k1]]]], x1, y1, z1); }
+
+                let t2 = 0.6 - x2*x2 - y2*y2 - z2*z2;
+                if (t2 < 0) n2 = 0;
+                else { t2 *= t2; n2 = t2 * t2 * dot3(grad3[permMod12[ii+i2+perm[jj+j2+perm[kk+k2]]]], x2, y2, z2); }
+
+                let t3 = 0.6 - x3*x3 - y3*y3 - z3*z3;
+                if (t3 < 0) n3 = 0;
+                else { t3 *= t3; n3 = t3 * t3 * dot3(grad3[permMod12[ii+1+perm[jj+1+perm[kk+1]]]], x3, y3, z3); }
+
+                return 32 * (n0 + n1 + n2 + n3);
+            }
+
+            // 分形布朗运动（多层噪声叠加）
+            function fbm(x, y, z, octaves) {
+                let value = 0;
+                let amplitude = 1;
+                let frequency = 1;
+                let maxVal = 0;
+                for (let i = 0; i < octaves; i++) {
+                    value += amplitude * noise3D(x * frequency, y * frequency, z * frequency);
+                    maxVal += amplitude;
+                    amplitude *= 0.5;
+                    frequency *= 2;
+                }
+                return value / maxVal;
+            }
 
             function resize() {
                 const dpr = window.devicePixelRatio || 1;
@@ -2724,132 +2816,88 @@
                 ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             }
 
-            // 粒子类型: 0=小方块, 1=加号, 2=弧线, 3=小点
-            function createParticles() {
-                particles = [];
-                const count = 220;
-                const cx = width * 0.5;
-                const cy = height * 0.5;
-                const maxRadius = Math.min(width, height) * 0.48;
+            // 网格参数
+            const CELL_SIZE = 5;       // 每个小方块的尺寸（像素）
+            const NOISE_SCALE = 0.012; // 噪声采样缩放（值越小，图案越大）
+            const OCTAVES = 5;         // 噪声层数（越多细节越丰富）
+            const TIME_SPEED = 0.0004; // 动画速度（非常缓慢的演变）
 
-                for (let i = 0; i < count; i++) {
-                    // 圆盘分布：使用平方根使粒子均匀分布在圆盘内
-                    const r = Math.sqrt(Math.random()) * maxRadius;
-                    const theta = Math.random() * Math.PI * 2;
-                    
-                    const x = cx + r * Math.cos(theta);
-                    const y = cy + r * Math.sin(theta);
-                    
-                    const type = Math.random();
-                    let particleType;
-                    if (type < 0.45) particleType = 0;       // 45% 小方块
-                    else if (type < 0.70) particleType = 1;  // 25% 加号
-                    else if (type < 0.85) particleType = 2;  // 15% 弧线
-                    else particleType = 3;                    // 15% 小点
-
-                    particles.push({
-                        x: x,
-                        y: y,
-                        type: particleType,
-                        size: Math.random() * 5 + 2.5,
-                        baseOpacity: Math.random() * 0.4 + 0.15,
-                        rotation: Math.random() * Math.PI * 2,
-                        rotSpeed: (Math.random() - 0.5) * 0.008,
-                        breatheSpeed: Math.random() * 0.6 + 0.2,
-                        breathePhase: Math.random() * Math.PI * 2,
-                        // 轨道运动参数
-                        orbitRadius: Math.random() * 20 + 8,
-                        orbitSpeed: (Math.random() - 0.5) * 0.25,
-                        orbitPhase: Math.random() * Math.PI * 2
-                    });
-                }
-            }
-
-            function drawSquare(p) {
-                const s = p.size;
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate(p.rotation);
-                ctx.fillRect(-s/2, -s/2, s, s);
-                ctx.restore();
-            }
-
-            function drawPlus(p) {
-                const s = p.size * 1.5;
-                const t = s / 3;
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate(p.rotation);
-                ctx.fillRect(-t/2, -s/2, t, s);
-                ctx.fillRect(-s/2, -t/2, s, t);
-                ctx.restore();
-            }
-
-            function drawArc(p) {
-                const r = p.size * 2;
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate(p.rotation);
-                ctx.beginPath();
-                ctx.arc(0, 0, r, 0, Math.PI * 0.7);
-                ctx.stroke();
-                ctx.restore();
-            }
-
-            function drawDot(p) {
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size * 0.6, 0, Math.PI * 2);
-                ctx.fill();
+            // 预计算灰度查找表，避免每帧重复计算字符串
+            const GRAY_LEVELS = 32;
+            const grayLUT = [];
+            for (let i = 0; i < GRAY_LEVELS; i++) {
+                const v = Math.round(200 + (i / (GRAY_LEVELS - 1)) * 55); // 200-255 范围（浅灰到中灰）
+                grayLUT[i] = 'rgb(' + v + ',' + v + ',' + v + ')';
             }
 
             function animate() {
                 ctx.clearRect(0, 0, width, height);
-                time += 0.016;
+                time += TIME_SPEED;
 
-                particles.forEach(p => {
-                    // 呼吸效果
-                    const breathe = Math.sin(time * p.breatheSpeed + p.breathePhase) * 0.4 + 0.6;
-                    const alpha = p.baseOpacity * breathe;
-                    
-                    // 轨道微运动
-                    const orbitX = Math.cos(time * p.orbitSpeed + p.orbitPhase) * p.orbitRadius;
-                    const orbitY = Math.sin(time * p.orbitSpeed + p.orbitPhase) * p.orbitRadius;
-                    
-                    p.rotation += p.rotSpeed;
-                    
-                    ctx.globalAlpha = alpha;
-                    ctx.fillStyle = '#111';
-                    ctx.strokeStyle = '#111';
-                    ctx.lineWidth = 0.8;
-                    
-                    const drawX = p.x + orbitX;
-                    const drawY = p.y + orbitY;
-                    
-                    // 临时修改位置用于绘制
-                    const origX = p.x, origY = p.y;
-                    p.x = drawX; p.y = drawY;
-                    
-                    switch(p.type) {
-                        case 0: drawSquare(p); break;
-                        case 1: drawPlus(p); break;
-                        case 2: drawArc(p); break;
-                        case 3: drawDot(p); break;
+                const cols = Math.ceil(width / CELL_SIZE);
+                const rows = Math.ceil(height / CELL_SIZE);
+
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        const px = col * CELL_SIZE;
+                        const py = row * CELL_SIZE;
+
+                        // 计算该位置在画布中的归一化坐标
+                        const nx = px / width;
+                        const ny = py / height;
+
+                        // 右侧渐变遮罩：右侧（nx接近1）完全不透明，左侧（nx接近0）淡出
+                        // 使用平滑的 S 曲线过渡
+                        const rightFade = Math.pow(Math.max(0, Math.min(1, (nx - 0.15) / 0.55)), 1.8);
+
+                        if (rightFade < 0.01) continue; // 左侧完全跳过
+
+                        // 采样多层噪声
+                        const noiseVal = fbm(
+                            px * NOISE_SCALE,
+                            py * NOISE_SCALE,
+                            time,
+                            OCTAVES
+                        );
+
+                        // 将噪声值 [-1, 1] 映射到 [0, 1]
+                        const normalized = (noiseVal + 1) * 0.5;
+
+                        // 创建拓扑地图效果：使用阈值产生类似等高线的明暗变化
+                        // 将值量化为离散层级，产生条纹/等高线效果
+                        const contourLines = 12;
+                        const contourVal = normalized * contourLines;
+                        const contourFraction = contourVal - Math.floor(contourVal);
+                        // 在等高线边界处加深，产生线条感
+                        const contourEffect = 1.0 - Math.pow(Math.abs(contourFraction - 0.5) * 2, 0.6);
+
+                        // 综合噪声值和等高线效果
+                        const intensity = normalized * 0.6 + contourEffect * 0.4;
+
+                        // 最终灰度：intensity 越高越深（越暗）
+                        // 映射到灰度查找表索引
+                        const grayIndex = Math.min(GRAY_LEVELS - 1, Math.max(0, Math.floor(intensity * GRAY_LEVELS)));
+
+                        // 应用右侧渐变透明度
+                        const alpha = rightFade * (0.15 + intensity * 0.55);
+
+                        if (alpha < 0.02) continue;
+
+                        ctx.globalAlpha = alpha;
+                        ctx.fillStyle = grayLUT[grayIndex];
+                        ctx.fillRect(px, py, CELL_SIZE - 0.5, CELL_SIZE - 0.5);
                     }
-                    
-                    p.x = origX; p.y = origY;
-                });
-                
+                }
+
                 ctx.globalAlpha = 1;
                 requestAnimationFrame(animate);
             }
 
             resize();
-            createParticles();
             animate();
 
             window.addEventListener('resize', () => {
                 resize();
-                createParticles();
             });
         })();
 
