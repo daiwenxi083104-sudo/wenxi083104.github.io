@@ -132,7 +132,7 @@
             }
         }
 
-        /* ========== 第1屏：V0 极简风格首页 ========== */
+        /* ========== 第1屏：V0 Optimus 风格首页 ========== */
         .intro-page {
             position: relative;
             min-height: 100vh;
@@ -144,18 +144,14 @@
             overflow: hidden;
         }
 
-        /* 网格背景纹理 */
-        .intro-page::before {
-            content: '';
+        /* Canvas 背景层 */
+        .hero-canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image:
-                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
+            z-index: 0;
             pointer-events: none;
         }
 
@@ -163,17 +159,26 @@
             position: relative;
             z-index: 1;
             text-align: center;
-            padding: 120px 40px;
-            max-width: 800px;
+            padding: 80px 40px 40px;
+            max-width: 900px;
             width: 100%;
         }
 
+        .v0-hero-badge {
+            display: inline-block;
+            font-size: 13px;
+            color: #888;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
         .v0-hero-title {
-            font-size: 72px;
+            font-size: 64px;
             font-weight: 700;
             color: #111;
             letter-spacing: -0.03em;
-            line-height: 1.1;
+            line-height: 1.05;
             margin-bottom: 24px;
         }
 
@@ -181,34 +186,17 @@
             font-size: 18px;
             color: #666;
             line-height: 1.7;
-            margin-bottom: 32px;
-            max-width: 500px;
+            margin-bottom: 40px;
+            max-width: 480px;
             margin-left: auto;
             margin-right: auto;
-        }
-
-        .v0-hero-tags {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-
-        .v0-hero-tag {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            color: #666;
-            background: #fff;
-            border: 1px solid #e5e5e5;
         }
 
         .v0-hero-btns {
             display: flex;
             gap: 16px;
             justify-content: center;
+            margin-bottom: 60px;
         }
 
         .v0-btn {
@@ -220,7 +208,9 @@
             transition: all 0.2s;
             cursor: pointer;
             border: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .v0-btn-primary {
@@ -234,13 +224,59 @@
         }
 
         .v0-btn-secondary {
-            background: #fff;
+            background: transparent;
             color: #111;
-            border: 1px solid #e5e5e5;
+            border: 1px solid #ddd;
         }
 
         .v0-btn-secondary:hover {
             background: #f5f5f5;
+        }
+
+        /* 数字滚动区域 */
+        .stats-bar {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 40px;
+            margin-top: auto;
+            margin-bottom: 40px;
+        }
+
+        .stats-track {
+            display: flex;
+            gap: 60px;
+            overflow: hidden;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .stats-item {
+            flex-shrink: 0;
+            text-align: left;
+            min-width: 160px;
+        }
+
+        .stats-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #111;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stats-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stats-company {
+            font-size: 11px;
+            color: #bbb;
+            margin-top: 2px;
         }
 
         .player-container {
@@ -2121,20 +2157,51 @@
     </nav>
 
     <main id="main-content">
-    <!-- 第1屏：V0 极简风格首页 -->
+    <!-- 第1屏：V0 Optimus 风格首页 -->
     <section class="page intro-page" id="page-0" aria-labelledby="intro-title">
+        <canvas class="hero-canvas" id="heroCanvas"></canvas>
+
         <div class="v0-hero">
-            <div class="v0-hero-content">
-                <h1 class="v0-hero-title" id="intro-title">戴雯晞</h1>
-                <p class="v0-hero-desc">音乐艺术背景的我，在找寻热爱与价值的路上步履不停，始终相信步步向青山的力量。</p>
-                <div class="v0-hero-tags">
-                    <span class="v0-hero-tag">音乐学</span>
-                    <span class="v0-hero-tag">企业文化</span>
-                    <span class="v0-hero-tag">2026届</span>
+            <div class="v0-hero-badge">The platform for creative minds</div>
+            <h1 class="v0-hero-title" id="intro-title">戴雯晞</h1>
+            <p class="v0-hero-desc">音乐艺术背景的我，在找寻热爱与价值的路上步履不停，始终相信步步向青山的力量。</p>
+            <div class="v0-hero-btns">
+                <a href="#page-1" class="v0-btn v0-btn-primary">向下探索 →</a>
+                <a href="./project.html" class="v0-btn v0-btn-secondary">查看作品</a>
+            </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stats-track" id="statsTrack">
+                <div class="stats-item">
+                    <div class="stats-number" data-target="98">0%</div>
+                    <div class="stats-label">音乐素养</div>
+                    <div class="stats-company">MUSIC</div>
                 </div>
-                <div class="v0-hero-btns">
-                    <a href="#page-1" class="v0-btn v0-btn-primary">向下探索</a>
-                    <a href="./project.html" class="v0-btn v0-btn-secondary">查看作品</a>
+                <div class="stats-item">
+                    <div class="stats-number" data-target="300">0%</div>
+                    <div class="stats-label">创意产出</div>
+                    <div class="stats-company">CREATIVE</div>
+                </div>
+                <div class="stats-item">
+                    <div class="stats-number" data-target="6">0x</div>
+                    <div class="stats-label">跨界能力</div>
+                    <div class="stats-company">CROSSOVER</div>
+                </div>
+                <div class="stats-item">
+                    <div class="stats-number" data-target="20">0+</div>
+                    <div class="stats-label">项目经验</div>
+                    <div class="stats-company">PROJECTS</div>
+                </div>
+                <div class="stats-item">
+                    <div class="stats-number" data-target="100">0%</div>
+                    <div class="stats-label">学习热情</div>
+                    <div class="stats-company">PASSION</div>
+                </div>
+                <div class="stats-item">
+                    <div class="stats-number" data-target="365">0</div>
+                    <div class="stats-label">坚持天数</div>
+                    <div class="stats-company">DAYS</div>
                 </div>
             </div>
         </div>
@@ -2440,6 +2507,146 @@
     </div>
 
     <script>
+        // ========== V0 Optimus 风格 Canvas 环形粒子动画 ==========
+        (function() {
+            const canvas = document.getElementById('heroCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            let rings = [];
+            let time = 0;
+
+            function resize() {
+                width = canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+                height = canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+                ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+                width /= window.devicePixelRatio;
+                height /= window.devicePixelRatio;
+            }
+
+            function createParticles() {
+                particles = [];
+                const count = 80;
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        size: Math.random() * 2 + 0.5,
+                        speedX: (Math.random() - 0.5) * 0.3,
+                        speedY: (Math.random() - 0.5) * 0.3,
+                        opacity: Math.random() * 0.3 + 0.1
+                    });
+                }
+            }
+
+            function createRings() {
+                rings = [];
+                const centerX = width * 0.75;
+                const centerY = height * 0.4;
+                for (let i = 0; i < 3; i++) {
+                    rings.push({
+                        x: centerX,
+                        y: centerY,
+                        radius: 80 + i * 60,
+                        speed: 0.002 + i * 0.001,
+                        offset: i * Math.PI / 3,
+                        dots: 20 + i * 10
+                    });
+                }
+            }
+
+            function drawParticles() {
+                particles.forEach(p => {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+                    if (p.y < 0) p.y = height;
+                    if (p.y > height) p.y = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0,0,0,${p.opacity})`;
+                    ctx.fill();
+                });
+            }
+
+            function drawRings() {
+                rings.forEach(ring => {
+                    const angle = time * ring.speed + ring.offset;
+                    for (let i = 0; i < ring.dots; i++) {
+                        const dotAngle = angle + (i / ring.dots) * Math.PI * 2;
+                        const x = ring.x + Math.cos(dotAngle) * ring.radius;
+                        const y = ring.y + Math.sin(dotAngle) * ring.radius;
+                        const distFromCenter = Math.sqrt((x - ring.x) ** 2 + (y - ring.y) ** 2);
+                        const opacity = 0.15 + 0.1 * Math.sin(time * 0.01 + i * 0.5);
+
+                        ctx.beginPath();
+                        ctx.arc(x, y, 2, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(0,0,0,${opacity})`;
+                        ctx.fill();
+                    }
+
+                    // 绘制连接线
+                    ctx.beginPath();
+                    ctx.arc(ring.x, ring.y, ring.radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = `rgba(0,0,0,0.05)`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                time++;
+                drawParticles();
+                drawRings();
+                requestAnimationFrame(animate);
+            }
+
+            resize();
+            createParticles();
+            createRings();
+            animate();
+
+            window.addEventListener('resize', () => {
+                resize();
+                createParticles();
+                createRings();
+            });
+        })();
+
+        // ========== 数字滚动动画 ==========
+        (function() {
+            const statsNumbers = document.querySelectorAll('.stats-number');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        const target = parseInt(el.dataset.target);
+                        const suffix = el.textContent.replace(/[0-9]/g, '');
+                        let current = 0;
+                        const duration = 2000;
+                        const increment = target / (duration / 16);
+
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                current = target;
+                                clearInterval(timer);
+                            }
+                            el.textContent = Math.floor(current) + suffix;
+                        }, 16);
+
+                        observer.unobserve(el);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            statsNumbers.forEach(el => observer.observe(el));
+        })();
+
         // ========== 音乐播放器动画 ==========
         let isPlaying = true;
 
