@@ -188,7 +188,7 @@
             transform: translateY(-50%);
             width: 650px;
             height: 650px;
-            opacity: 0.7;
+            opacity: 1;
             pointer-events: none;
             z-index: 0;
         }
@@ -247,13 +247,16 @@
             display: block;
         }
 
-        /* 字符逐个blur-in动画 */
+        /* 字符逐个blur-in动画 - 初始状态隐藏，由JS触发 */
         .animate-char-in {
             opacity: 0;
             filter: blur(40px);
-            animation: 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards char-in;
-            display: inline-block;
             transform: translateY(100%);
+            display: inline-block;
+            transition: none;
+        }
+        .animate-char-in.animating {
+            animation: 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards char-in;
         }
         @keyframes char-in {
             0% { opacity: 0; filter: blur(40px); transform: translateY(100%); }
@@ -2826,7 +2829,7 @@
             const GRAY_LEVELS = 32;
             const grayLUT = [];
             for (let i = 0; i < GRAY_LEVELS; i++) {
-                const v = Math.round(140 + (i / (GRAY_LEVELS - 1)) * 100); // 140-240 范围（中灰到浅灰）
+                const v = Math.round(80 + (i / (GRAY_LEVELS - 1)) * 120); // 80-200 范围（深灰到中灰）
                 grayLUT[i] = 'rgb(' + v + ',' + v + ',' + v + ')';
             }
 
@@ -2878,10 +2881,10 @@
                         // 映射到灰度查找表索引
                         const grayIndex = Math.min(GRAY_LEVELS - 1, Math.max(0, Math.floor(intensity * GRAY_LEVELS)));
 
-                        // 应用右侧渐变透明度
-                        const alpha = rightFade * (0.25 + intensity * 0.65);
+                        // 应用右侧渐变透明度 - 增加基础透明度使纹理更明显
+                        const alpha = rightFade * (0.4 + intensity * 0.5);
 
-                        if (alpha < 0.02) continue;
+                        if (alpha < 0.05) continue;
 
                         ctx.globalAlpha = alpha;
                         ctx.fillStyle = grayLUT[grayIndex];
@@ -2903,23 +2906,45 @@
 
         // ========== Hero 标题字符动画触发 ==========
         (function() {
-            // 确保动画在页面完全加载后触发
+            let hasAnimated = false;
+            
             function triggerCharAnimation() {
+                if (hasAnimated) return;
+                hasAnimated = true;
+                
                 const chars = document.querySelectorAll('.animate-char-in');
                 chars.forEach((char, index) => {
-                    // 重置动画
-                    char.style.animation = 'none';
-                    char.offsetHeight; // 强制重排
-                    // 重新应用动画，使用递增延迟
-                    const delay = 0.3 + index * 0.15;
-                    char.style.animation = `0.6s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s forwards char-in`;
+                    // 先移除animating类（如果存在）
+                    char.classList.remove('animating');
+                    // 强制重排
+                    void char.offsetWidth;
+                    // 添加延迟
+                    const delay = 0.3 + index * 0.2;
+                    char.style.animationDelay = delay + 's';
+                    // 添加animating类触发动画
+                    char.classList.add('animating');
                 });
             }
 
-            if (document.readyState === 'complete') {
-                triggerCharAnimation();
+            // 使用 Intersection Observer 在元素进入视口时触发动画
+            const titleElement = document.getElementById('intro-title');
+            if (titleElement && 'IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            triggerCharAnimation();
+                            observer.disconnect();
+                        }
+                    });
+                }, { threshold: 0.1 });
+                observer.observe(titleElement);
             } else {
-                window.addEventListener('load', triggerCharAnimation);
+                // 降级：页面加载后触发
+                if (document.readyState === 'complete') {
+                    setTimeout(triggerCharAnimation, 100);
+                } else {
+                    window.addEventListener('load', () => setTimeout(triggerCharAnimation, 100));
+                }
             }
         })();
 
