@@ -2300,7 +2300,7 @@
             <div class="v0-hero-badge">The platform for creative minds</div>
             <h1 class="v0-hero-title" id="intro-title">
                 <span class="block">
-                    <span class="animate-char-in" style="animation-delay:0ms">戴</span><span class="animate-char-in" style="animation-delay:80ms">雯</span><span class="char-last-wrapper"><span class="animate-char-in" style="animation-delay:160ms">晞</span><span class="char-last-bar"></span></span>
+                    <span class="animate-char-in" style="animation-delay:0.3s">戴</span><span class="animate-char-in" style="animation-delay:0.45s">雯</span><span class="char-last-wrapper"><span class="animate-char-in" style="animation-delay:0.6s">晞</span><span class="char-last-bar"></span></span>
                 </span>
             </h1>
             <p class="v0-hero-desc">音乐艺术背景的我，在找寻热爱与价值的路上步履不停，始终相信步步向青山的力量。</p>
@@ -2826,7 +2826,7 @@
             const GRAY_LEVELS = 32;
             const grayLUT = [];
             for (let i = 0; i < GRAY_LEVELS; i++) {
-                const v = Math.round(200 + (i / (GRAY_LEVELS - 1)) * 55); // 200-255 范围（浅灰到中灰）
+                const v = Math.round(140 + (i / (GRAY_LEVELS - 1)) * 100); // 140-240 范围（中灰到浅灰）
                 grayLUT[i] = 'rgb(' + v + ',' + v + ',' + v + ')';
             }
 
@@ -2879,7 +2879,7 @@
                         const grayIndex = Math.min(GRAY_LEVELS - 1, Math.max(0, Math.floor(intensity * GRAY_LEVELS)));
 
                         // 应用右侧渐变透明度
-                        const alpha = rightFade * (0.15 + intensity * 0.55);
+                        const alpha = rightFade * (0.25 + intensity * 0.65);
 
                         if (alpha < 0.02) continue;
 
@@ -2899,6 +2899,28 @@
             window.addEventListener('resize', () => {
                 resize();
             });
+        })();
+
+        // ========== Hero 标题字符动画触发 ==========
+        (function() {
+            // 确保动画在页面完全加载后触发
+            function triggerCharAnimation() {
+                const chars = document.querySelectorAll('.animate-char-in');
+                chars.forEach((char, index) => {
+                    // 重置动画
+                    char.style.animation = 'none';
+                    char.offsetHeight; // 强制重排
+                    // 重新应用动画，使用递增延迟
+                    const delay = 0.3 + index * 0.15;
+                    char.style.animation = `0.6s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s forwards char-in`;
+                });
+            }
+
+            if (document.readyState === 'complete') {
+                triggerCharAnimation();
+            } else {
+                window.addEventListener('load', triggerCharAnimation);
+            }
         })();
 
         // ========== 音乐播放器动画 ==========
