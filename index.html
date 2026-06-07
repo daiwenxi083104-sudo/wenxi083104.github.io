@@ -132,10 +132,115 @@
             }
         }
 
-        /* ========== 第1屏：音乐播放器首页 ========== */
+        /* ========== 第1屏：V0 极简风格首页 ========== */
         .intro-page {
             position: relative;
-            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #fafafa;
+            overflow: hidden;
+        }
+
+        /* 网格背景纹理 */
+        .intro-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        .v0-hero {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 120px 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .v0-hero-title {
+            font-size: 72px;
+            font-weight: 700;
+            color: #111;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .v0-hero-desc {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .v0-hero-tags {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .v0-hero-tag {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #666;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+        }
+
+        .v0-hero-btns {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .v0-btn {
+            padding: 14px 32px;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
+        }
+
+        .v0-btn-primary {
+            background: #111;
+            color: #fff;
+        }
+
+        .v0-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .v0-btn-secondary {
+            background: #fff;
+            color: #111;
+            border: 1px solid #e5e5e5;
+        }
+
+        .v0-btn-secondary:hover {
+            background: #f5f5f5;
         }
 
         .player-container {
@@ -2016,95 +2121,20 @@
     </nav>
 
     <main id="main-content">
-    <!-- 第1屏：开场 -->
+    <!-- 第1屏：V0 极简风格首页 -->
     <section class="page intro-page" id="page-0" aria-labelledby="intro-title">
-        <div class="player-container">
-            <!-- 左侧：旋转唱片 -->
-            <div class="vinyl-section">
-                <div class="floating-notes">
-                    <span class="note">♪</span>
-                    <span class="note">♫</span>
-                    <span class="note">♩</span>
-                    <span class="note">♬</span>
-                    <span class="note">♪</span>
-                    <span class="note">♫</span>
-                    <span class="note">♩</span>
-                    <span class="note">♬</span>
+        <div class="v0-hero">
+            <div class="v0-hero-content">
+                <h1 class="v0-hero-title" id="intro-title">戴雯晞</h1>
+                <p class="v0-hero-desc">音乐艺术背景的我，在找寻热爱与价值的路上步履不停，始终相信步步向青山的力量。</p>
+                <div class="v0-hero-tags">
+                    <span class="v0-hero-tag">音乐学</span>
+                    <span class="v0-hero-tag">企业文化</span>
+                    <span class="v0-hero-tag">2026届</span>
                 </div>
-                <div class="vinyl-disc" id="vinylDisc" onclick="togglePlay()">
-                    <div class="vinyl-center">
-                        <img src="./images/album-cover.jpg" alt="戴雯晞专辑封面" loading="eager">
-                    </div>
-                </div>
-            </div>
-
-            <!-- 右侧：播放器面板 -->
-            <div class="player-panel">
-                <!-- 主显示区域：屏幕 + 开关 -->
-                <div class="player-main">
-                    <!-- CRT屏幕 -->
-                    <div class="crt-screen">
-                        <div class="crt-inner">
-                            <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
-                            <div class="crt-info">戴雯晞 · 音乐艺术</div>
-                        </div>
-                    </div>
-
-                    <!-- 右侧开关组 -->
-                    <div class="switch-group">
-                        <div class="switch-item active" onclick="toggleSwitch(this)">
-                            <div class="switch-btn"></div>
-                            <span class="switch-label">音乐</span>
-                        </div>
-                        <div class="switch-item" onclick="toggleSwitch(this)">
-                            <div class="switch-btn"></div>
-                            <span class="switch-label">文化</span>
-                        </div>
-                        <div class="switch-item" onclick="toggleSwitch(this)">
-                            <div class="switch-btn"></div>
-                            <span class="switch-label">创意</span>
-                        </div>
-                        <div class="switch-item" onclick="toggleSwitch(this)">
-                            <div class="switch-btn"></div>
-                            <span class="switch-label">进化</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 中间圆形按钮组 -->
-                <div class="round-buttons">
-                    <div class="round-btn" onclick="togglePlay()">
-                        <div class="round-btn-icon" id="playRoundBtn">⏸</div>
-                        <span class="round-btn-label">PLAY</span>
-                    </div>
-                    <div class="round-btn">
-                        <div class="round-btn-icon">✦</div>
-                        <span class="round-btn-label">MODE</span>
-                    </div>
-                    <div class="round-btn">
-                        <div class="round-btn-icon">+</div>
-                        <span class="round-btn-label">ADD</span>
-                    </div>
-                </div>
-
-                <!-- 音量滑块 -->
-                <div class="volume-section">
-                    <div class="volume-label">VOLUME</div>
-                    <div class="volume-slider">
-                        <div class="volume-fill"></div>
-                        <div class="volume-handle"></div>
-                    </div>
-                </div>
-
-                <!-- 播放器信息 -->
-                <div class="player-info">
-                    <h1 class="player-name" id="intro-title">戴雯晞</h1>
-                    <p class="player-desc">音乐艺术背景的我，在找寻热爱与价值的路上步履不停，始终相信步步向青山的力量。</p>
-                    <div class="player-tags">
-                        <span class="player-tag">音乐学</span>
-                        <span class="player-tag">企业文化</span>
-                        <span class="player-tag">2026届</span>
-                    </div>
+                <div class="v0-hero-btns">
+                    <a href="#page-1" class="v0-btn v0-btn-primary">向下探索</a>
+                    <a href="./project.html" class="v0-btn v0-btn-secondary">查看作品</a>
                 </div>
             </div>
         </div>
