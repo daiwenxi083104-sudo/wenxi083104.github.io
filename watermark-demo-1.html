@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水印方案1 - 页脚角落署名</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            color: white;
+        }
+        .mock-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .mock-card h2 { margin-bottom: 12px; font-size: 20px; }
+        .mock-card p { opacity: 0.9; line-height: 1.6; }
+
+        /* 页脚署名样式 */
+        .footer-credit {
+            padding: 20px 40px;
+            text-align: right;
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .footer-credit a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            margin-left: 15px;
+            transition: color 0.3s;
+        }
+        .footer-credit a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <h1 style="margin-bottom: 30px; font-size: 28px;">📊 企业文化工作看板</h1>
+        <div class="mock-card">
+            <h2>🎯 本月目标</h2>
+            <p>完成年度企业文化活动方案策划，推进员工关怀体系落地...</p>
+        </div>
+        <div class="mock-card">
+            <h2>📋 任务概览</h2>
+            <p>待开始 5 | 进行中 3 | 已完成 12</p>
+        </div>
+        <div class="mock-card">
+            <h2>📈 数据洞察</h2>
+            <p>文化活动模块健康度 85%，品牌传播模块需关注...</p>
+        </div>
+    </div>
+
+    <!-- 页脚署名 -->
+    <div class="footer-credit">
+        <span>© 2025 戴雯晞 · 企业文化工作管理系统</span>
+        <a href="https://github.com/wenxi083104" target="_blank">GitHub</a>
+        <a href="https://wenxi083104.github.io/" target="_blank">作品集</a>
+    </div>
+</body>
+</html>

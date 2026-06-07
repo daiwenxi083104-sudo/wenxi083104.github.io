@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水印方案2 - 浮动水印卡片</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px;
+            color: white;
+        }
+        .mock-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            max-width: 800px;
+        }
+        .mock-card h2 { margin-bottom: 12px; font-size: 20px; }
+        .mock-card p { opacity: 0.9; line-height: 1.6; }
+
+        /* 浮动水印卡片 */
+        .floating-credit {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            line-height: 1.8;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        .floating-credit:hover {
+            background: rgba(255,255,255,0.25);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        .floating-credit .name {
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 2px;
+        }
+        .floating-credit .tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="margin-bottom: 30px; font-size: 28px;">📊 企业文化工作看板</h1>
+    <div class="mock-card">
+        <h2>🎯 本月目标</h2>
+        <p>完成年度企业文化活动方案策划，推进员工关怀体系落地...</p>
+    </div>
+    <div class="mock-card">
+        <h2>📋 任务概览</h2>
+        <p>待开始 5 | 进行中 3 | 已完成 12</p>
+    </div>
+    <div class="mock-card">
+        <h2>📈 数据洞察</h2>
+        <p>文化活动模块健康度 85%，品牌传播模块需关注...</p>
+    </div>
+
+    <!-- 浮动水印卡片 -->
+    <div class="floating-credit">
+        <div class="name">👤 戴雯晞</div>
+        <div>2026届应届生</div>
+        <div class="tag">企业文化方向</div>
+    </div>
+</body>
+</html>

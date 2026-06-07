@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水印方案4 - 交互式署名气泡</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px;
+            color: white;
+        }
+        .mock-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            max-width: 800px;
+        }
+        .mock-card h2 { margin-bottom: 12px; font-size: 20px; }
+        .mock-card p { opacity: 0.9; line-height: 1.6; }
+
+        /* 交互式气泡 */
+        .credit-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        /* 展开的消息气泡 */
+        .bubble-message {
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            padding: 14px 18px;
+            border-radius: 16px 16px 4px 16px;
+            font-size: 13px;
+            line-height: 1.6;
+            max-width: 220px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            animation: bubbleIn 0.4s ease;
+            position: relative;
+        }
+        .bubble-message .close-btn {
+            position: absolute;
+            top: 6px;
+            right: 10px;
+            cursor: pointer;
+            opacity: 0.4;
+            font-size: 16px;
+        }
+        .bubble-message .close-btn:hover { opacity: 0.8; }
+        .bubble-message .author {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+        .bubble-message .links {
+            margin-top: 8px;
+            display: flex;
+            gap: 10px;
+        }
+        .bubble-message .links a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .bubble-message .links a:hover { text-decoration: underline; }
+
+        /* 收缩后的圆点 */
+        .bubble-dot {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: 2px solid rgba(255,255,255,0.5);
+            color: white;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            animation: dotPulse 2s infinite;
+        }
+        .bubble-dot:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+        }
+
+        @keyframes bubbleIn {
+            from { opacity: 0; transform: translateY(10px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes dotPulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(102, 126, 234, 0.7); }
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <h1 style="margin-bottom: 30px; font-size: 28px;">📊 企业文化工作看板</h1>
+    <div class="mock-card">
+        <h2>🎯 本月目标</h2>
+        <p>完成年度企业文化活动方案策划，推进员工关怀体系落地...</p>
+    </div>
+    <div class="mock-card">
+        <h2>📋 任务概览</h2>
+        <p>待开始 5 | 进行中 3 | 已完成 12</p>
+    </div>
+    <div class="mock-card">
+        <h2>📈 数据洞察</h2>
+        <p>文化活动模块健康度 85%，品牌传播模块需关注...</p>
+    </div>
+
+    <!-- 交互式署名气泡 -->
+    <div class="credit-bubble" id="creditBubble">
+        <div class="bubble-message" id="bubbleMsg">
+            <span class="close-btn" onclick="minimizeBubble()">×</span>
+            <div class="author">👋 嗨，我是戴雯晞</div>
+            <div>这是我在准备企业文化岗位求职过程中独立开发的作品。</div>
+            <div class="links">
+                <a href="https://github.com/wenxi083104" target="_blank">GitHub →</a>
+                <a href="https://wenxi083104.github.io/" target="_blank">作品集 →</a>
+            </div>
+        </div>
+        <div class="bubble-dot hidden" id="bubbleDot" onclick="expandBubble()" title="关于作者">👤</div>
+    </div>
+
+    <script>
+        const bubbleMsg = document.getElementById('bubbleMsg');
+        const bubbleDot = document.getElementById('bubbleDot');
+
+        // 3秒后自动收缩
+        setTimeout(() => {
+            minimizeBubble();
+        }, 5000);
+
+        function minimizeBubble() {
+            bubbleMsg.classList.add('hidden');
+            bubbleDot.classList.remove('hidden');
+        }
+
+        function expandBubble() {
+            bubbleDot.classList.add('hidden');
+            bubbleMsg.classList.remove('hidden');
+            // 重新计时
+            clearTimeout(window.bubbleTimer);
+            window.bubbleTimer = setTimeout(minimizeBubble, 5000);
+        }
+    </script>
+</body>
+</html>
