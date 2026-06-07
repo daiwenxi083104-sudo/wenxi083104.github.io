@@ -183,19 +183,20 @@
         /* Canvas 背景层 - 右侧圆盘粒子 */
         .hero-canvas-container {
             position: absolute;
-            right: 0;
+            right: -100px;
             top: 50%;
             transform: translateY(-50%);
-            width: 600px;
-            height: 600px;
-            opacity: 0.4;
+            width: 700px;
+            height: 700px;
+            opacity: 0.55;
             pointer-events: none;
             z-index: 0;
         }
         @media (min-width: 1024px) {
             .hero-canvas-container {
-                width: 800px;
-                height: 800px;
+                width: 900px;
+                height: 900px;
+                right: -150px;
             }
         }
         .hero-canvas {
@@ -2298,7 +2299,9 @@
         <div class="v0-hero">
             <div class="v0-hero-badge">The platform for creative minds</div>
             <h1 class="v0-hero-title" id="intro-title">
-                <span class="block">戴雯晞</span>
+                <span class="block">
+                    <span class="animate-char-in" style="animation-delay:0ms">戴</span><span class="animate-char-in" style="animation-delay:80ms">雯</span><span class="char-last-wrapper"><span class="animate-char-in" style="animation-delay:160ms">晞</span><span class="char-last-bar"></span></span>
+                </span>
             </h1>
             <p class="v0-hero-desc">音乐艺术背景的我，在找寻热爱与价值的路上步履不停，始终相信步步向青山的力量。</p>
             <div class="v0-hero-btns">
@@ -2724,10 +2727,10 @@
             // 粒子类型: 0=小方块, 1=加号, 2=弧线, 3=小点
             function createParticles() {
                 particles = [];
-                const count = 180;
+                const count = 220;
                 const cx = width * 0.5;
                 const cy = height * 0.5;
-                const maxRadius = Math.min(width, height) * 0.45;
+                const maxRadius = Math.min(width, height) * 0.48;
 
                 for (let i = 0; i < count; i++) {
                     // 圆盘分布：使用平方根使粒子均匀分布在圆盘内
@@ -2739,24 +2742,24 @@
                     
                     const type = Math.random();
                     let particleType;
-                    if (type < 0.5) particleType = 0;      // 50% 小方块
-                    else if (type < 0.75) particleType = 1; // 25% 加号
-                    else if (type < 0.9) particleType = 2;  // 15% 弧线
-                    else particleType = 3;                   // 10% 小点
+                    if (type < 0.45) particleType = 0;       // 45% 小方块
+                    else if (type < 0.70) particleType = 1;  // 25% 加号
+                    else if (type < 0.85) particleType = 2;  // 15% 弧线
+                    else particleType = 3;                    // 15% 小点
 
                     particles.push({
                         x: x,
                         y: y,
                         type: particleType,
-                        size: Math.random() * 3 + 1.5,
-                        baseOpacity: Math.random() * 0.25 + 0.08,
+                        size: Math.random() * 4 + 2,
+                        baseOpacity: Math.random() * 0.35 + 0.12,
                         rotation: Math.random() * Math.PI * 2,
-                        rotSpeed: (Math.random() - 0.5) * 0.01,
-                        breatheSpeed: Math.random() * 0.8 + 0.3,
+                        rotSpeed: (Math.random() - 0.5) * 0.008,
+                        breatheSpeed: Math.random() * 0.6 + 0.2,
                         breathePhase: Math.random() * Math.PI * 2,
                         // 轨道运动参数
-                        orbitRadius: Math.random() * 15 + 5,
-                        orbitSpeed: (Math.random() - 0.5) * 0.3,
+                        orbitRadius: Math.random() * 20 + 8,
+                        orbitSpeed: (Math.random() - 0.5) * 0.25,
                         orbitPhase: Math.random() * Math.PI * 2
                     });
                 }
