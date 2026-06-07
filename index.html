@@ -2759,20 +2759,24 @@
                     this.x += this.speedX + Math.sin(this.wobblePhase) * this.wobbleAmp;
                     this.rotation += this.rotSpeed;
 
-                    // 从底部淡入
-                    const bottomFadeStart = H * 0.85;
-                    if (this.y > bottomFadeStart) {
-                        this.opacity = Math.min(this.maxOpacity, (H - this.y) / (H - bottomFadeStart) * this.maxOpacity);
+                    // 计算透明度：在页面范围内从底部到顶部
+                    if (this.y > H) {
+                        // 还在画布下方，完全透明
+                        this.opacity = 0;
+                    } else if (this.y > H * 0.85) {
+                        // 底部15%区域淡入
+                        this.opacity = Math.min(this.maxOpacity, (H - this.y) / (H * 0.15) * this.maxOpacity);
+                    } else if (this.y < 0) {
+                        // 已经超出顶部，完全透明并立即重置
+                        this.opacity = 0;
+                        this.reset(false);
+                        return;
                     } else if (this.y < H * 0.15) {
-                        // 接近顶部时淡出
+                        // 顶部15%区域淡出
                         this.opacity = Math.max(0, this.y / (H * 0.15) * this.maxOpacity);
                     } else {
+                        // 中间区域完全显示
                         this.opacity = this.maxOpacity;
-                    }
-
-                    // 到达顶部后重置
-                    if (this.y < -60) {
-                        this.reset(false);
                     }
                 }
 
