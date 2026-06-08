@@ -61,6 +61,38 @@
             top: 0;
         }
 
+        /* 顶部导航栏 */
+        .top-nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            background: rgba(250, 250, 250, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            z-index: 999;
+            padding: 0 20px;
+        }
+        .nav-bar-link {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .nav-bar-link:hover {
+            color: var(--black);
+            background: rgba(0,0,0,0.04);
+        }
+
         /* 可访问性：Focus 样式 */
         *:focus-visible {
             outline: 3px solid #0066cc;
@@ -2257,6 +2289,12 @@
 <body>
     <!-- 可访问性：Skip Link -->
     <a href="#main-content" class="skip-link">跳转到主要内容</a>
+
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav-bar" aria-label="站点导航">
+        <a href="./project.html" class="nav-bar-link">📁 项目介绍</a>
+        <a href="./dashboard.html" class="nav-bar-link">🚀 工作看板</a>
+    </nav>
 
     <!-- 页面导航点 -->
     <nav class="page-dots" aria-label="页面导航">
