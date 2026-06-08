@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>随机抽签</title>
+<!-- 本地字体 fallback -->
+<link rel="stylesheet" href="./fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet"></noscript>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+    background: #fff;
+    color: #222;
+    min-height: 100vh;
+    padding: 20px;
+    background-image:
+      radial-gradient(circle, #ddd 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 8px 18px;
+    border: 2px dashed #222;
+    border-radius: 12px 8px 14px 10px;
+    text-decoration: none;
+    color: #222;
+    font-size: 16px;
+    transition: all 0.2s;
+    background: #fff;
+  }
+  .back-link:hover {
+    background: #222;
+    color: #fff;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: clamp(28px, 6vw, 48px);
+    margin-bottom: 24px;
+    letter-spacing: 4px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+  h1::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 3px;
+    background: #222;
+    margin: 8px auto 0;
+    border-radius: 2px;
+    transform: rotate(-0.5deg);
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* --- 手绘风格卡片 --- */
+  .card {
+    background: #fff;
+    border: 2.5px solid #222;
+    border-radius: 25px 20px 30px 22px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    box-shadow: 4px 4px 0 #222;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -6px; left: -6px; right: -6px; bottom: -6px;
+    border: 2px dashed #aaa;
+    border-radius: 30px 24px 35px 27px;
+    pointer-events: none;
+  }
+
+  .card-title {
+    font-size: 20px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed #ccc;
+  }
+
+  /* --- 名字列表 --- */
+  .name-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+    min-height: 40px;
+  }
+  .name-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 2px solid #222;
+    border-radius: 18px 12px 20px 14px;
+    font-size: 16px;
+    background: #f9f9f9;
+    animation: popIn 0.3s ease;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.6); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .name-tag .del-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    color: #666;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    transition: color 0.2s;
+    padding: 0;
+  }
+  .name-tag .del-btn:hover { color: #222; }
+
+  /* --- 输入区 --- */
+  .input-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .input-row input {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px 16px;
+    border: 2px solid #222;
+    border-radius: 14px 10px 16px 12px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    transition: box-shadow 0.2s;
+  }
+  .input-row input:focus {
+    box-shadow: 3px 3px 0 #222;
+  }
+  .btn {
+    padding: 10px 20px;
+    border: 2.5px solid #222;
+    border-radius: 16px 12px 18px 14px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #fff;
+    color: #222;
+    white-space: nowrap;
+  }
+  .btn:hover {
+    background: #222;
+    color: #fff;
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 #222;
+  }
+  .btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+  }
+  .btn-primary {
+    background: #222;
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: #444;
+    color: #fff;
+  }
+
+  /* --- 抽取人数选择 --- */
+  .count-selector {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .count-selector label {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+  .count-selector input[type="radio"] {
+    accent-color: #222;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  /* --- 滚动显示区 --- */
+  .slot-area {
+    text-align: center;
+    padding: 30px 20px;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .slot-display {
+    font-size: clamp(32px, 8vw, 56px);
+    letter-spacing: 6px;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: #222;
+  }
+  .slot-display.rolling {
+    animation: shake 0.08s infinite alternate;
+  }
+  @keyframes shake {
+    0% { transform: translateX(-2px) rotate(-0.5deg); }
+    100% { transform: translateX(2px) rotate(0.5deg); }
+  }
+  .slot-placeholder {
+    font-size: 20px;
+    color: #aaa;
+  }
+
+  /* --- 按钮区 --- */
+  .action-row {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .btn-big {
+    padding: 14px 36px;
+    font-size: 22px;
+    border-radius: 20px 16px 24px 18px;
+    border-width: 3px;
+  }
+
+  /* --- 弹窗遮罩 --- */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal {
+    background: #fff;
+    border: 3px solid #222;
+    border-radius: 28px 22px 32px 26px;
+    padding: 32px 28px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 6px 6px 0 #222;
+    animation: modalPop 0.35s ease;
+    position: relative;
+  }
+  @keyframes modalPop {
+    0% { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .modal h2 {
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+  .modal-close {
+    position: absolute;
+    top: 12px; right: 16px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    color: #666;
+    line-height: 1;
+  }
+  .modal-close:hover { color: #222; }
+
+  .result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border: 2px solid #222;
+    border-radius: 16px 12px 18px 14px;
+    background: #f9f9f9;
+    font-size: 20px;
+  }
+  .result-item .result-name {
+    font-size: 22px;
+  }
+  .result-item .result-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .result-item .result-actions .btn {
+    padding: 6px 14px;
+    font-size: 14px;
+    border-radius: 10px 8px 12px 9px;
+  }
+  .btn-remove {
+    background: #222;
+    color: #fff;
+  }
+  .btn-remove:hover {
+    background: #555;
+    color: #fff;
+  }
+  .btn-keep {
+    background: #fff;
+    color: #222;
+  }
+
+  .modal-footer {
+    text-align: center;
+  }
+
+  /* --- 历史记录 --- */
+  .history-section {
+    margin-top: 8px;
+  }
+  .history-item {
+    padding: 8px 14px;
+    border-bottom: 1px dashed #ccc;
+    font-size: 15px;
+    color: #555;
+  }
+  .history-item:last-child { border-bottom: none; }
+  .history-empty {
+    color: #bbb;
+    font-size: 15px;
+    text-align: center;
+    padding: 10px;
+  }
+
+  /* --- 响应式 --- */
+  @media (max-width: 500px) {
+    body { padding: 12px; }
+    .card { padding: 16px; }
+    .btn-big { padding: 12px 24px; font-size: 18px; }
+    .modal { padding: 24px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-link" aria-label="返回首页">&larr; 返回首页</a>
+
+<main class="container" role="main" aria-labelledby="page-title">
+  <h1 id="page-title">随机抽签</h1>
+
+  <!-- 名字管理 -->
+  <section class="card" aria-labelledby="names-title">
+    <h2 class="card-title" id="names-title">参与人员</h2>
+    <div class="name-list" id="nameList" role="list" aria-label="已添加的参与者"></div>
+    <div class="input-row">
+      <input type="text" id="nameInput" placeholder="输入名字..." maxlength="20" aria-label="输入参与者姓名">
+      <button class="btn" onclick="addName()" aria-label="添加参与者">添加</button>
+    </div>
+  </section>
+
+  <!-- 抽签设置 -->
+  <section class="card" aria-labelledby="settings-title">
+    <h2 class="card-title" id="settings-title">抽签设置</h2>
+    <div class="count-selector" role="radiogroup" aria-label="抽取人数">
+      <label><input type="radio" name="drawCount" value="1" checked aria-label="抽取1人"> 抽 1 人</label>
+      <label><input type="radio" name="drawCount" value="2" aria-label="抽取2人"> 抽 2 人</label>
+      <label><input type="radio" name="drawCount" value="3" aria-label="抽取3人"> 抽 3 人</label>
+    </div>
+  </section>
+
+  <!-- 抽签区 -->
+  <section class="card" aria-labelledby="draw-area-title">
+    <h2 class="card-title" id="draw-area-title" class="visually-hidden">抽签区域</h2>
+    <div class="slot-area">
+      <div class="slot-display" id="slotDisplay" role="status" aria-live="polite" aria-atomic="true">
+        <span class="slot-placeholder">点击下方按钮开始抽签</span>
+      </div>
+    </div>
+    <div class="action-row">
+      <button class="btn btn-primary btn-big" id="startBtn" onclick="startDraw()" aria-label="开始抽签">开始抽签</button>
+      <button class="btn btn-big" id="stopBtn" onclick="stopDraw()" style="display:none;" aria-label="停止抽签">停 止</button>
+    </div>
+  </section>
+
+  <!-- 历史记录 -->
+  <section class="card history-section" aria-labelledby="history-title">
+    <h2 class="card-title" id="history-title">抽签记录</h2>
+    <div id="historyList" role="log" aria-live="polite" aria-atomic="false">
+      <div class="history-empty">暂无记录</div>
+    </div>
+  </section>
+</main>
+
+<!-- 结果弹窗 -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="result-title" aria-hidden="true">
+  <div class="modal" role="document">
+    <button class="modal-close" onclick="closeModal()" aria-label="关闭弹窗">&times;</button>
+    <h2 id="result-title">抽签结果</h2>
+    <div class="result-list" id="resultList" role="list" aria-label="中签名单"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal()" aria-label="确定并关闭">确 定</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { RandomDraw } from './js/RandomDraw.js';
+  
+  // 初始化抽签器
+  const drawApp = new RandomDraw();
+  
+  // 将方法暴露到全局，供 HTML 内联事件调用
+  window.addName = () => drawApp.addName();
+  window.startDraw = () => drawApp.startDraw();
+  window.stopDraw = () => drawApp.stopDraw();
+  window.closeModal = () => drawApp.closeModal();
+</script>
+</body>
+</html>

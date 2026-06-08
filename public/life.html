@@ -1,0 +1,2358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的生活 - 戴雯晞</title>
+    <!-- 本地字体 fallback -->
+    <link rel="stylesheet" href="./fonts.css">
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --gray: #666;
+            --light-gray: #999;
+            --bg: #fafafa;
+            --white: #fff;
+            --border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            background: var(--bg);
+            color: var(--black);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 手绘背景装饰 */
+        .bg-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .hand-drawn-element {
+            position: absolute;
+            opacity: 0.07;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+            50% { transform: translateY(-15px) rotate(-3deg) scale(1.05); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.07; transform: scale(1); }
+            50% { opacity: 0.12; transform: scale(1.2); }
+        }
+
+        /* 音符 */
+        .note-1 { top: 12%; left: 4%; font-size: 44px; animation: float 7s ease-in-out infinite; }
+        .note-2 { top: 32%; right: 6%; font-size: 36px; animation: float 6s ease-in-out infinite 1s; }
+        .note-3 { top: 58%; left: 2%; font-size: 30px; animation: float 8s ease-in-out infinite 2s; }
+        .note-4 { bottom: 22%; right: 4%; font-size: 38px; animation: float 7s ease-in-out infinite 3s; }
+        .note-5 { top: 75%; left: 12%; font-size: 26px; animation: float 9s ease-in-out infinite 1.5s; }
+
+        /* 星星 */
+        .star-1 { top: 6%; right: 12%; font-size: 26px; animation: twinkle 3s ease-in-out infinite; }
+        .star-2 { top: 42%; left: 8%; font-size: 22px; animation: twinkle 4s ease-in-out infinite 1s; }
+        .star-3 { bottom: 38%; right: 10%; font-size: 30px; animation: twinkle 3.5s ease-in-out infinite 0.5s; }
+        .star-4 { bottom: 12%; left: 18%; font-size: 24px; animation: twinkle 4s ease-in-out infinite 2s; }
+        .star-5 { top: 18%; left: 22%; font-size: 18px; animation: twinkle 3s ease-in-out infinite 1.5s; }
+
+        /* 云朵 */
+        .cloud-1 { top: 18%; right: 18%; font-size: 55px; animation: floatSlow 10s ease-in-out infinite; }
+        .cloud-2 { bottom: 28%; left: 6%; font-size: 42px; animation: floatSlow 12s ease-in-out infinite 2s; }
+        .cloud-3 { top: 48%; right: 2%; font-size: 35px; animation: floatSlow 11s ease-in-out infinite 4s; }
+
+        /* 爱心 */
+        .heart-1 { top: 48%; right: 2%; font-size: 28px; animation: float 5s ease-in-out infinite 1.2s; }
+        .heart-2 { bottom: 18%; right: 22%; font-size: 24px; animation: float 6s ease-in-out infinite 2.8s; }
+        .heart-3 { top: 8%; left: 30%; font-size: 20px; animation: twinkle 4s ease-in-out infinite 0.8s; }
+
+        /* 太阳和月亮 */
+        .sun { top: 3%; left: 12%; font-size: 48px; animation: wiggle 4s ease-in-out infinite; }
+        .moon { bottom: 8%; left: 4%; font-size: 38px; animation: floatSlow 9s ease-in-out infinite 2.2s; }
+
+        /* 可爱小动物 - 小猫 */
+        .cat-doodle {
+            top: 25%;
+            right: 3%;
+            font-size: 36px;
+            animation: float 8s ease-in-out infinite 0.5s;
+        }
+
+        /* 可爱小动物 - 小兔子 */
+        .bunny-doodle {
+            bottom: 35%;
+            left: 3%;
+            font-size: 32px;
+            animation: float 7s ease-in-out infinite 1.5s;
+        }
+
+        /* 可爱小动物 - 小熊 */
+        .bear-doodle {
+            top: 65%;
+            right: 15%;
+            font-size: 28px;
+            animation: float 9s ease-in-out infinite 2.5s;
+        }
+
+        /* 花朵 */
+        .flower-1 { top: 38%; left: 15%; font-size: 30px; animation: wiggle 5s ease-in-out infinite 0.3s; }
+        .flower-2 { bottom: 15%; right: 30%; font-size: 26px; animation: wiggle 6s ease-in-out infinite 1.8s; }
+        .flower-3 { top: 72%; left: 25%; font-size: 22px; animation: wiggle 4s ease-in-out infinite 3s; }
+
+        /* 蝴蝶 */
+        .butterfly-1 { top: 15%; left: 40%; font-size: 28px; animation: floatSlow 7s ease-in-out infinite 0.7s; }
+        .butterfly-2 { bottom: 45%; right: 20%; font-size: 24px; animation: floatSlow 8s ease-in-out infinite 2.3s; }
+
+        /* 彩虹 */
+        .rainbow-doodle {
+            top: 5%;
+            right: 5%;
+            font-size: 40px;
+            animation: floatSlow 11s ease-in-out infinite 1s;
+        }
+
+        /* 手绘线条装饰 */
+        .doodle-line {
+            position: absolute;
+            border: 2px solid var(--black);
+            opacity: 0.05;
+            border-radius: 50%;
+        }
+
+        .doodle-1 {
+            width: 100px;
+            height: 100px;
+            top: 22%;
+            left: 1%;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation: floatSlow 12s ease-in-out infinite;
+        }
+
+        .doodle-2 {
+            width: 80px;
+            height: 80px;
+            top: 68%;
+            right: 2%;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: floatSlow 10s ease-in-out infinite 2s;
+        }
+
+        .doodle-3 {
+            width: 60px;
+            height: 60px;
+            bottom: 12%;
+            left: 28%;
+            border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%;
+            animation: floatSlow 11s ease-in-out infinite 3s;
+        }
+
+        .doodle-4 {
+            width: 70px;
+            height: 70px;
+            top: 45%;
+            right: 25%;
+            border-radius: 40% 60% 50% 50% / 50% 40% 60% 50%;
+            animation: floatSlow 13s ease-in-out infinite 1.5s;
+        }
+
+        /* 螺旋装饰 */
+        .spiral {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            opacity: 0.06;
+        }
+
+        .spiral::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            border-top-color: transparent;
+            border-right-color: transparent;
+            animation: spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .spiral-1 { top: 38%; left: 4%; }
+        .spiral-2 { bottom: 32%; right: 6%; animation-delay: -4s; }
+
+        /* 手绘波浪线 */
+        .wave-line {
+            position: absolute;
+            opacity: 0.05;
+        }
+
+        .wave-line svg {
+            width: 120px;
+            height: 30px;
+        }
+
+        .wave-1 { top: 55%; left: 1%; animation: floatSlow 10s ease-in-out infinite; }
+        .wave-2 { bottom: 5%; right: 10%; animation: floatSlow 12s ease-in-out infinite 2s; }
+
+        /* 手绘小星星点缀 */
+        .sparkle-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--black);
+            border-radius: 50%;
+            opacity: 0.06;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .dot-1 { top: 20%; left: 35%; animation-delay: 0s; }
+        .dot-2 { top: 40%; right: 30%; animation-delay: 0.5s; }
+        .dot-3 { top: 60%; left: 45%; animation-delay: 1s; }
+        .dot-4 { top: 80%; right: 35%; animation-delay: 1.5s; }
+        .dot-5 { top: 30%; left: 50%; animation-delay: 2s; }
+        .dot-6 { bottom: 25%; left: 35%; animation-delay: 2.5s; }
+
+        /* 头部导航 */
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            border-bottom: 2px solid var(--black);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 2px 0 rgba(0,0,0,0.05);
+        }
+
+        /* 确保内容在背景之上 */
+        .header, .container {
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 14px;
+            padding: 8px 16px;
+            border: 2px solid var(--black);
+            border-radius: 20px 18px 22px 16px;
+            transition: all 0.3s;
+            background: var(--white);
+        }
+
+        .back-link:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 3px 3px 0 var(--black);
+        }
+
+        .header-title {
+            font-size: 24px;
+            letter-spacing: 4px;
+        }
+
+        .new-post-btn {
+            padding: 10px 20px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 22px 20px 24px 18px;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .new-post-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* 发布框 */
+        .post-form {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 24px 20px 28px 22px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 4px 4px 0 var(--black);
+            display: none;
+        }
+
+        .post-form.active {
+            display: block;
+        }
+
+        .form-title {
+            font-size: 18px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        /* 媒体上传区域 */
+        .media-upload {
+            border: 2px dashed var(--light-gray);
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .media-upload:hover {
+            border-color: var(--black);
+            background: rgba(0,0,0,0.02);
+        }
+
+        .media-upload.has-media {
+            border-style: solid;
+            border-color: var(--black);
+            padding: 16px;
+        }
+
+        .upload-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .upload-text {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .media-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .media-preview.active {
+            display: block;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* 输入框 */
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 16px 14px 18px 12px;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            margin-bottom: 12px;
+            transition: border-color 0.3s;
+            resize: vertical;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--black);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* 心情选择 */
+        .mood-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .mood-tag {
+            padding: 6px 14px;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--white);
+        }
+
+        .mood-tag:hover,
+        .mood-tag.active {
+            border-color: var(--black);
+            background: var(--black);
+            color: var(--white);
+        }
+
+        /* 自定义心情 */
+        .custom-mood-btn {
+            padding: 6px 14px;
+            border: 2px dashed var(--light-gray);
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--white);
+            color: var(--gray);
+        }
+
+        .custom-mood-btn:hover {
+            border-color: var(--black);
+            color: var(--black);
+        }
+
+        .custom-mood-input-area {
+            display: none;
+            width: 100%;
+            gap: 8px;
+            margin-top: 8px;
+            align-items: center;
+        }
+
+        .custom-mood-input-area.active {
+            display: flex;
+        }
+
+        .custom-mood-emoji {
+            width: 60px;
+            text-align: center;
+        }
+
+        .custom-mood-text {
+            flex: 1;
+        }
+
+        .confirm-custom-mood {
+            padding: 8px 16px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* 按钮组 */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border: 2px solid var(--black);
+            border-radius: 20px 18px 22px 16px;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg);
+        }
+
+        .btn-primary {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+        }
+
+        /* 日历视图 */
+        .calendar-view {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 24px 20px 28px 22px;
+            padding: 20px;
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px dashed rgba(0,0,0,0.2);
+        }
+
+        .calendar-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .calendar-nav-btn {
+            width: 36px;
+            height: 36px;
+            border: 2px solid var(--black);
+            border-radius: 10px;
+            background: var(--white);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .calendar-nav-btn:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0 var(--black);
+        }
+
+        .calendar-nav-btn:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0 var(--black);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 1.5px solid rgba(0,0,0,0.15);
+            border-radius: 12px 10px 14px 11px;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            min-height: 60px;
+        }
+
+        .calendar-day:hover {
+            border-color: var(--black);
+            transform: translate(-1px, -1px);
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.4;
+            background: #f8f8f8;
+        }
+
+        .calendar-day-number {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .calendar-day-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--black);
+            margin-top: 2px;
+        }
+
+        .calendar-day-indicator.multi {
+            width: 12px;
+            border-radius: 3px;
+        }
+
+        .calendar-day.today {
+            background: var(--bg);
+            border-color: var(--black);
+            border-width: 2px;
+        }
+
+        .calendar-day.today .calendar-day-number {
+            color: var(--black);
+            font-weight: 700;
+        }
+
+        /* 日期帖子弹窗 */
+        .day-posts-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .day-posts-modal.active {
+            display: flex;
+        }
+
+        .day-posts-content {
+            background: var(--white);
+            border: 3px solid var(--black);
+            border-radius: 28px 28px 0 0;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .day-posts-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 24px;
+            border-bottom: 2px dashed var(--black);
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 10;
+            border-radius: 25px 25px 0 0;
+        }
+
+        .day-posts-close {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            background: var(--white);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .day-posts-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .day-posts-list {
+            padding: 20px 24px;
+            overflow-y: auto;
+            flex: 1;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* 动态列表 */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .post-card {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 24px 20px 28px 22px;
+            overflow: hidden;
+            box-shadow: 4px 4px 0 var(--black);
+            transition: all 0.3s;
+        }
+
+        .post-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .post-media {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--black);
+        }
+
+        .post-content {
+            padding: 20px;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .post-time {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 12px;
+            color: var(--light-gray);
+        }
+
+        .post-mood {
+            padding: 4px 10px;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .post-location {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 12px;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .post-text {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--black);
+            margin-bottom: 12px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .post-action {
+            font-size: 12px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: color 0.3s;
+            user-select: none;
+        }
+
+        .post-action:hover {
+            color: var(--black);
+        }
+
+        .comment-hint {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 11px;
+            color: var(--light-gray);
+            margin-left: 4px;
+        }
+
+        /* 评论区 */
+        .comments-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px dashed var(--border);
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .comment-item {
+            background: var(--bg);
+            padding: 10px 14px;
+            border-radius: 12px 10px 14px 8px;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
+        }
+
+        .comment-time {
+            font-size: 11px;
+            color: var(--light-gray);
+            margin-top: 4px;
+        }
+
+        .comment-input-area {
+            display: flex;
+            gap: 8px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid var(--border);
+            border-radius: 12px 10px 14px 8px;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--black);
+        }
+
+        .comment-btn {
+            padding: 8px 16px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 12px 10px 14px 8px;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--light-gray);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-text {
+            font-size: 16px;
+        }
+
+        /* 编辑弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 24px 20px 28px 22px;
+            padding: 24px;
+            max-width: 560px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        /* 图片编辑区域 */
+        .edit-image-section {
+            margin-bottom: 16px;
+        }
+
+        .edit-image-preview-wrap {
+            position: relative;
+            width: 100%;
+            max-height: 250px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            border-radius: 16px 14px 18px 12px;
+            margin-bottom: 12px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edit-image-preview-wrap img {
+            max-width: 100%;
+            max-height: 250px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .edit-image-preview-wrap video {
+            max-width: 100%;
+            max-height: 250px;
+        }
+
+        .edit-image-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .edit-img-btn {
+            padding: 6px 14px;
+            border: 2px solid var(--border);
+            border-radius: 14px 12px 16px 10px;
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 12px;
+            cursor: pointer;
+            background: var(--white);
+            color: var(--black);
+            transition: all 0.3s;
+        }
+
+        .edit-img-btn:hover {
+            border-color: var(--black);
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .edit-img-btn.active {
+            border-color: var(--black);
+            background: var(--black);
+            color: var(--white);
+        }
+
+        /* 滤镜调整面板 */
+        .filter-panel {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            border: 2px dashed var(--border);
+            border-radius: 14px 12px 16px 10px;
+            background: var(--bg);
+        }
+
+        .filter-panel.active {
+            display: block;
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .filter-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-label {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 12px;
+            color: var(--gray);
+            min-width: 50px;
+        }
+
+        .filter-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .filter-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--black);
+            cursor: pointer;
+        }
+
+        .filter-value {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 11px;
+            color: var(--light-gray);
+            min-width: 30px;
+            text-align: right;
+        }
+
+        /* 裁剪面板 */
+        .crop-panel {
+            display: none;
+            margin-top: 12px;
+        }
+
+        .crop-panel.active {
+            display: block;
+        }
+
+        .crop-canvas-wrap {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            background: repeating-conic-gradient(#ddd 0% 25%, #fff 0% 50%) 50% / 16px 16px;
+            margin-bottom: 10px;
+            cursor: crosshair;
+        }
+
+        .crop-canvas-wrap canvas {
+            display: block;
+            width: 100%;
+        }
+
+        .crop-overlay {
+            position: absolute;
+            border: 2px dashed var(--black);
+            background: rgba(255,255,255,0.3);
+            pointer-events: none;
+            display: none;
+        }
+
+        .crop-info {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 11px;
+            color: var(--light-gray);
+            margin-bottom: 8px;
+        }
+
+        .crop-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .crop-actions .edit-img-btn {
+            flex: 1;
+            text-align: center;
+        }
+
+        #editFileInput {
+            display: none;
+        }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .header {
+                padding: 12px 16px;
+            }
+
+            .header-title {
+                font-size: 18px;
+            }
+
+            .container {
+                padding: 16px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 手绘背景装饰 -->
+    <div class="bg-decoration">
+        <!-- 音符（音乐元素） -->
+        <span class="hand-drawn-element note-1">♪</span>
+        <span class="hand-drawn-element note-2">♫</span>
+        <span class="hand-drawn-element note-3">♩</span>
+        <span class="hand-drawn-element note-4">♬</span>
+        <span class="hand-drawn-element note-5">♪</span>
+        
+        <!-- 星星 -->
+        <span class="hand-drawn-element star-1">✦</span>
+        <span class="hand-drawn-element star-2">✧</span>
+        <span class="hand-drawn-element star-3">⭐</span>
+        <span class="hand-drawn-element star-4">✦</span>
+        <span class="hand-drawn-element star-5">✧</span>
+        
+        <!-- 云朵 -->
+        <span class="hand-drawn-element cloud-1">☁</span>
+        <span class="hand-drawn-element cloud-2">☁</span>
+        <span class="hand-drawn-element cloud-3">☁</span>
+        
+        <!-- 爱心 -->
+        <span class="hand-drawn-element heart-1">♡</span>
+        <span class="hand-drawn-element heart-2">♥</span>
+        <span class="hand-drawn-element heart-3">♡</span>
+        
+        <!-- 太阳和月亮 -->
+        <span class="hand-drawn-element sun">☀</span>
+        <span class="hand-drawn-element moon">☽</span>
+        
+        <!-- 可爱小动物 -->
+        <span class="hand-drawn-element cat-doodle">🐱</span>
+        <span class="hand-drawn-element bunny-doodle">🐰</span>
+        <span class="hand-drawn-element bear-doodle">🐻</span>
+        
+        <!-- 花朵 -->
+        <span class="hand-drawn-element flower-1">🌸</span>
+        <span class="hand-drawn-element flower-2">🌼</span>
+        <span class="hand-drawn-element flower-3">🌷</span>
+        
+        <!-- 蝴蝶 -->
+        <span class="hand-drawn-element butterfly-1">🦋</span>
+        <span class="hand-drawn-element butterfly-2">🦋</span>
+        
+        <!-- 彩虹 -->
+        <span class="hand-drawn-element rainbow-doodle">🌈</span>
+        
+        <!-- 手绘线条装饰 -->
+        <div class="doodle-line doodle-1"></div>
+        <div class="doodle-line doodle-2"></div>
+        <div class="doodle-line doodle-3"></div>
+        <div class="doodle-line doodle-4"></div>
+        
+        <!-- 螺旋装饰 -->
+        <div class="spiral spiral-1"></div>
+        <div class="spiral spiral-2"></div>
+        
+        <!-- 手绘波浪线 -->
+        <div class="wave-line wave-1">
+            <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 15 Q15 5 25 15 Q35 25 45 15 Q55 5 65 15 Q75 25 85 15 Q95 5 105 15 Q115 25 120 15" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="wave-line wave-2">
+            <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 15 Q15 25 25 15 Q35 5 45 15 Q55 25 65 15 Q75 5 85 15 Q95 25 105 15 Q115 5 120 15" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+        </div>
+        
+        <!-- 小星星点缀 -->
+        <div class="sparkle-dot dot-1"></div>
+        <div class="sparkle-dot dot-2"></div>
+        <div class="sparkle-dot dot-3"></div>
+        <div class="sparkle-dot dot-4"></div>
+        <div class="sparkle-dot dot-5"></div>
+        <div class="sparkle-dot dot-6"></div>
+    </div>
+
+    <!-- 头部 -->
+    <header class="header">
+        <a href="index.html" class="back-link">← 返回首页</a>
+        <h1 class="header-title">我 的 生 活</h1>
+        <button class="new-post-btn" onclick="toggleForm()">+ 记录生活</button>
+    </header>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 发布表单 -->
+        <div class="post-form" id="postForm">
+            <h2 class="form-title">记录这一刻 ✨</h2>
+            
+            <div class="media-upload" id="mediaUpload" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">点击上传图片或视频</div>
+                <img class="media-preview" id="mediaPreview" alt="预览" loading="lazy">
+                <video class="media-preview" id="videoPreview" controls></video>
+            </div>
+            <input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFileSelect(event)">
+
+            <textarea class="form-input" id="postText" rows="3" placeholder="写下你的心情..."></textarea>
+
+            <div class="mood-selector">
+                <span class="mood-tag" data-mood="开心" data-emoji="😊" onclick="selectMood(this)">😊 开心</span>
+                <span class="mood-tag" data-mood="平静" data-emoji="😌" onclick="selectMood(this)">😌 平静</span>
+                <span class="mood-tag" data-mood="兴奋" data-emoji="🤩" onclick="selectMood(this)">🤩 兴奋</span>
+                <span class="mood-tag" data-mood="疲惫" data-emoji="😴" onclick="selectMood(this)">😴 疲惫</span>
+                <span class="mood-tag" data-mood="感动" data-emoji="🥺" onclick="selectMood(this)">🥺 感动</span>
+                <span class="mood-tag" data-mood="期待" data-emoji="✨" onclick="selectMood(this)">✨ 期待</span>
+                <span class="custom-mood-btn" onclick="showCustomMoodInput()">+ 自定义</span>
+            </div>
+            
+            <!-- 自定义心情输入区 -->
+            <div class="custom-mood-input-area" id="customMoodArea">
+                <input type="text" class="form-input custom-mood-emoji" id="customMoodEmoji" placeholder="emoji" maxlength="2">
+                <input type="text" class="form-input custom-mood-text" id="customMoodText" placeholder="心情名称">
+                <button class="confirm-custom-mood" onclick="confirmCustomMood()">确定</button>
+            </div>
+
+            <div class="form-row">
+                <input type="text" class="form-input" id="postLocation" placeholder="📍 地点（可选）">
+                <input type="datetime-local" class="form-input" id="postTime">
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="toggleForm()">取消</button>
+                <button type="button" class="btn btn-primary" onclick="publishPost()">发布</button>
+            </div>
+        </div>
+
+        <!-- 日历视图 -->
+        <div class="calendar-view" id="calendarView">
+            <div class="calendar-header">
+                <button class="calendar-nav-btn" onclick="changeMonth(-1)">‹</button>
+                <h3 class="calendar-title" id="calendarTitle">2024年1月</h3>
+                <button class="calendar-nav-btn" onclick="changeMonth(1)">›</button>
+            </div>
+            <div class="calendar-weekdays">
+                <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- 日历格子由JS生成 -->
+            </div>
+        </div>
+
+        <!-- 日期帖子弹窗 -->
+        <div class="day-posts-modal" id="dayPostsModal" onclick="closeDayPostsOnOverlay(event)">
+            <div class="day-posts-content">
+                <div class="day-posts-header">
+                    <button class="day-posts-close" onclick="closeDayPosts()">←</button>
+                    <h3 class="day-posts-title" id="dayPostsTitle">1月1日</h3>
+                </div>
+                <div class="day-posts-list" id="dayPostsList">
+                    <!-- 该日期的帖子列表 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 数据备份/恢复 -->
+        <div class="data-backup-section" style="text-align:center;padding:20px;margin-top:10px;">
+            <button class="btn" onclick="exportPosts()" style="margin:5px;padding:8px 16px;font-size:13px;background:#f0f0f0;border:1px solid #ddd;border-radius:6px;cursor:pointer;">📥 备份帖子</button>
+            <button class="btn" onclick="document.getElementById('importFile').click()" style="margin:5px;padding:8px 16px;font-size:13px;background:#f0f0f0;border:1px solid #ddd;border-radius:6px;cursor:pointer;">📤 恢复帖子</button>
+            <input type="file" id="importFile" accept=".json" onchange="importPosts(event)" style="display:none;">
+            <p style="font-size:12px;color:#999;margin-top:8px;">帖子数据自动保存在浏览器中，建议定期备份以防丢失</p>
+        </div>
+    </div>
+
+    <!-- 编辑弹窗 -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h3 class="modal-title">编辑动态</h3>
+            
+            <!-- 图片编辑区 -->
+            <div class="edit-image-section" id="editImageSection" style="display: none;">
+                <div class="edit-image-preview-wrap" id="editImagePreviewWrap">
+                    <img id="editImagePreview" src="" alt="编辑图片" loading="lazy">
+                </div>
+                <input type="file" id="editFileInput" accept="image/*" onchange="handleEditImageReplace(event)">
+                
+                <div class="edit-image-actions">
+                    <button type="button" class="edit-img-btn" onclick="triggerEditImageReplace()">📷 更换图片</button>
+                    <button type="button" class="edit-img-btn" id="filterToggleBtn" onclick="toggleFilterPanel()">🎨 调整滤镜</button>
+                    <button type="button" class="edit-img-btn" id="cropToggleBtn" onclick="toggleCropPanel()">✂️ 裁剪图片</button>
+                </div>
+                
+                <!-- 滤镜调整面板 -->
+                <div class="filter-panel" id="filterPanel">
+                    <div class="filter-row">
+                        <span class="filter-label">亮度</span>
+                        <input type="range" class="filter-slider" id="filterBrightness" min="50" max="150" value="100" oninput="applyFilter()">
+                        <span class="filter-value" id="brightnessVal">100%</span>
+                    </div>
+                    <div class="filter-row">
+                        <span class="filter-label">对比度</span>
+                        <input type="range" class="filter-slider" id="filterContrast" min="50" max="150" value="100" oninput="applyFilter()">
+                        <span class="filter-value" id="contrastVal">100%</span>
+                    </div>
+                    <div class="filter-row">
+                        <span class="filter-label">饱和度</span>
+                        <input type="range" class="filter-slider" id="filterSaturate" min="0" max="200" value="100" oninput="applyFilter()">
+                        <span class="filter-value" id="saturateVal">100%</span>
+                    </div>
+                    <div class="filter-row">
+                        <span class="filter-label">模糊</span>
+                        <input type="range" class="filter-slider" id="filterBlur" min="0" max="10" value="0" oninput="applyFilter()">
+                        <span class="filter-value" id="blurVal">0px</span>
+                    </div>
+                    <div style="text-align: right; margin-top: 8px;">
+                        <button type="button" class="edit-img-btn" onclick="resetFilters()">↺ 重置滤镜</button>
+                    </div>
+                </div>
+                
+                <!-- 裁剪面板 -->
+                <div class="crop-panel" id="cropPanel">
+                    <div class="crop-info">在图片上拖动鼠标框选裁剪区域</div>
+                    <div class="crop-canvas-wrap" id="cropCanvasWrap">
+                        <canvas id="cropCanvas"></canvas>
+                        <div class="crop-overlay" id="cropOverlay"></div>
+                    </div>
+                    <div class="crop-actions">
+                        <button type="button" class="edit-img-btn" onclick="applyCrop()">✅ 确认裁剪</button>
+                        <button type="button" class="edit-img-btn" onclick="cancelCrop()">↺ 取消</button>
+                    </div>
+                </div>
+            </div>
+            
+            <textarea class="form-input" id="editText" rows="4"></textarea>
+            <input type="text" class="form-input" id="editLocation" placeholder="📍 地点">
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeEditModal()">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveEdit()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/LifeStorage.js"></script>
+    <script>
+        // 数据存储（使用 LifeStorage 持久化模块）
+        let posts = [];
+        let currentMedia = null;
+        let currentMediaType = null;
+        let selectedMood = '';
+        let selectedEmoji = '';
+        let editingId = null;
+        
+        // 图片编辑相关
+        let editMediaOriginal = null;   // 编辑前的原始图片
+        let editMediaCurrent = null;    // 编辑中的当前图片（含滤镜）
+        let cropStartX = 0, cropStartY = 0;
+        let cropEndX = 0, cropEndY = 0;
+        let isCropping = false;
+        let cropImageObj = null;        // 用于裁剪的Image对象
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('DOM loaded, initializing...');
+            
+            // 初始化持久化存储
+            await LifeStorage.init();
+            
+            // 从持久化存储加载帖子
+            posts = await LifeStorage.getAll();
+            
+            // 按时间排序（最新的在前）
+            sortPostsByTime();
+            renderPosts();
+            renderCalendar(); // 渲染日历
+            
+            // 设置默认时间为当前时间
+            const now = new Date();
+            const timeString = now.toISOString().slice(0, 16);
+            document.getElementById('postTime').value = timeString;
+            
+            // 绑定回车键发送评论
+            document.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && e.target.classList.contains('comment-input')) {
+                    const postId = e.target.id.replace('comment-input-', '');
+                    addComment(parseInt(postId));
+                }
+            });
+        });
+
+        // 按时间排序帖子（最新的在前）
+        function sortPostsByTime() {
+            posts.sort(function(a, b) {
+                const timeA = new Date(a.time || a.createdAt);
+                const timeB = new Date(b.time || b.createdAt);
+                return timeB - timeA; // 降序，最新的在前
+            });
+        }
+
+        // 切换表单显示
+        function toggleForm() {
+            console.log('toggleForm called');
+            const form = document.getElementById('postForm');
+            form.classList.toggle('active');
+            if (!form.classList.contains('active')) {
+                resetForm();
+            }
+        }
+
+        // 重置表单
+        function resetForm() {
+            document.getElementById('postText').value = '';
+            document.getElementById('postLocation').value = '';
+            document.getElementById('fileInput').value = '';
+            document.getElementById('mediaPreview').classList.remove('active');
+            document.getElementById('videoPreview').classList.remove('active');
+            document.getElementById('mediaUpload').classList.remove('has-media');
+            document.querySelector('.upload-icon').style.display = 'block';
+            document.querySelector('.upload-text').style.display = 'block';
+            document.getElementById('customMoodArea').classList.remove('active');
+            document.getElementById('customMoodEmoji').value = '';
+            document.getElementById('customMoodText').value = '';
+            currentMedia = null;
+            currentMediaType = null;
+            selectedMood = '';
+            selectedEmoji = '';
+            document.querySelectorAll('.mood-tag').forEach(function(tag) {
+                tag.classList.remove('active');
+            });
+            
+            // 重置时间
+            const now = new Date();
+            document.getElementById('postTime').value = now.toISOString().slice(0, 16);
+        }
+
+        // 选择心情
+        function selectMood(element) {
+            console.log('selectMood called');
+            // 清除自定义心情区域
+            document.getElementById('customMoodArea').classList.remove('active');
+            
+            document.querySelectorAll('.mood-tag').forEach(function(tag) {
+                tag.classList.remove('active');
+            });
+            element.classList.add('active');
+            selectedMood = element.dataset.mood;
+            selectedEmoji = element.dataset.emoji;
+        }
+
+        // 显示自定义心情输入
+        function showCustomMoodInput() {
+            console.log('showCustomMoodInput called');
+            // 清除预设心情选择
+            document.querySelectorAll('.mood-tag').forEach(function(tag) {
+                tag.classList.remove('active');
+            });
+            selectedMood = '';
+            selectedEmoji = '';
+            
+            // 显示自定义输入区
+            document.getElementById('customMoodArea').classList.add('active');
+            document.getElementById('customMoodEmoji').focus();
+        }
+
+        // 确认自定义心情
+        function confirmCustomMood() {
+            console.log('confirmCustomMood called');
+            const emoji = document.getElementById('customMoodEmoji').value.trim();
+            const text = document.getElementById('customMoodText').value.trim();
+            
+            if (!emoji || !text) {
+                alert('请输入emoji和心情名称~');
+                return;
+            }
+            
+            selectedEmoji = emoji;
+            selectedMood = emoji + ' ' + text;
+            
+            // 隐藏自定义输入区
+            document.getElementById('customMoodArea').classList.remove('active');
+            
+            // 创建一个临时标签显示已选择
+            const moodSelector = document.querySelector('.mood-selector');
+            const existingCustom = moodSelector.querySelector('.custom-selected');
+            if (existingCustom) {
+                existingCustom.remove();
+            }
+            
+            const customTag = document.createElement('span');
+            customTag.className = 'mood-tag custom-selected active';
+            customTag.textContent = selectedMood;
+            moodSelector.insertBefore(customTag, moodSelector.querySelector('.custom-mood-btn'));
+        }
+
+        // 处理文件选择
+        function handleFileSelect(event) {
+            console.log('handleFileSelect called');
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentMedia = e.target.result;
+                currentMediaType = file.type.startsWith('video') ? 'video' : 'image';
+
+                const uploadArea = document.getElementById('mediaUpload');
+                const imgPreview = document.getElementById('mediaPreview');
+                const videoPreview = document.getElementById('videoPreview');
+
+                uploadArea.classList.add('has-media');
+                document.querySelector('.upload-icon').style.display = 'none';
+                document.querySelector('.upload-text').style.display = 'none';
+
+                if (currentMediaType === 'image') {
+                    imgPreview.src = currentMedia;
+                    imgPreview.classList.add('active');
+                    videoPreview.classList.remove('active');
+                } else {
+                    videoPreview.src = currentMedia;
+                    videoPreview.classList.add('active');
+                    imgPreview.classList.remove('active');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 发布动态
+        function publishPost() {
+            console.log('publishPost called');
+            
+            const text = document.getElementById('postText').value.trim();
+            const location = document.getElementById('postLocation').value.trim();
+            const timeInput = document.getElementById('postTime').value;
+            const time = timeInput ? new Date(timeInput).toISOString() : new Date().toISOString();
+
+            console.log('Text:', text);
+            console.log('Location:', location);
+            console.log('Time:', time);
+            console.log('Media:', currentMedia ? '有' : '无');
+            console.log('Mood:', selectedMood);
+
+            if (!text && !currentMedia) {
+                alert('请写点什么或上传图片/视频~');
+                return;
+            }
+
+            const post = {
+                id: Date.now(),
+                text: text,
+                media: currentMedia,
+                mediaType: currentMediaType,
+                mood: selectedMood,
+                location: location,
+                time: time,
+                createdAt: new Date().toISOString(),
+                comments: []
+            };
+
+            console.log('Creating post:', post);
+
+            // 添加到数组开头
+            posts.unshift(post);
+            
+            // 保存到持久化存储（IndexedDB + localStorage 双重保障）
+            LifeStorage.saveAll(posts);
+            console.log('帖子已持久化保存');
+
+            // 重新渲染
+            renderPosts();
+            renderCalendar(); // 刷新日历
+            
+            // 关闭表单并重置
+            toggleForm();
+            resetForm();
+            
+            console.log('Post published successfully');
+        }
+
+        // 渲染动态列表
+        function renderPosts() {
+            console.log('renderPosts called, posts count:', posts ? posts.length : 0);
+            
+            // 安全检查
+            if (!posts || !Array.isArray(posts)) {
+                console.error('posts is not valid:', posts);
+                posts = [];
+            }
+            
+            const timeline = document.getElementById('timeline');
+            if (!timeline) {
+                console.error('timeline element not found');
+                return;
+            }
+            
+            timeline.innerHTML = '';
+
+            if (posts.length === 0) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'empty-state';
+                emptyDiv.innerHTML = '<div class="empty-icon">📝</div><p class="empty-text">还没有记录，点击右上角开始记录你的生活吧~</p>';
+                timeline.appendChild(emptyDiv);
+                return;
+            }
+
+            posts.forEach(function(post) {
+                if (post && post.id) {
+                    const card = createPostCard(post);
+                    timeline.appendChild(card);
+                }
+            });
+            
+            console.log('Posts rendered');
+        }
+
+        // 创建动态卡片
+        function createPostCard(post) {
+            const card = document.createElement('div');
+            card.className = 'post-card';
+            card.id = 'post-' + post.id;
+
+            const date = new Date(post.time || post.createdAt);
+            const timeStr = date.getFullYear() + '.' + 
+                String(date.getMonth() + 1).padStart(2, '0') + '.' + 
+                String(date.getDate()).padStart(2, '0') + ' ' + 
+                String(date.getHours()).padStart(2, '0') + ':' + 
+                String(date.getMinutes()).padStart(2, '0');
+
+            let mediaHtml = '';
+            if (post.media) {
+                if (post.mediaType === 'video') {
+                    mediaHtml = '<video class="post-media" src="' + post.media + '" controls></video>';
+                } else {
+                    mediaHtml = '<img class="post-media" src="' + post.media + '" alt="动态图片" loading="lazy">';
+                }
+            }
+
+            // 渲染评论
+            let commentsHtml = '';
+            if (post.comments && post.comments.length > 0) {
+                commentsHtml = post.comments.map(function(comment) {
+                    const commentDate = new Date(comment.time);
+                    return '<div class="comment-item">' +
+                        '<div>' + escapeHtml(comment.text) + '</div>' +
+                        '<div class="comment-time">' + commentDate.toLocaleString() + '</div>' +
+                    '</div>';
+                }).join('');
+            }
+
+            const moodHtml = post.mood ? '<span class="post-mood">' + post.mood + '</span>' : '';
+            const locationHtml = post.location ? '<span class="post-location">📍 ' + escapeHtml(post.location) + '</span>' : '';
+            const textHtml = post.text ? '<p class="post-text">' + escapeHtml(post.text) + '</p>' : '';
+
+            card.innerHTML = 
+                mediaHtml +
+                '<div class="post-content">' +
+                    '<div class="post-header">' +
+                        '<div class="post-meta">' +
+                            moodHtml +
+                            '<span class="post-time">' + timeStr + '</span>' +
+                        '</div>' +
+                        locationHtml +
+                    '</div>' +
+                    textHtml +
+                    '<div class="post-actions">' +
+                        '<span class="post-action" onclick="openEditModal(' + post.id + ')">✏️ 编辑</span>' +
+                        '<span class="post-action" onclick="deletePost(' + post.id + ')">🗑️ 删除</span>' +
+                        '<span class="post-action" onclick="toggleComments(' + post.id + ')">💬 评论<span class="comment-hint">（来说点什么吧~）</span></span>' +
+                    '</div>' +
+                    '<div class="comments-section" id="comments-' + post.id + '" style="display: none;">' +
+                        '<div class="comments-list" id="comments-list-' + post.id + '">' +
+                            commentsHtml +
+                        '</div>' +
+                        '<div class="comment-input-area">' +
+                            '<input type="text" class="comment-input" id="comment-input-' + post.id + '" placeholder="写下你的评论...">' +
+                            '<button class="comment-btn" onclick="addComment(' + post.id + ')">发送</button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+            return card;
+        }
+
+        // HTML转义
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 删除动态
+        function deletePost(id) {
+            console.log('deletePost called, id:', id);
+            if (!confirm('确定要删除这条动态吗？')) return;
+            
+            // 过滤掉要删除的帖子
+            posts = posts.filter(function(p) {
+                return p.id !== id;
+            });
+            
+            // 保存到持久化存储
+            LifeStorage.saveAll(posts);
+            console.log('Post deleted, remaining:', posts.length);
+            
+            // 重新渲染
+            renderPosts();
+            renderCalendar(); // 刷新日历
+        }
+
+        // 打开编辑弹窗
+        function openEditModal(id) {
+            console.log('openEditModal called, id:', id);
+            const post = posts.find(function(p) {
+                return p.id === id;
+            });
+            if (!post) return;
+
+            editingId = id;
+            document.getElementById('editText').value = post.text || '';
+            document.getElementById('editLocation').value = post.location || '';
+            
+            // 图片编辑初始化
+            const imageSection = document.getElementById('editImageSection');
+            const imagePreview = document.getElementById('editImagePreview');
+            
+            if (post.media && post.mediaType === 'image') {
+                imageSection.style.display = 'block';
+                imagePreview.src = post.media;
+                editMediaOriginal = post.media;
+                editMediaCurrent = post.media;
+                
+                // 重置滤镜
+                resetFilterValues();
+                imagePreview.style.filter = '';
+                
+                // 关闭子面板
+                document.getElementById('filterPanel').classList.remove('active');
+                document.getElementById('cropPanel').classList.remove('active');
+                document.getElementById('filterToggleBtn').classList.remove('active');
+                document.getElementById('cropToggleBtn').classList.remove('active');
+            } else {
+                imageSection.style.display = 'none';
+                editMediaOriginal = null;
+                editMediaCurrent = null;
+            }
+            
+            document.getElementById('editModal').classList.add('active');
+        }
+
+        // 关闭编辑弹窗
+        function closeEditModal() {
+            console.log('closeEditModal called');
+            document.getElementById('editModal').classList.remove('active');
+            document.getElementById('filterPanel').classList.remove('active');
+            document.getElementById('cropPanel').classList.remove('active');
+            document.getElementById('filterToggleBtn').classList.remove('active');
+            document.getElementById('cropToggleBtn').classList.remove('active');
+            editingId = null;
+            editMediaOriginal = null;
+            editMediaCurrent = null;
+        }
+
+        // ========== 图片编辑功能 ==========
+        
+        // 触发更换图片
+        function triggerEditImageReplace() {
+            document.getElementById('editFileInput').click();
+        }
+        
+        // 处理更换图片
+        function handleEditImageReplace(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                editMediaCurrent = e.target.result;
+                editMediaOriginal = e.target.result;
+                document.getElementById('editImagePreview').src = editMediaCurrent;
+                document.getElementById('editImagePreview').style.filter = '';
+                resetFilterValues();
+                console.log('Image replaced');
+            };
+            reader.readAsDataURL(file);
+            // 重置input以便再次选择同一文件
+            event.target.value = '';
+        }
+        
+        // 切换滤镜面板
+        function toggleFilterPanel() {
+            const panel = document.getElementById('filterPanel');
+            const btn = document.getElementById('filterToggleBtn');
+            // 关闭裁剪面板
+            document.getElementById('cropPanel').classList.remove('active');
+            document.getElementById('cropToggleBtn').classList.remove('active');
+            
+            panel.classList.toggle('active');
+            btn.classList.toggle('active');
+        }
+        
+        // 切换裁剪面板
+        function toggleCropPanel() {
+            const panel = document.getElementById('cropPanel');
+            const btn = document.getElementById('cropToggleBtn');
+            // 关闭滤镜面板
+            document.getElementById('filterPanel').classList.remove('active');
+            document.getElementById('filterToggleBtn').classList.remove('active');
+            
+            if (panel.classList.contains('active')) {
+                panel.classList.remove('active');
+                btn.classList.remove('active');
+            } else {
+                panel.classList.add('active');
+                btn.classList.add('active');
+                initCropCanvas();
+            }
+        }
+        
+        // 应用滤镜预览
+        function applyFilter() {
+            const brightness = document.getElementById('filterBrightness').value;
+            const contrast = document.getElementById('filterContrast').value;
+            const saturate = document.getElementById('filterSaturate').value;
+            const blur = document.getElementById('filterBlur').value;
+            
+            document.getElementById('brightnessVal').textContent = brightness + '%';
+            document.getElementById('contrastVal').textContent = contrast + '%';
+            document.getElementById('saturateVal').textContent = saturate + '%';
+            document.getElementById('blurVal').textContent = blur + 'px';
+            
+            const filterStr = 'brightness(' + (brightness / 100) + ') contrast(' + (contrast / 100) + ') saturate(' + (saturate / 100) + ') blur(' + blur + 'px)';
+            document.getElementById('editImagePreview').style.filter = filterStr;
+        }
+        
+        // 重置滤镜值
+        function resetFilterValues() {
+            document.getElementById('filterBrightness').value = 100;
+            document.getElementById('filterContrast').value = 100;
+            document.getElementById('filterSaturate').value = 100;
+            document.getElementById('filterBlur').value = 0;
+            document.getElementById('brightnessVal').textContent = '100%';
+            document.getElementById('contrastVal').textContent = '100%';
+            document.getElementById('saturateVal').textContent = '100%';
+            document.getElementById('blurVal').textContent = '0px';
+        }
+        
+        // 重置滤镜
+        function resetFilters() {
+            resetFilterValues();
+            document.getElementById('editImagePreview').style.filter = '';
+            editMediaCurrent = editMediaOriginal;
+            console.log('Filters reset');
+        }
+        
+        // ========== 裁剪功能 ==========
+        
+        // 初始化裁剪画布
+        function initCropCanvas() {
+            const canvas = document.getElementById('cropCanvas');
+            const ctx = canvas.getContext('2d');
+            const wrap = document.getElementById('cropCanvasWrap');
+            
+            cropImageObj = new Image();
+            cropImageObj.onload = function() {
+                // 计算画布尺寸（适配容器宽度）
+                const maxWidth = wrap.clientWidth || 400;
+                const ratio = cropImageObj.height / cropImageObj.width;
+                canvas.width = maxWidth;
+                canvas.height = maxWidth * ratio;
+                canvas.style.height = canvas.height + 'px';
+                
+                ctx.drawImage(cropImageObj, 0, 0, canvas.width, canvas.height);
+                
+                // 隐藏裁剪框
+                document.getElementById('cropOverlay').style.display = 'none';
+            };
+            cropImageObj.src = editMediaCurrent;
+        }
+        
+        // 裁剪鼠标事件
+        (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                const canvas = document.getElementById('cropCanvas');
+                const overlay = document.getElementById('cropOverlay');
+                
+                canvas.addEventListener('mousedown', function(e) {
+                    const rect = canvas.getBoundingClientRect();
+                    cropStartX = e.clientX - rect.left;
+                    cropStartY = e.clientY - rect.top;
+                    cropEndX = cropStartX;
+                    cropEndY = cropStartY;
+                    isCropping = true;
+                    overlay.style.display = 'block';
+                    overlay.style.left = cropStartX + 'px';
+                    overlay.style.top = cropStartY + 'px';
+                    overlay.style.width = '0px';
+                    overlay.style.height = '0px';
+                });
+                
+                canvas.addEventListener('mousemove', function(e) {
+                    if (!isCropping) return;
+                    const rect = canvas.getBoundingClientRect();
+                    cropEndX = e.clientX - rect.left;
+                    cropEndY = e.clientY - rect.top;
+                    
+                    const x = Math.min(cropStartX, cropEndX);
+                    const y = Math.min(cropStartY, cropEndY);
+                    const w = Math.abs(cropEndX - cropStartX);
+                    const h = Math.abs(cropEndY - cropStartY);
+                    
+                    overlay.style.left = x + 'px';
+                    overlay.style.top = y + 'px';
+                    overlay.style.width = w + 'px';
+                    overlay.style.height = h + 'px';
+                });
+                
+                canvas.addEventListener('mouseup', function() {
+                    isCropping = false;
+                });
+                
+                // 触摸事件支持
+                canvas.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    const rect = canvas.getBoundingClientRect();
+                    const touch = e.touches[0];
+                    cropStartX = touch.clientX - rect.left;
+                    cropStartY = touch.clientY - rect.top;
+                    cropEndX = cropStartX;
+                    cropEndY = cropStartY;
+                    isCropping = true;
+                    overlay.style.display = 'block';
+                    overlay.style.left = cropStartX + 'px';
+                    overlay.style.top = cropStartY + 'px';
+                    overlay.style.width = '0px';
+                    overlay.style.height = '0px';
+                }, { passive: false });
+                
+                canvas.addEventListener('touchmove', function(e) {
+                    e.preventDefault();
+                    if (!isCropping) return;
+                    const rect = canvas.getBoundingClientRect();
+                    const touch = e.touches[0];
+                    cropEndX = touch.clientX - rect.left;
+                    cropEndY = touch.clientY - rect.top;
+                    
+                    const x = Math.min(cropStartX, cropEndX);
+                    const y = Math.min(cropStartY, cropEndY);
+                    const w = Math.abs(cropEndX - cropStartX);
+                    const h = Math.abs(cropEndY - cropStartY);
+                    
+                    overlay.style.left = x + 'px';
+                    overlay.style.top = y + 'px';
+                    overlay.style.width = w + 'px';
+                    overlay.style.height = h + 'px';
+                }, { passive: false });
+                
+                canvas.addEventListener('touchend', function() {
+                    isCropping = false;
+                });
+            });
+        })();
+        
+        // 确认裁剪
+        function applyCrop() {
+            if (!cropImageObj) return;
+            
+            const canvas = document.getElementById('cropCanvas');
+            const scaleX = cropImageObj.naturalWidth / canvas.width;
+            const scaleY = cropImageObj.naturalHeight / canvas.height;
+            
+            const x = Math.min(cropStartX, cropEndX) * scaleX;
+            const y = Math.min(cropStartY, cropEndY) * scaleY;
+            const w = Math.abs(cropEndX - cropStartX) * scaleX;
+            const h = Math.abs(cropEndY - cropStartY) * scaleY;
+            
+            if (w < 10 || h < 10) {
+                alert('裁剪区域太小，请重新选择~');
+                return;
+            }
+            
+            // 限制最大尺寸，防止图片过大
+            const maxDim = 1200;
+            let outW = Math.round(w);
+            let outH = Math.round(h);
+            if (outW > maxDim || outH > maxDim) {
+                const ratio = Math.min(maxDim / outW, maxDim / outH);
+                outW = Math.round(outW * ratio);
+                outH = Math.round(outH * ratio);
+            }
+            
+            const cropCanvas = document.createElement('canvas');
+            const ctx = cropCanvas.getContext('2d');
+            cropCanvas.width = outW;
+            cropCanvas.height = outH;
+            ctx.drawImage(cropImageObj, x, y, w, h, 0, 0, outW, outH);
+            
+            const croppedDataUrl = cropCanvas.toDataURL('image/jpeg', 0.7);
+            editMediaCurrent = croppedDataUrl;
+            editMediaOriginal = croppedDataUrl;
+            
+            // 更新预览
+            document.getElementById('editImagePreview').src = croppedDataUrl;
+            document.getElementById('editImagePreview').style.filter = '';
+            resetFilterValues();
+            
+            // 关闭裁剪面板
+            document.getElementById('cropPanel').classList.remove('active');
+            document.getElementById('cropToggleBtn').classList.remove('active');
+            
+            console.log('Crop applied, size:', outW, 'x', outH);
+        }
+        
+        // 取消裁剪
+        function cancelCrop() {
+            document.getElementById('cropOverlay').style.display = 'none';
+            document.getElementById('cropPanel').classList.remove('active');
+            document.getElementById('cropToggleBtn').classList.remove('active');
+        }
+
+        // 保存编辑
+        function saveEdit() {
+            console.log('saveEdit called, editingId:', editingId);
+            
+            if (!editingId) {
+                console.log('No editingId, returning');
+                return;
+            }
+
+            const post = posts.find(function(p) {
+                return p.id === editingId;
+            });
+            
+            if (post) {
+                const newText = document.getElementById('editText').value.trim();
+                const newLocation = document.getElementById('editLocation').value.trim();
+                
+                post.text = newText;
+                post.location = newLocation;
+                
+                // 如果图片被编辑过，应用滤镜并保存
+                if (editMediaCurrent && post.mediaType === 'image') {
+                    const filterStr = document.getElementById('editImagePreview').style.filter;
+                    if (filterStr && filterStr !== '') {
+                        // 用Canvas将滤镜应用到图片上（同步方式，图片已加载）
+                        post.media = applyFilterToImageSync(editMediaCurrent, filterStr);
+                    } else {
+                        post.media = editMediaCurrent;
+                    }
+                }
+                
+                // 保存到持久化存储
+                LifeStorage.saveAll(posts);
+                console.log('帖子编辑已保存');
+                
+                renderPosts();
+                renderCalendar(); // 刷新日历
+                console.log('Re-rendered posts');
+            }
+
+            closeEditModal();
+        }
+
+        // 将滤镜同步应用到图片（图片已经加载过）
+        function applyFilterToImageSync(src, filterStr) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = document.getElementById('editImagePreview');
+            
+            // 直接从已加载的预览图获取尺寸
+            canvas.width = img.naturalWidth || 800;
+            canvas.height = img.naturalHeight || 600;
+            
+            // 限制最大尺寸
+            const maxDim = 1200;
+            if (canvas.width > maxDim || canvas.height > maxDim) {
+                const ratio = Math.min(maxDim / canvas.width, maxDim / canvas.height);
+                canvas.width = Math.round(canvas.width * ratio);
+                canvas.height = Math.round(canvas.height * ratio);
+            }
+            
+            ctx.filter = filterStr;
+            const tempImg = new Image();
+            tempImg.src = src;
+            ctx.drawImage(tempImg, 0, 0, canvas.width, canvas.height);
+            return canvas.toDataURL('image/jpeg', 0.7);
+        }
+
+        // 切换评论区显示
+        function toggleComments(postId) {
+            console.log('toggleComments called, postId:', postId);
+            const commentsSection = document.getElementById('comments-' + postId);
+            if (commentsSection) {
+                commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        // 添加评论
+        function addComment(postId) {
+            console.log('addComment called, postId:', postId);
+            const input = document.getElementById('comment-input-' + postId);
+            const text = input.value.trim();
+            
+            if (!text) return;
+
+            const post = posts.find(function(p) {
+                return p.id === postId;
+            });
+            
+            if (post) {
+                if (!post.comments) post.comments = [];
+                
+                post.comments.push({
+                    text: text,
+                    time: new Date().toISOString()
+                });
+                
+                LifeStorage.saveAll(posts);
+                const commentsList = document.getElementById('comments-list-' + postId);
+                commentsList.innerHTML = post.comments.map(function(comment) {
+                    const commentDate = new Date(comment.time);
+                    return '<div class="comment-item">' +
+                        '<div>' + escapeHtml(comment.text) + '</div>' +
+                        '<div class="comment-time">' + commentDate.toLocaleString() + '</div>' +
+                    '</div>';
+                }).join('');
+                
+                input.value = '';
+            }
+        }
+
+        // 点击遮罩关闭弹窗
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target.id === 'editModal') {
+                closeEditModal();
+            }
+        });
+
+        // ========== 数据备份与恢复 ==========
+
+        // 导出帖子为 JSON 文件
+        async function exportPosts() {
+            const success = await LifeStorage.exportToFile();
+            if (success) {
+                showToast('备份成功！文件已下载~');
+            } else {
+                showToast('没有帖子可以备份~');
+            }
+        }
+
+        // 从 JSON 文件导入帖子
+        async function importPosts(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            try {
+                const result = await LifeStorage.importFromFile(file);
+                posts = await LifeStorage.getAll();
+                sortPostsByTime();
+                renderPosts();
+                showToast(result.message);
+            } catch (err) {
+                showToast('导入失败：' + err.message);
+            }
+            
+            // 重置 input，允许再次选择同一文件
+            event.target.value = '';
+        }
+
+        // ========== 日历功能 ==========
+        let currentCalendarDate = new Date();
+
+        // 渲染日历
+        function renderCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            
+            // 更新标题
+            document.getElementById('calendarTitle').textContent = year + '年' + (month + 1) + '月';
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            const today = new Date();
+            
+            // 生成42个格子（6周）
+            for (let i = 0; i < 42; i++) {
+                const cellDate = new Date(startDate);
+                cellDate.setDate(startDate.getDate() + i);
+                
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                
+                // 判断是否为本月
+                if (cellDate.getMonth() !== month) {
+                    dayEl.classList.add('other-month');
+                }
+                
+                // 判断是否为今天
+                if (cellDate.toDateString() === today.toDateString()) {
+                    dayEl.classList.add('today');
+                }
+                
+                // 日期数字
+                const dayNum = document.createElement('span');
+                dayNum.className = 'calendar-day-number';
+                dayNum.textContent = cellDate.getDate();
+                dayEl.appendChild(dayNum);
+                
+                // 检查该日期是否有帖子
+                const dateStr = cellDate.toISOString().split('T')[0];
+                const dayPosts = posts.filter(p => {
+                    const postDate = new Date(p.time || p.createdAt);
+                    return postDate.toISOString().split('T')[0] === dateStr;
+                });
+                
+                if (dayPosts.length > 0) {
+                    const indicator = document.createElement('span');
+                    indicator.className = 'calendar-day-indicator' + (dayPosts.length > 1 ? ' multi' : '');
+                    dayEl.appendChild(indicator);
+                    dayEl.onclick = function() { openDayPosts(cellDate, dayPosts); };
+                }
+                
+                grid.appendChild(dayEl);
+            }
+        }
+
+        // 切换月份
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        // 打开某一天的帖子弹窗
+        function openDayPosts(date, dayPosts) {
+            const modal = document.getElementById('dayPostsModal');
+            document.getElementById('dayPostsTitle').textContent = (date.getMonth() + 1) + '月' + date.getDate() + '日';
+            
+            const list = document.getElementById('dayPostsList');
+            list.innerHTML = '';
+            
+            if (dayPosts.length === 0) {
+                list.innerHTML = '<p style="text-align:center;color:#999;padding:40px;">这一天还没有记录~</p>';
+            } else {
+                dayPosts.forEach(post => {
+                    const card = createPostCard(post);
+                    list.appendChild(card);
+                });
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 关闭日期帖子弹窗
+        function closeDayPosts() {
+            const modal = document.getElementById('dayPostsModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeDayPostsOnOverlay(event) {
+            if (event.target === event.currentTarget) {
+                closeDayPosts();
+            }
+        }
+
+        // 创建帖子卡片（复用原有逻辑）
+        function createPostCard(post) {
+            const card = document.createElement('div');
+            card.className = 'post-card';
+            card.id = 'post-' + post.id;
+            
+            let mediaHTML = '';
+            if (post.media) {
+                if (post.mediaType === 'video') {
+                    mediaHTML = '<video class="post-media" controls preload="metadata"><source src="' + post.media + '" type="video/mp4"></video>';
+                } else {
+                    mediaHTML = '<img class="post-media" src="' + post.media + '" alt="图片" loading="lazy">';
+                }
+            }
+            
+            const postDate = new Date(post.time || post.createdAt);
+            const timeStr = postDate.toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            
+            let commentsHTML = '';
+            if (post.comments && post.comments.length > 0) {
+                commentsHTML = '<div class="comments-section">' +
+                    post.comments.map(function(c) {
+                        const cDate = new Date(c.time);
+                        return '<div class="comment-item">' +
+                            '<div>' + escapeHtml(c.text) + '</div>' +
+                            '<div class="comment-time">' + cDate.toLocaleString('zh-CN') + '</div>' +
+                        '</div>';
+                    }).join('') +
+                '</div>';
+            }
+            
+            card.innerHTML = 
+                mediaHTML +
+                '<div class="post-content">' +
+                    '<div class="post-header">' +
+                        '<div class="post-meta">' +
+                            (post.mood ? '<span class="mood-badge">' + post.mood + '</span>' : '') +
+                            (post.location ? '<span class="location-tag">📍 ' + escapeHtml(post.location) + '</span>' : '') +
+                            '<span class="post-time">' + timeStr + '</span>' +
+                        '</div>' +
+                        '<div class="post-actions">' +
+                            '<button class="action-btn" onclick="openEditModal(' + post.id + ')">✏️</button>' +
+                            '<button class="action-btn" onclick="deletePost(' + post.id + ')">🗑️</button>' +
+                        '</div>' +
+                    '</div>' +
+                    (post.text ? '<p class="post-text">' + escapeHtml(post.text) + '</p>' : '') +
+                    '<div class="post-footer">' +
+                        '<div class="comment-section">' +
+                            '<input type="text" class="comment-input" id="comment-input-' + post.id + '" placeholder="写下评论...">' +
+                            '<button class="comment-btn" onclick="addComment(' + post.id + ')">发送</button>' +
+                        '</div>' +
+                        commentsHTML +
+                    '</div>' +
+                '</div>';
+            
+            return card;
+        }
+
+        // Toast 提示
+        function showToast(msg) {
+            let toast = document.getElementById('lifeToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'lifeToast';
+                toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:12px 24px;border-radius:8px;z-index:9999;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none;';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+        }
+    </script>
+</body>
+</html>

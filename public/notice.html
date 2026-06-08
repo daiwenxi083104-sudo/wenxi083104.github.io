@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>通知生成器</title>
+<!-- 本地字体 fallback -->
+<link rel="stylesheet" href="./fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet"></noscript>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+    background: #fff;
+    color: #333;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle, #ddd 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin: 20px 0 0 20px;
+    padding: 8px 20px;
+    border: 2px dashed #333;
+    border-radius: 20px 12px 18px 14px;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    background: #fff;
+    transition: all 0.3s;
+  }
+
+  .back-link:hover {
+    background: #333;
+    color: #fff;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 0 20px 40px;
+  }
+
+  .page-title {
+    text-align: center;
+    font-size: 36px;
+    margin: 20px 0 30px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .page-title::before,
+  .page-title::after {
+    content: '~';
+    font-size: 28px;
+    opacity: 0.5;
+  }
+
+  .page-title::before {
+    margin-right: 8px;
+  }
+
+  .page-title::after {
+    margin-left: 8px;
+  }
+
+  .card {
+    border: 2.5px solid #333;
+    border-radius: 25px 20px 30px 22px;
+    padding: 25px;
+    margin-bottom: 20px;
+    background: #fff;
+    position: relative;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border: 1.5px dashed #999;
+    border-radius: 27px 22px 32px 24px;
+    pointer-events: none;
+  }
+
+  .section-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed #ccc;
+  }
+
+  /* 模板选择标签 */
+  .template-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .tab-btn {
+    padding: 8px 20px;
+    border: 2.5px solid #333;
+    border-radius: 20px 16px 22px 18px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 16px;
+    cursor: pointer;
+    background: #fff;
+    color: #333;
+    transition: all 0.3s;
+  }
+
+  .tab-btn:hover {
+    background: #f5f5f5;
+  }
+
+  .tab-btn.active {
+    background: #333;
+    color: #fff;
+  }
+
+  /* 表单区域 */
+  .form-area {
+    display: none;
+  }
+
+  .form-area.active {
+    display: block;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 6px;
+    color: #555;
+  }
+
+  .form-group label::before {
+    content: '> ';
+    opacity: 0.5;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #333;
+    border-radius: 18px 14px 20px 16px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.3s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: #666;
+    background: #fafafa;
+  }
+
+  .form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: #ccc;
+  }
+
+  /* 预览区域 */
+  .preview-card {
+    border: 2.5px solid #333;
+    border-radius: 25px 20px 30px 22px;
+    padding: 25px;
+    margin-bottom: 20px;
+    background: #fff;
+    position: relative;
+  }
+
+  .preview-card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border: 1.5px dashed #999;
+    border-radius: 27px 22px 32px 24px;
+    pointer-events: none;
+  }
+
+  .preview-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed #ccc;
+  }
+
+  .preview-title span {
+    display: inline-block;
+    background: #333;
+    color: #fff;
+    padding: 2px 12px;
+    border-radius: 10px 8px 12px 9px;
+    font-size: 16px;
+    margin-left: 8px;
+  }
+
+  .preview-content {
+    background: #fafafa;
+    border: 2px dashed #ddd;
+    border-radius: 18px 14px 20px 16px;
+    padding: 20px;
+    min-height: 120px;
+    white-space: pre-wrap;
+    line-height: 1.8;
+    font-size: 16px;
+    word-break: break-all;
+  }
+
+  .preview-content .placeholder-empty {
+    color: #ccc;
+    font-style: normal;
+  }
+
+  .copy-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 2.5px solid #333;
+    border-radius: 20px 16px 22px 18px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 18px;
+    cursor: pointer;
+    background: #333;
+    color: #fff;
+    transition: all 0.3s;
+    margin-top: 15px;
+  }
+
+  .copy-btn:hover {
+    background: #555;
+    border-color: #555;
+    transform: translateY(-2px);
+  }
+
+  .copy-btn:active {
+    transform: translateY(0);
+  }
+
+  .copy-btn.copied {
+    background: #fff;
+    color: #333;
+    border-style: dashed;
+  }
+
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: #333;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 20px 16px 22px 18px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 16px;
+    z-index: 999;
+    transition: transform 0.4s ease;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .hint {
+    text-align: center;
+    color: #bbb;
+    font-size: 14px;
+    margin-top: 8px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 2px dashed #ddd;
+    margin: 20px 0;
+  }
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<a href="index.html" class="back-link">&larr; 返回首页</a>
+
+<div class="container">
+  <div class="page-title">通知生成器</div>
+
+  <!-- 模板选择 -->
+  <div class="card">
+    <div class="section-title">选择通知模板</div>
+    <div class="template-tabs">
+      <button class="tab-btn active" onclick="switchTemplate('holiday')">节假日通知</button>
+      <button class="tab-btn" onclick="switchTemplate('activity')">活动通知</button>
+      <button class="tab-btn" onclick="switchTemplate('meeting')">会议通知</button>
+      <button class="tab-btn" onclick="switchTemplate('leave')">放假通知</button>
+    </div>
+
+    <!-- 节假日通知 -->
+    <div class="form-area active" id="form-holiday">
+      <div class="form-group">
+        <label>节日名称</label>
+        <input type="text" id="holiday_name" placeholder="例如：端午节" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>放假日期</label>
+        <input type="text" id="holiday_date" placeholder="例如：6月8日（周六）至6月10日（周一）" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>补班日期</label>
+        <input type="text" id="holiday_workday" placeholder="例如：6月7日（周五）正常上班" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>祝福语</label>
+        <input type="text" id="holiday_wish" placeholder="例如：祝大家端午安康！" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>发布部门</label>
+        <input type="text" id="holiday_dept" placeholder="例如：行政部" oninput="updatePreview()">
+      </div>
+    </div>
+
+    <!-- 活动通知 -->
+    <div class="form-area" id="form-activity">
+      <div class="form-group">
+        <label>活动名称</label>
+        <input type="text" id="activity_name" placeholder="例如：2024年公司年会" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>活动时间</label>
+        <input type="text" id="activity_time" placeholder="例如：12月28日（周五）18:00" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>活动地点</label>
+        <input type="text" id="activity_place" placeholder="例如：公司三楼多功能厅" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>参加人员</label>
+        <input type="text" id="activity_people" placeholder="例如：全体员工" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>活动内容</label>
+        <textarea id="activity_content" placeholder="例如：文艺表演、抽奖环节、自助晚餐" oninput="updatePreview()"></textarea>
+      </div>
+      <div class="form-group">
+        <label>注意事项</label>
+        <textarea id="activity_note" placeholder="例如：请提前15分钟到场签到" oninput="updatePreview()"></textarea>
+      </div>
+      <div class="form-group">
+        <label>发布部门</label>
+        <input type="text" id="activity_dept" placeholder="例如：人事部" oninput="updatePreview()">
+      </div>
+    </div>
+
+    <!-- 会议通知 -->
+    <div class="form-area" id="form-meeting">
+      <div class="form-group">
+        <label>会议主题</label>
+        <input type="text" id="meeting_topic" placeholder="例如：第三季度工作总结会议" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>会议时间</label>
+        <input type="text" id="meeting_time" placeholder="例如：10月15日（周二）14:00-16:00" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>会议地点</label>
+        <input type="text" id="meeting_place" placeholder="例如：A栋5楼会议室" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>参会人员</label>
+        <input type="text" id="meeting_people" placeholder="例如：各部门负责人" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>会议议程</label>
+        <textarea id="meeting_agenda" placeholder="例如：&#10;1. 各部门工作汇报&#10;2. 问题讨论&#10;3. 下阶段计划" oninput="updatePreview()"></textarea>
+      </div>
+      <div class="form-group">
+        <label>准备事项</label>
+        <textarea id="meeting_prepare" placeholder="例如：请参会人员提前准备汇报材料" oninput="updatePreview()"></textarea>
+      </div>
+      <div class="form-group">
+        <label>发布部门</label>
+        <input type="text" id="meeting_dept" placeholder="例如：总经办" oninput="updatePreview()">
+      </div>
+    </div>
+
+    <!-- 放假通知 -->
+    <div class="form-area" id="form-leave">
+      <div class="form-group">
+        <label>放假原因</label>
+        <input type="text" id="leave_reason" placeholder="例如：公司搬迁" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>放假日期</label>
+        <input type="text" id="leave_date" placeholder="例如：8月1日（周四）至8月3日（周六），共3天" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>复工日期</label>
+        <input type="text" id="leave_resume" placeholder="例如：8月4日（周日）正常上班" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>注意事项</label>
+        <textarea id="leave_note" placeholder="例如：放假前请关闭个人电脑及电源，锁好门窗" oninput="updatePreview()"></textarea>
+      </div>
+      <div class="form-group">
+        <label>紧急联系人</label>
+        <input type="text" id="leave_contact" placeholder="例如：张经理 138xxxx1234" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>发布部门</label>
+        <input type="text" id="leave_dept" placeholder="例如：行政部" oninput="updatePreview()">
+      </div>
+    </div>
+  </div>
+
+  <!-- 预览区域 -->
+  <div class="preview-card">
+    <div class="preview-title">实时预览 <span>Preview</span></div>
+    <div class="preview-content" id="previewContent">请选择模板并填写内容，预览将在此处实时显示~</div>
+    <button class="copy-btn" id="copyBtn" onclick="copyNotice()">复制通知内容</button>
+    <div class="hint">点击按钮即可复制到剪贴板</div>
+  </div>
+</div>
+
+<script type="module">
+  import { NoticeGenerator } from './js/NoticeGenerator.js';
+  
+  // 初始化通知生成器
+  const noticeApp = new NoticeGenerator();
+  
+  // 暴露方法到全局，供 HTML 内联事件调用
+  window.switchTemplate = (type) => noticeApp.switchTemplate(type);
+  window.updatePreview = () => noticeApp.updatePreview();
+  window.copyNotice = () => noticeApp.copyNotice();
+</script>
+
+</body>
+</html>

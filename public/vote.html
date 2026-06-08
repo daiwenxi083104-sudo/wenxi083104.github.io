@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>投票小助手</title>
+<!-- 本地字体 fallback -->
+<link rel="stylesheet" href="./fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet"></noscript>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+    background: #fff;
+    color: #333;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle, #ddd 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin: 20px 0 0 20px;
+    padding: 8px 20px;
+    border: 2px dashed #333;
+    border-radius: 20px 12px 18px 14px;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    background: #fff;
+    transition: all 0.3s;
+  }
+
+  .back-link:hover {
+    background: #333;
+    color: #fff;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 0 20px 40px;
+  }
+
+  .page-title {
+    text-align: center;
+    font-size: 36px;
+    margin: 20px 0 30px;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .page-title::before,
+  .page-title::after {
+    content: '~';
+    font-size: 28px;
+    opacity: 0.5;
+  }
+
+  .page-title::before {
+    margin-right: 8px;
+  }
+
+  .page-title::after {
+    margin-left: 8px;
+  }
+
+  .card {
+    border: 2.5px solid #333;
+    border-radius: 25px 20px 30px 22px;
+    padding: 25px;
+    margin-bottom: 20px;
+    background: #fff;
+    position: relative;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border: 1.5px dashed #999;
+    border-radius: 27px 22px 32px 24px;
+    pointer-events: none;
+  }
+
+  .section-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed #ccc;
+  }
+
+  .section-title span {
+    display: inline-block;
+    background: #333;
+    color: #fff;
+    padding: 2px 12px;
+    border-radius: 10px 8px 12px 9px;
+    font-size: 16px;
+    margin-left: 8px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #333;
+    border-radius: 18px 14px 20px 16px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.3s;
+  }
+
+  input[type="text"]:focus {
+    border-color: #666;
+    background: #fafafa;
+  }
+
+  input[type="text"]::placeholder {
+    color: #bbb;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 24px;
+    border: 2.5px solid #333;
+    border-radius: 20px 16px 22px 18px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: #fff;
+    color: #333;
+  }
+
+  .btn:hover {
+    background: #333;
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn-primary {
+    background: #333;
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #555;
+    border-color: #555;
+  }
+
+  .btn-small {
+    padding: 6px 16px;
+    font-size: 14px;
+  }
+
+  .btn-danger {
+    border-color: #999;
+    color: #999;
+  }
+
+  .btn-danger:hover {
+    background: #999;
+    border-color: #999;
+    color: #fff;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .input-group input {
+    flex: 1;
+  }
+
+  .vote-topic {
+    font-size: 24px;
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+    border: 2px dashed #ccc;
+    border-radius: 15px 18px 12px 20px;
+    background: #fafafa;
+  }
+
+  .option-list {
+    list-style: none;
+    margin-top: 15px;
+  }
+
+  .option-item {
+    margin-bottom: 12px;
+    border: 2px solid #333;
+    border-radius: 22px 18px 25px 20px;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .option-item:hover {
+    transform: translateX(5px);
+    box-shadow: 3px 3px 0 #ddd;
+  }
+
+  .option-item.voted {
+    border-style: dashed;
+  }
+
+  .option-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: #fff;
+  }
+
+  .option-name {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .option-radio {
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid #333;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .option-item.voted .option-radio::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+  }
+
+  .option-votes {
+    font-size: 14px;
+    color: #999;
+  }
+
+  .option-bar-wrap {
+    height: 8px;
+    background: #f0f0f0;
+    position: relative;
+  }
+
+  .option-bar {
+    height: 100%;
+    background: #333;
+    transition: width 0.5s ease;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .option-percent {
+    position: absolute;
+    right: 8px;
+    top: -22px;
+    font-size: 13px;
+    color: #999;
+  }
+
+  .total-votes {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 16px;
+    color: #999;
+  }
+
+  .total-votes b {
+    color: #333;
+    font-size: 22px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 30px;
+    color: #bbb;
+    font-size: 18px;
+  }
+
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: #333;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 20px 16px 22px 18px;
+    font-family: 'ZCOOL KuaiLe', cursive;
+    font-size: 16px;
+    z-index: 999;
+    transition: transform 0.4s ease;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .doodle-star {
+    display: inline-block;
+    font-size: 14px;
+    margin: 0 2px;
+    opacity: 0.4;
+  }
+
+  .divider {
+    border: none;
+    border-top: 2px dashed #ddd;
+    margin: 20px 0;
+  }
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<a href="index.html" class="back-link">&larr; 返回首页</a>
+
+<div class="container">
+  <div class="page-title">投票小助手</div>
+
+  <!-- 创建投票 -->
+  <div class="card" id="createCard">
+    <div class="section-title">创建投票 <span>Step 1</span></div>
+    <input type="text" id="topicInput" placeholder="输入投票主题，例如：团建去哪里？" maxlength="50">
+    <div class="input-group">
+      <input type="text" id="optionInput" placeholder="输入选项名称" maxlength="30">
+      <button class="btn btn-small" onclick="addOption()">添加</button>
+    </div>
+    <div style="margin-top:12px; text-align:center;">
+      <button class="btn btn-primary" onclick="startVote()">开始投票!</button>
+    </div>
+  </div>
+
+  <!-- 投票区域 -->
+  <div class="card" id="voteCard" style="display:none;">
+    <div class="section-title">进行投票 <span>Step 2</span></div>
+    <div class="vote-topic" id="voteTopic"></div>
+    <ul class="option-list" id="optionList"></ul>
+    <div class="total-votes">总票数：<b id="totalVotes">0</b></div>
+    <hr class="divider">
+    <div class="actions">
+      <button class="btn btn-small" onclick="showAddOption()">+ 添加新选项</button>
+      <button class="btn btn-small btn-danger" onclick="resetVote()">重置投票</button>
+      <button class="btn btn-small btn-danger" onclick="newVote()">新建投票</button>
+    </div>
+    <div id="addOptionWrap" style="display:none; margin-top:15px;">
+      <div class="input-group">
+        <input type="text" id="newOptionInput" placeholder="输入新选项名称" maxlength="30">
+        <button class="btn btn-small" onclick="addNewOption()">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { VoteHelper } from './js/VoteHelper.js';
+  
+  // 初始化投票助手
+  const voteApp = new VoteHelper();
+  
+  // 暴露方法到全局，供 HTML 内联事件调用
+  window.addOption = () => voteApp.addOption();
+  window.startVote = () => voteApp.startVote();
+  window.vote = (index) => voteApp.vote(index);
+  window.showAddOption = () => voteApp.showAddOption();
+  window.addNewOption = () => voteApp.addNewOption();
+  window.resetVote = () => voteApp.resetVote();
+  window.newVote = () => voteApp.newVote();
+</script>
+
+</body>
+</html>
