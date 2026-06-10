@@ -3225,11 +3225,7 @@
 
         // PDF作品集
         function openPortfolio() {
-            const modal = document.getElementById('pdfModal');
-            const frame = document.getElementById('pdfFrame');
-            frame.src = './assets/戴雯晞作品集.pdf';
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            window.location.href = './portfolio.html';
         }
 
         function closePdfModal() {
@@ -3916,13 +3912,12 @@
 
         function closeSkillDetail() {
             const modal = document.getElementById('skillDetailModal');
-            const scrollY = document.body.style.top;
             modal.classList.remove('active');
             document.body.style.overflow = '';
             document.body.style.position = '';
             document.body.style.width = '';
             document.body.style.top = '';
-            window.scrollTo(0, parseInt(scrollY || '0') * -1);
+            // 不再强制滚动，保持当前页面位置
         }
 
         function closeSkillDetailOnOverlay(event) {
